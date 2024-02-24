@@ -13,6 +13,7 @@ import { removeNestedUndefinedValues } from './utils';
 export const extractMetaTags = (
   body: string,
   options: {
+    onlyGetOpenGraphInfo?: boolean;
     customMetaTags: {
       multiple: false;
       property: 'og:type';

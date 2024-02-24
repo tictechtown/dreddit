@@ -1,29 +1,28 @@
-// const validator = require('validator');
-
 /*
  * validates the url
  * @param string var - the url we want to scrape
  */
-export const isUrlValid = (url, urlValidatorSettings) => typeof url === 'string' && url.length > 0; // && validator.isURL(url, urlValidatorSettings);
+export const isUrlValid = (url: string) => typeof url === 'string' && url.length > 0;
 
 /*
  * forces url to start with http://
  * @param string var - the url we want to scrape
  */
-const coerceUrl = (url) => (/^(f|ht)tps?:\/\//i.test(url) ? url : `http://${url}`);
+const coerceUrl = (url: string) => (/^(f|ht)tps?:\/\//i.test(url) ? url : `http://${url}`);
 
 /*
  * validate timeout - how long should we wait for a request
  * @param number var - the time we want to wait
  */
-const isTimeoutValid = (timeout) => typeof timeout === 'number' && /^\d{1,10}$/.test(timeout);
+const isTimeoutValid = (timeout: number) =>
+  typeof timeout === 'number' && /^\d{1,10}$/.test(`${timeout}`);
 
 /*
  * validates url and timeout
  * @param string var - user input url and timeout
  */
-export const validate = (url, timeout, urlValidatorSettings) => ({
-  url: isUrlValid(url, urlValidatorSettings) ? coerceUrl(url) : null,
+export const validate = (url: string, timeout: number) => ({
+  url: isUrlValid(url) ? coerceUrl(url) : null,
   timeout: isTimeoutValid(timeout) ? timeout : 2000,
 });
 
@@ -31,8 +30,8 @@ export const validate = (url, timeout, urlValidatorSettings) => ({
  * findImageTypeFromUrl
  * @param string url - image url
  */
-export const findImageTypeFromUrl = (url) => {
-  let type = url.split('.').pop();
+export const findImageTypeFromUrl = (url: string) => {
+  let type = url.split('.').pop() ?? '';
   [type] = type.split('?');
   return type;
 };
@@ -41,7 +40,7 @@ export const findImageTypeFromUrl = (url) => {
  * isImageTypeValid
  * @param string type - image type
  */
-export const isImageTypeValid = (type) => {
+export const isImageTypeValid = (type: string) => {
   const validImageTypes = [
     'apng',
     'bmp',
@@ -66,7 +65,7 @@ export const isImageTypeValid = (type) => {
  * isThisANonHTMLPage
  * @param string url - url of site
  */
-export const isThisANonHTMLUrl = (url) => {
+export const isThisANonHTMLUrl = (url: string) => {
   const invalidImageTypes = [
     '.doc',
     '.docx',
@@ -112,7 +111,7 @@ export const isThisANonHTMLUrl = (url) => {
  * removeNestedUndefinedValues
  * @param object object - an object
  */
-export const removeNestedUndefinedValues = (object) => {
+export const removeNestedUndefinedValues = (object: Record<string, any>) => {
   Object.entries(object).forEach(([key, value]) => {
     if (value && typeof value === 'object') removeNestedUndefinedValues(value);
     else if (value === undefined) delete object[key];

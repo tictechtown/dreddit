@@ -1,9 +1,9 @@
 const { findImageTypeFromUrl, isImageTypeValid, isUrlValid } = require('./utils');
 
-const doesElementExist = (selector, attribute, $) =>
+const doesElementExist = (selector: string, attribute: string, $: any) =>
   $(selector).attr(attribute) && $(selector).attr(attribute).length > 0;
 
-const fallback = (ogObject, options, $) => {
+const fallback = (ogObject: any, options: any, $: any) => {
   // title fallback
   if (!ogObject.ogTitle) {
     if ($('title').text() && $('title').text().length > 0) {
@@ -41,12 +41,11 @@ const fallback = (ogObject, options, $) => {
   // Get all of images if there is no og:image info
   if (!ogObject.ogImage && options.ogImageFallback) {
     ogObject.ogImage = [];
-    $('img').map((index, imageElement) => {
+    $('img').map((_args: any, imageElement: any) => {
       if (doesElementExist(imageElement, 'src', $)) {
         const source = $(imageElement).attr('src');
         const type = findImageTypeFromUrl(source);
-        if (!isUrlValid(source, options.urlValidatorSettings) || !isImageTypeValid(type))
-          return false;
+        if (!isUrlValid(source) || !isImageTypeValid(type)) return false;
         ogObject.ogImage.push({
           url: source,
           width: $(imageElement).attr('width') || null,
@@ -60,7 +59,7 @@ const fallback = (ogObject, options, $) => {
   } else if (ogObject.ogImage) {
     // if there isn't a type, try to pull it from the URL
     if (Array.isArray(ogObject.ogImage)) {
-      ogObject.ogImage.map((image) => {
+      ogObject.ogImage.map((image: any) => {
         if (image.url && !image.type) {
           const type = findImageTypeFromUrl(image.url);
           if (isImageTypeValid(type)) image.type = type;

@@ -87,6 +87,26 @@ export const markdownStyles = {
   },
 };
 
+export const commentMarkdownStyles = {
+  ...markdownStyles,
+  heading1: {
+    fontSize: 18,
+    borderColor: Palette.surfaceVariant,
+    marginTop: Spacing.small,
+    paddingBottom: Spacing.small,
+    marginBottom: Spacing.small,
+    fontWeight: 'bold',
+  },
+  heading2: {
+    fontSize: 18,
+    borderColor: Palette.surfaceVariant,
+    marginTop: Spacing.small,
+    paddingBottom: Spacing.small,
+    marginBottom: Spacing.small,
+    fontWeight: 'bold',
+  },
+};
+
 export function getMaxPreviewByDomain(post: Post | null | undefined) {
   if (!post?.data.preview) return null;
   if (post.data.domain === 'i.redd.it' && !post.data.preview) {

@@ -8,7 +8,7 @@ import { Palette } from '../../colors';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import { Spacing } from '../../typography';
 import { timeDifference } from '../../utils';
-import { markdownIt, markdownRenderRules, markdownStyles } from '../utils';
+import { commentMarkdownStyles, markdownIt, markdownRenderRules } from '../utils';
 import CommentMediaView from './CommentMediaView';
 
 const CommentItem = ({
@@ -145,7 +145,7 @@ const CommentItem = ({
         ) : (
           <Markdown
             markdownit={markdownIt}
-            style={markdownStyles}
+            style={commentMarkdownStyles}
             rules={markdownRenderRules}
             onLinkPress={_onLinkPress}>
             {decode(comment.data.body)}

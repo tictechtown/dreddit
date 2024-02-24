@@ -12,7 +12,10 @@ export const onLinkPress = (post: Post): HrefObject => {
   }
   const domain = originalPost.data.domain;
   // if "%" is in the table, the navigation will crash
-  const title = originalPost.data.title.replaceAll('%', '');
+  const title = originalPost.data.title
+    .replaceAll('%', '')
+    .replaceAll('(', '&lpar;')
+    .replaceAll(')', '&rpar;');
 
   if (originalPost.data.gallery_data) {
     return {

@@ -32,7 +32,7 @@ Run
 npm install
 ```
 
-to install all the dependencies
+to install all the dependencies.
 
 Then run
 

@@ -147,7 +147,7 @@ const SubRedditView = (props: Props) => {
   ]);
 
   const savedPostIds: Record<string, boolean> = useMemo(() => {
-    var result = savedPosts.reduce(function (map: Record<string, boolean>, obj) {
+    const result = savedPosts.reduce(function (map: Record<string, boolean>, obj) {
       map[obj.data.id] = true;
       return map;
     }, {});
@@ -436,7 +436,7 @@ const SubRedditView = (props: Props) => {
       </View>
       {loading && (
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
-          <IndeterminateProgressBarView height={8} />
+          <IndeterminateProgressBarView />
         </View>
       )}
     </>

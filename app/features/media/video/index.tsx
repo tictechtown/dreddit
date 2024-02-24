@@ -36,7 +36,7 @@ export default function Page() {
       }
     }
     if (prefetchuri) {
-      let uri: string = prefetchuri as string;
+      const uri: string = prefetchuri as string;
       fetchMetadata(uri);
     }
   }, [prefetchuri]);

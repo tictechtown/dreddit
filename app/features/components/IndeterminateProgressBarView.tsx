@@ -10,14 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Palette } from '../colors';
 
-function IndeterminateProgressBarView({
-  height = 7,
-  borderRadius = height * 0.5,
-  // Default iOS blue
-  color = '#007aff',
-  trackColor = 'transparent',
-  style,
-}: any) {
+function IndeterminateProgressBarView() {
   const progress = useSharedValue(0);
   const dimensions = useWindowDimensions();
   const progressBarContainerStyles: ViewStyle[] = [styles.progressBarContainer];

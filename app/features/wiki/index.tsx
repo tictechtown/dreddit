@@ -9,22 +9,6 @@ import { Palette } from '../colors';
 import { markdownIt, markdownRenderRules, markdownStyles } from '../post/utils';
 import { Spacing } from '../typography';
 
-// TODO -merge that with RedditApi t5
-type SubredditData = {
-  wiki_enabled: boolean;
-  display_name: string;
-  icon_img: string;
-  created: number;
-  display_name_prefixed: string;
-  accounts_active: number;
-  subscribers: number;
-  name: string;
-  public_description: string;
-  community_icon: string;
-  banner_background_image: string;
-  description: string;
-};
-
 type Wikipage = {
   content_md: string;
   may_revise: boolean;

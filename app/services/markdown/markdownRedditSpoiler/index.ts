@@ -25,7 +25,7 @@ export default function markdownRedditSpoiler(md: MarkdownIt, options: Options) 
   const tags: Tags = {
     spoiler: {
       // >! !<
-      regex: /\>\!([\s\S]+?)\!\</,
+      regex: />!([\s\S]+?)!</,
       name: 'spoiler',
     },
   };

@@ -17,11 +17,11 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
     }
   }, [progress]);
 
-  const onLoadEnd = React.useCallback(() => {
-    if (progress) {
-      progress.value = 1;
-    }
-  }, [progress]);
+  // const onLoadEnd = React.useCallback(() => {
+  //   if (progress) {
+  //     progress.value = 1;
+  //   }
+  // }, [progress]);
 
   const onProgress = React.useCallback(
     ({ nativeEvent: { loaded, total } }: { nativeEvent: { loaded: number; total: number } }) => {

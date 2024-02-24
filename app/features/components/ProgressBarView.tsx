@@ -1,17 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, { SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { Palette } from '../colors';
 
-function ProgressBarView({
-  progress = 0,
-  height = 7,
-  borderRadius = height * 0.5,
-  // Default iOS blue
-  color = '#007aff',
-  trackColor = 'transparent',
-  style,
-}: any) {
+function ProgressBarView({ progress }: { progress: SharedValue<number> }) {
   const dimensions = useWindowDimensions();
   const progressBarContainerStyles: ViewStyle[] = [styles.progressBarContainer];
 
@@ -36,7 +28,7 @@ function ProgressBarView({
 
   const progressBarStyles: ViewStyle[] = [styles.progressBar, progressBarWidthAnimated];
 
-  if (progress === 1) {
+  if (progress.value === 1) {
     progressBarStyles.push({ borderBottomRightRadius: 0 });
   }
 

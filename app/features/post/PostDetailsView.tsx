@@ -58,11 +58,6 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
   // variables
   const snapPoints = useMemo(() => ['25%', '35%'], []);
 
-  // callbacks
-  const handleSheetChanges = useCallback((index: number) => {
-    // console.log('handleSheetChanges', index);
-  }, []);
-
   // Android: handle back button when media is displayed
   useFocusEffect(
     useCallback(() => {
@@ -219,7 +214,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         .slice(0, 25)
         .map((cId) => api.getSubmissionComments(postId, { ...searchParams, comment: cId }));
       const allData = await Promise.all(promises);
-      let data = allData.reduce(
+      const data = allData.reduce(
         (prevValue, currentValue) => {
           if (prevValue?.submission === null) {
             prevValue.submission = currentValue?.submission;
@@ -280,7 +275,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         ListHeaderComponent={Header}
         refreshControl={refreshControl}
       />
-      {queryData.loading && <IndeterminateProgressBarView height={8} />}
+      {queryData.loading && <IndeterminateProgressBarView />}
       {showingModal && (
         <Pressable
           style={{
@@ -362,8 +357,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
           snapPoints={snapPoints}
           backgroundStyle={styles.backgroundStyle}
           handleStyle={styles.handleStyle}
-          handleIndicatorStyle={styles.handleIndicatorStyle}
-          onChange={handleSheetChanges}>
+          handleIndicatorStyle={styles.handleIndicatorStyle}>
           <SortOptions
             currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
             onSortPressed={onSortPressed}

@@ -142,7 +142,9 @@ export const markdownRenderRules: RenderRules = {
     // a bit dirty, but we are using a scrollview only if the table contains more than 6 <thead>.<tr>.<th>
     // to determine the type, we look at the end of the key (should be _thead, _tr, _th)
     let shouldUseScrollView = false;
+    // @ts-ignore
     if (children[0] != null && children[0].key.endsWith('_thead')) {
+      // @ts-ignore
       const totalTH = children[0].props.children[0].props.children.length ?? 0;
       shouldUseScrollView = totalTH > 6;
     }
@@ -224,7 +226,7 @@ export const markdownRenderRules: RenderRules = {
       {node.content}
     </Text>
   ),
-  spoiler: (node, children, parent, styles) => {
+  spoiler: (node) => {
     return <PostSpoiler content={node.content.trim()} />;
   },
   subreddit: (node, children, parent, styles) => {
@@ -289,12 +291,12 @@ export function mergeComments(oldComments: Comment[], newComments: Comment[]): C
   if (newComments.length === 0) {
     return oldComments;
   }
-  let result: Comment[] = [...oldComments];
+  const result: Comment[] = [...oldComments];
   const index = result.findIndex((c) =>
     Array.isArray(c) ? false : c.data.id === newComments[0].data.id
   );
   if (index > -1 && result[index].kind === 'more') {
-    for (let newComment of newComments) {
+    for (const newComment of newComments) {
       newComment.data.depth += result[index].data.depth;
     }
     // @ts-ignore

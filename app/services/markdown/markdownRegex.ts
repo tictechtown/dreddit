@@ -16,7 +16,7 @@ export const coreRuler = (state: any, silent: boolean, options: any) => {
     }
     let tokens = state.tokens[i].children;
     for (let j = tokens.length - 1; j >= 0; j--) {
-      let token = tokens[j];
+      const token = tokens[j];
       if (token.type === 'text' && options.regex.test(token.content)) {
         // don't insert any tokens in silent mode
 

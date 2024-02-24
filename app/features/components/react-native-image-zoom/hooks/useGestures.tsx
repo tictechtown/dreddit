@@ -29,7 +29,7 @@ const getContainedInitialImageSize = (fullImageSize: Size, containerImageSize: S
     return { width: 100, height: 100 };
   }
   console.log('fullImageSize', fullImageSize, 'containerImageSize', containerImageSize);
-  const containerAspectRatio = containerImageSize.width / containerImageSize.height;
+  // const containerAspectRatio = containerImageSize.width / containerImageSize.height;
   const fullImageAspectRatio = fullImageSize.width / fullImageSize.height;
   if (containerImageSize.width / fullImageAspectRatio <= containerImageSize.height) {
     return {

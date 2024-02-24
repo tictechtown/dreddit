@@ -5,6 +5,7 @@
   "scripts": {
     "start": "expo start",
     "start:android": "expo start --android",
+    "lint": "eslint .",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -41,16 +42,16 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/react": "~18.2.45",
     "@types/react-native-base64": "^0.2.2",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "eslint": "^8.46.0",
+    "eslint": "^8.57.0",
     "eslint-config-universe": "^11.3.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "typescript-eslint": "^7.0.2"
   },
-  "private": true,
-  "eslintConfig": {
-    "extends": "universe/native"
-  }
+  "private": true
 }

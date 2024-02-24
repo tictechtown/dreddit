@@ -1,4 +1,4 @@
-const { findImageTypeFromUrl, isImageTypeValid, isUrlValid } = require('./utils');
+import { findImageTypeFromUrl, isImageTypeValid, isUrlValid } from './utils';
 
 const doesElementExist = (selector: string, attribute: string, $: any) =>
   $(selector).attr(attribute) && $(selector).attr(attribute).length > 0;

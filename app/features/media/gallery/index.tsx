@@ -1,39 +1,13 @@
-import Constants from 'expo-constants';
 import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { FlatList, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import base64 from 'react-native-base64';
-import PhotoZoom from 'react-native-photo-zoom';
-import { useSharedValue } from 'react-native-reanimated';
 import { Post } from '../../../services/api';
 import { Palette } from '../../colors';
-import ImageZoom from '../../components/react-native-image-zoom';
 import { Spacing } from '../../typography';
 import ImageView from '../image/ImageView';
-
-// TODO - Pinch to Zoom
-
-const ZoomableImage = ({ uri, width, height }: { uri: string; width: number; height: number }) => {
-  console.log('uri', uri);
-  return Constants.appOwnership === 'expo' ? (
-    <ImageZoom uri={uri} maxScale={10} resizeMethod="resize" fadeDuration={0} />
-  ) : (
-    <PhotoZoom
-      source={{ uri }}
-      style={{
-        width: width,
-        height: height,
-      }}
-      fadeDuration={0}
-      maximumZoomScale={10}
-      androidScaleType="fitCenter"
-      // onLoadStart={onLoadStart}
-      // onProgress={onProgress}
-    />
-  );
-};
 
 const CarouselView = ({
   pages,
@@ -48,8 +22,6 @@ const CarouselView = ({
     | null;
 }) => {
   const [pageIndex, setPageIndex] = React.useState(0);
-  const { width } = useWindowDimensions();
-  const animatedValue = useSharedValue(0);
 
   if (!pages) {
     return <></>;

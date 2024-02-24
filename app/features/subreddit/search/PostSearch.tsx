@@ -79,7 +79,7 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
                 }></MaterialCommunityIcons>
             );
           },
-          headerTitle: (_props) => {
+          headerTitle: () => {
             return (
               <TextInput
                 ref={inputRef}

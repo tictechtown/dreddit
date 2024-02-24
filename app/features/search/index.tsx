@@ -12,11 +12,7 @@ import FilterChip from '../components/FilterChip';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
 import { Spacing } from '../typography';
 
-type Props = {
-  onClose: () => void;
-};
-
-const defaultSubredditIcon = require('../../../assets/images/subbit.png');
+import defaultSubredditIcon = require('../../../assets/images/subbit.png');
 
 function getSubredditIcon(icon: string | undefined): string {
   if (!icon || icon?.length === 0) {
@@ -201,8 +197,6 @@ const SearchResultUser = (props: { result: User }) => {
 };
 
 const SearchResultItem = (props: { result: SearchResult }) => {
-  const data = props.result.data;
-
   if (props.result.kind === 't5') {
     return <SearchResultSub result={props.result} />;
   } else if (props.result.kind === 't3') {
@@ -220,7 +214,7 @@ enum SearchType {
   Posts,
 }
 
-const HomeSearch = (props: Props) => {
+const HomeSearch = () => {
   const [searchText, setSearchText] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [defaultResults, setDefaultResults] = useState<SubReddit[]>([]);
@@ -301,7 +295,7 @@ const HomeSearch = (props: Props) => {
                 }></MaterialCommunityIcons>
             );
           },
-          headerTitle: (props) => {
+          headerTitle: () => {
             return (
               <TextInput
                 ref={inputRef}

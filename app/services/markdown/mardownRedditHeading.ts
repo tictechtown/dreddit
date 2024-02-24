@@ -20,7 +20,7 @@ function headingRuler(state: MarkdownState) {
       continue;
     }
     for (let j = 0; j < blockTokens[i].children.length; j++) {
-      let inlineToken = blockTokens[i].children[j];
+      const inlineToken = blockTokens[i].children[j];
       if (inlineToken.type !== 'text') {
         continue;
       }
@@ -74,7 +74,7 @@ function headingRuler(state: MarkdownState) {
   }
 }
 
-const markdownRedditHeadingPlugin = (md: any, options: any) => {
+const markdownRedditHeadingPlugin = (md: any) => {
   md.core.ruler.push('redditheading', headingRuler);
 };
 

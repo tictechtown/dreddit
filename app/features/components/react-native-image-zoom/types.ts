@@ -39,27 +39,27 @@ export type ImageZoomProps = Omit<ImageProps, 'source'> & {
   /**
    * A callback triggered when the image interaction starts.
    */
-  onInteractionStart?: Function;
+  onInteractionStart?: () => void;
   /**
    * A callback triggered when the image interaction ends.
    */
-  onInteractionEnd?: Function;
+  onInteractionEnd?: () => void;
   /**
    * A callback triggered when the image pinching starts.
    */
-  onPinchStart?: Function;
+  onPinchStart?: () => void;
   /**
    * A callback triggered when the image pinching ends.
    */
-  onPinchEnd?: Function;
+  onPinchEnd?: () => void;
   /**
    * A callback triggered when the image panning starts.
    */
-  onPanStart?: Function;
+  onPanStart?: () => void;
   /**
    * A callback triggered when the image panning ends.
    */
-  onPanEnd?: Function;
+  onPanEnd?: () => void;
   /**
    * @see https://facebook.github.io/react-native/docs/image.html#source
    * @default undefined

@@ -17,7 +17,7 @@ export default function blockquoteRule(
   endLine: number,
   silent: boolean
 ) {
-  var adjustTab,
+  let adjustTab,
     ch,
     i,
     initial,
@@ -26,21 +26,13 @@ export default function blockquoteRule(
     lines,
     nextLine,
     offset,
-    oldBMarks,
-    oldBSCount,
-    oldIndent,
-    oldParentType,
-    oldSCount,
-    oldTShift,
     spaceAfterMarker,
     terminate,
-    terminatorRules,
     token,
     isOutdented,
-    oldLineMax = state.lineMax,
     pos = state.bMarks[startLine] + state.tShift[startLine],
     max = state.eMarks[startLine];
-
+  const oldLineMax = state.lineMax;
   // if it's indented more than 3 spaces, it should be a code block
   if (state.sCount[startLine] - state.blkIndent >= 4) {
     return false;
@@ -62,14 +54,14 @@ export default function blockquoteRule(
     return true;
   }
 
-  oldBMarks = [];
-  oldBSCount = [];
-  oldSCount = [];
-  oldTShift = [];
+  const oldBMarks = [];
+  const oldBSCount = [];
+  const oldSCount = [];
+  const oldTShift = [];
 
-  terminatorRules = state.md.block.ruler.getRules('blockquote');
+  const terminatorRules = state.md.block.ruler.getRules('blockquote');
 
-  oldParentType = state.parentType;
+  const oldParentType = state.parentType;
   state.parentType = 'blockquote';
 
   // Search the end of the block
@@ -220,7 +212,7 @@ export default function blockquoteRule(
     state.sCount[nextLine] = -1;
   }
 
-  oldIndent = state.blkIndent;
+  const oldIndent = state.blkIndent;
   state.blkIndent = 0;
 
   token = state.push('blockquote_open', 'blockquote', 1);

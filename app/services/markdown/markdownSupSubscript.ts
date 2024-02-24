@@ -39,7 +39,7 @@ export default function markdownItRedditSupsubscript(md: MarkdownIt, options: Op
     },
     subscriptParenthesized: {
       //~(subscript)
-      regex: /\~\(((?:\[[^\]]*\]\([^)]*\)|[\s\S])+?)\)/,
+      regex: /~\(((?:\[[^\]]*\]\([^)]*\)|[\s\S])+?)\)/,
       name: 'sub',
     },
     // subscript: {

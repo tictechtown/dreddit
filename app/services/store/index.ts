@@ -16,7 +16,7 @@ interface FavoriteState {
   removeFromFavorite: (entry: SubredditFavorite) => void;
 }
 
-const createSubredditSlice: StateCreator<FavoriteState> = (set, get, replace) => ({
+const createSubredditSlice: StateCreator<FavoriteState> = (set) => ({
   favorites: [],
   addToFavorites: (entry) =>
     set((state) => ({
@@ -33,7 +33,7 @@ interface SettingsState {
   setUseLowRes: (entry: boolean) => void;
 }
 
-const createSettingsSlice: StateCreator<SettingsState> = (set, get, replace) => ({
+const createSettingsSlice: StateCreator<SettingsState> = (set) => ({
   useLowRes: false,
   setUseLowRes: (entry) => set(() => ({ useLowRes: entry })),
 });
@@ -51,7 +51,7 @@ interface SavedPostState {
   removeFromSavedPosts: (entry: SavedPost) => void;
 }
 
-const createSavedPostSlice: StateCreator<SavedPostState> = (set, get, replace) => ({
+const createSavedPostSlice: StateCreator<SavedPostState> = (set) => ({
   savedPosts: [],
   addToSavedPosts: (entry) =>
     set((state) => ({

@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import * as React from 'react';
 import { FlatList, View } from 'react-native';
+import { Post } from '../../services/api';
 import { useStore } from '../../services/store';
 import { Palette } from '../colors';
 import ItemSeparator from '../components/ItemSeparator';
@@ -14,7 +15,7 @@ export default function Page() {
   ]);
 
   const savedPostIds: Record<string, boolean> = React.useMemo(() => {
-    var result = savedPosts.reduce(function (map: Record<string, boolean>, obj) {
+    const result = savedPosts.reduce(function (map: Record<string, boolean>, obj) {
       map[obj.data.id] = true;
       return map;
     }, {});
@@ -40,7 +41,7 @@ export default function Page() {
           data={savedPosts}
           renderItem={({ item }) => (
             <SubredditPostItemView
-              post={item}
+              post={item as Post}
               isSaved={savedPostIds[item.data.id]}
               addToSavedPosts={addToSavedPosts}
               removeFromSavedPosts={removeFromSavedPosts}

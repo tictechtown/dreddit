@@ -1,0 +1,5 @@
+.eslintrc.js
+app.config.js
+babel.config.js
+node_modules/
+.expo/

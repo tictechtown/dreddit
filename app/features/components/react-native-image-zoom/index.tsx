@@ -63,6 +63,9 @@ const ImageZoom: React.FC<ImageZoomProps> = ({
     Image.getSize(uri, (width, height) => {
       setImageSize({ width, height });
     });
+    if (onLoadEnd) {
+      onLoadEnd();
+    }
   }, [uri]);
 
   return (

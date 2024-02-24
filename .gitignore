@@ -37,3 +37,6 @@ yarn-error.*
 # prebuild ios/android
 android/
 ios/
+
+# Fixtures
+./app/features/home/fixtures.ts

@@ -1,13 +1,13 @@
 import { StyleSheet, View } from 'react-native';
 import { Palette } from '../colors';
 
-const ItemSeparator = () => {
+const ItemSeparator = ({ fullWidth = false }) => {
   return (
     <View
       style={{
-        borderBottomColor: Palette.onBackgroundLowest,
+        borderBottomColor: Palette.outlineVariant,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        marginHorizontal: 8,
+        marginHorizontal: fullWidth ? 0 : 16,
       }}
     />
   );

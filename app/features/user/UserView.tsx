@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Comment, Post, RedditApi, Trophy, User } from '../../services/api';
 import { Palette } from '../colors';
+import Tabs from '../components/Tabs';
+import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
 import { Spacing } from '../typography';
 import { timeDifference } from '../utils';
@@ -14,70 +16,14 @@ type Props = {
 
 type CommentOrPostOrTrophy = Comment | Post | Trophy;
 
-const Tab = ({
-  tabId,
-  tabName,
-  sortOrder,
-  onPress,
-}: {
-  tabId: string;
-  tabName: string;
-  sortOrder: string;
-  onPress: (value: string) => void;
-}) => {
-  return (
-    <TouchableOpacity
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom: Spacing.small,
-        borderBottomWidth: sortOrder === tabId ? 2 : 0,
-        borderBottomColor: Palette.primary,
-        flexDirection: 'row',
-        paddingTop: Spacing.regular,
-      }}
-      onPress={() => onPress(tabId)}
-      disabled={sortOrder === tabId}>
-      <Text
-        style={{
-          fontSize: 12,
-          fontWeight: 'bold',
-          color: sortOrder === tabId ? Palette.primary : Palette.onBackgroundLowest,
-        }}>
-        {tabName}
-      </Text>
-    </TouchableOpacity>
-  );
-};
-
 const TabView = (props: { sortOrder: string; onSortOrderChanged: (value: string) => void }) => {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingHorizontal: Spacing.regular,
-      }}>
-      <Tab
-        tabId={'posts'}
-        tabName={'Post'}
-        sortOrder={props.sortOrder}
-        onPress={props.onSortOrderChanged}
-      />
-      <Tab
-        tabId={'comments'}
-        tabName={'Comments'}
-        sortOrder={props.sortOrder}
-        onPress={props.onSortOrderChanged}
-      />
-      <Tab
-        tabId={'trophies'}
-        tabName={'Trophies'}
-        sortOrder={props.sortOrder}
-        onPress={props.onSortOrderChanged}
-      />
-    </View>
+    <Tabs
+      selectedTabId={props.sortOrder}
+      tabIds={['posts', 'comments', 'trophies']}
+      tabNames={['Post', 'Comments', 'Trophies']}
+      onPress={props.onSortOrderChanged}
+    />
   );
 };
 
@@ -110,29 +56,23 @@ const CommentItem = ({ commentOrPost }: { commentOrPost: CommentOrPostOrTrophy }
       <View
         style={{
           flex: 1,
-          borderBottomColor: Palette.outline,
-          borderBottomWidth: 1,
           paddingHorizontal: Spacing.small,
-          paddingVertical: Spacing.xsmall,
+          paddingBottom: Spacing.small,
         }}>
         <TouchableOpacity onPress={onPress}>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: Palette.onBackgroundLowest }}>
+            <Typography variant="headlineSmall">
               {/* @ts-ignore */}
               {decode(commentOrPost.data.link_title)}
-            </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={{ color: Palette.onSurfaceVariant }}>
-                {commentOrPost.data.subreddit_name_prefixed}
-              </Text>
+            </Typography>
+            <Typography variant="bodySmall" style={{ color: Palette.onSurfaceVariant }}>
+              {commentOrPost.data.subreddit_name_prefixed} •{' '}
+              {timeDifference(commentOrPost.data.created_utc * 1000)}
+            </Typography>
 
-              <Text style={{ color: Palette.onSurfaceVariant }}>
-                {timeDifference(commentOrPost.data.created_utc * 1000)}
-              </Text>
-            </View>
-            <Text style={{ color: Palette.onSurfaceVariant }}>
+            <Typography variant="bodyMedium" style={{ color: Palette.onSurfaceVariant }}>
               {decode(commentOrPost.data.body)}
-            </Text>
+            </Typography>
           </View>
         </TouchableOpacity>
       </View>
@@ -146,19 +86,17 @@ const CommentItem = ({ commentOrPost }: { commentOrPost: CommentOrPostOrTrophy }
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          paddingHorizontal: 6,
-          paddingVertical: 12,
+          paddingHorizontal: Spacing.regular,
+          paddingVertical: Spacing.xxsmall,
         }}>
         <Image
-          style={{ borderRadius: 16, marginRight: Spacing.regular }}
-          width={70}
-          height={70}
+          style={{ borderRadius: 10, marginRight: Spacing.regular }}
+          width={40}
+          height={40}
           source={{
             uri: commentOrPost.data.icon_70.replaceAll('&amp;', '&'),
           }}></Image>
-        <Text style={{ color: Palette.onBackgroundLowest, fontSize: 16 }}>
-          {commentOrPost.data.name}
-        </Text>
+        <Typography variant="bodyLarge">{commentOrPost.data.name}</Typography>
       </View>
     );
   }
@@ -209,86 +147,45 @@ const UserView = (props: Props) => {
     if (!userData) {
       return (
         <View>
-          <Text>Loading avatar</Text>
+          <Typography variant="headlineSmall">Loading avatar</Typography>
         </View>
       );
     }
 
     return (
       <View style={{ flex: 1, width: '100%' }}>
-        <Image
-          style={{ borderRadius: 64, alignSelf: 'center' }}
-          width={128}
-          height={128}
-          source={{
-            uri: (!userData.data.pref_show_snoovatar
-              ? userData.data.icon_img
-              : userData.data.snoovatar_img
-            ).replaceAll('&amp;', '&'),
-          }}></Image>
-        <View
-          style={{
-            backgroundColor: Palette.background,
-            padding: Spacing.small,
-            marginTop: Spacing.small,
-          }}>
-          <View style={{ flexDirection: 'row' }}>
+        <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+          <Image
+            style={{ width: 140, height: 140, borderRadius: 70, marginBottom: 10 }}
+            source={{
+              uri: (!userData.data.pref_show_snoovatar
+                ? userData.data.icon_img
+                : userData.data.snoovatar_img
+              ).replaceAll('&amp;', '&'),
+            }}></Image>
+
+          <Typography variant="headlineMedium">{props.userId.trim()}</Typography>
+          <View style={{ flexDirection: 'row', marginBottom: 20 }}>
             {userData.data.subreddit.over_18 && (
               <Text style={{ marginRight: Spacing.small, color: 'red', fontWeight: 'bold' }}>
                 NSFW
               </Text>
             )}
 
-            <Text style={{ color: Palette.onBackgroundLowest, fontWeight: '300' }}>
+            <Typography variant="bodyMedium" style={{ color: Palette.onSurfaceVariant }}>
               {userData.data.total_karma.toLocaleString('en-US')} karma •{' '}
               {new Date(userData.data.created_utc * 1000).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
               })}
-            </Text>
+            </Typography>
           </View>
           {userData.data.subreddit.public_description?.length > 0 && (
-            <Text style={{ color: Palette.onBackgroundLowest }}>
+            <Typography variant="bodyMedium">
               {decode(userData.data.subreddit.public_description)}
-            </Text>
+            </Typography>
           )}
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            backgroundColor: Palette.background,
-            paddingBottom: Spacing.small,
-          }}>
-          <View
-            style={{
-              backgroundColor: Palette.surfaceVariant,
-              borderRadius: 60,
-              height: 60,
-              paddingHorizontal: Spacing.regular,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text style={{ color: Palette.onSurfaceVariant }}>Post Karma</Text>
-            <Text style={{ color: Palette.onSurfaceVariant, fontWeight: 'bold' }}>
-              {userData.data.link_karma.toLocaleString('en-US')}
-            </Text>
-          </View>
-          <View
-            style={{
-              backgroundColor: Palette.surfaceVariant,
-              borderRadius: 60,
-              height: 60,
-              paddingHorizontal: Spacing.regular,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text style={{ color: Palette.onSurfaceVariant }}>Comment Karma</Text>
-            <Text style={{ color: Palette.onSurfaceVariant, fontWeight: 'bold' }}>
-              {userData.data.comment_karma.toLocaleString('en-US')}
-            </Text>
-          </View>
         </View>
         <TabView sortOrder={sortOrder} onSortOrderChanged={setSortOrder} />
       </View>
@@ -313,7 +210,7 @@ const UserView = (props: Props) => {
       style={{
         flex: 1,
         width: '100%',
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: Palette.surface,
       }}>
       <Stack.Screen options={{ title: props.userId }} />
       <FlatList
@@ -321,6 +218,7 @@ const UserView = (props: Props) => {
         renderItem={({ item }) => <CommentItem commentOrPost={item} />}
         keyExtractor={(item) => item.data.id ?? item.data.name}
         ListHeaderComponent={Header}
+        contentContainerStyle={{ rowGap: 10 }}
         ListFooterComponent={() => {
           if (commentsData.isLoaded && filteredData?.length === 0) {
             return (
@@ -329,12 +227,17 @@ const UserView = (props: Props) => {
                   borderColor: Palette.outline,
                   padding: Spacing.small,
                   margin: Spacing.small,
-                  marginTop: Spacing.large,
                   borderWidth: 1,
                   borderRadius: 8,
                 }}>
                 <Text style={{ color: Palette.onSurface }}>
-                  No {sortOrder === 'posts' ? 'post' : 'comment'} sent
+                  No{' '}
+                  {sortOrder === 'posts'
+                    ? 'post'
+                    : sortOrder === 'comments'
+                      ? 'comment'
+                      : 'trophies'}{' '}
+                  sent
                 </Text>
               </View>
             );
@@ -347,3 +250,41 @@ const UserView = (props: Props) => {
 };
 
 export default UserView;
+
+/**
+ * 
+ *         { <View
+          style={{
+            flexDirection: 'row',
+            paddingHorizontal: Spacing.small,
+            justifyContent: 'space-between',
+          }}>
+          <View>
+            <Text
+              style={{
+                color: Palette.onSurfaceVariant,
+                ...TypographyStyles.overline,
+                opacity: 0.6,
+              }}>
+              Post Karma
+            </Text>
+            <Text style={{ color: Palette.onSurfaceVariant, ...TypographyStyles.bodyLarge }}>
+              {userData.data.link_karma.toLocaleString('en-US')}
+            </Text>
+          </View>
+          <View>
+            <Text
+              style={{
+                color: Palette.onSurfaceVariant,
+                ...TypographyStyles.overline,
+                opacity: 0.6,
+              }}>
+              Comment Karma
+            </Text>
+            <Text style={{ color: Palette.onSurfaceVariant, ...TypographyStyles.bodyLarge }}>
+              {userData.data.comment_karma.toLocaleString('en-US')}
+            </Text>
+          </View>
+        </View> }
+
+ */

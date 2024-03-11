@@ -43,16 +43,28 @@ const FlairTextView = (props: Props) => {
   }
 
   return (
-    <View style={{ ...props.containerStyle, flexDirection: 'row', alignItems: 'center' }}>
+    <View
+      style={{
+        ...props.containerStyle,
+        flexDirection: 'row',
+        alignItems: 'center',
+        columnGap: 2,
+      }}>
       {elementsToDisplay.map((it, index) => {
         if (it.e === 'text') {
+          let displayedItem = decode(it.t);
+          if (displayedItem.length > 22) {
+            displayedItem = displayedItem.slice(0, 22) + '...';
+          }
+
           return (
             <Text
+              numberOfLines={1}
               key={`${it.t}.${index}`}
               style={
                 props.textStyle ? props.textStyle : { color: Palette.onBackground, fontSize: 11 }
               }>
-              {decode(it.t)}
+              {displayedItem}
             </Text>
           );
         }
@@ -62,7 +74,6 @@ const FlairTextView = (props: Props) => {
               width: 12,
               height: 12,
               borderRadius: 6,
-              marginRight: 3,
               backgroundColor: props.flair_background_color ?? undefined,
             }}
             key={`${it.a}.${index}`}

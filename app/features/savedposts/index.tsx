@@ -27,7 +27,7 @@ export default function Page() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: Palette.background,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
@@ -35,7 +35,7 @@ export default function Page() {
       <View
         style={{
           flex: 1,
-          backgroundColor: Palette.backgroundLowest,
+          backgroundColor: Palette.background,
         }}>
         <FlatList
           data={savedPosts}

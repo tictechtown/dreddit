@@ -13,7 +13,7 @@ const PostSpoiler = ({ content }: { content: string }) => {
     <Text
       onPress={revealPost}
       style={{
-        backgroundColor: isRevealed ? Palette.backgroundLowest : Palette.surfaceVariant,
+        backgroundColor: isRevealed ? Palette.surface : Palette.surfaceVariant,
         color: isRevealed ? Palette.secondary : Palette.surfaceVariant,
       }}>
       {content}

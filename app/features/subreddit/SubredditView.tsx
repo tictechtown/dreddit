@@ -1,4 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Link, Stack, router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -8,7 +8,6 @@ import {
   RefreshControl,
   Text,
   TouchableNativeFeedback,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { Post, RedditApi } from '../../services/api';
@@ -16,8 +15,7 @@ import { useStore } from '../../services/store';
 import { Palette } from '../colors';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import ItemSeparator from '../components/ItemSeparator';
-import { Spacing } from '../typography';
-import SortTab from './components/SortTab';
+import Tabs from '../components/Tabs';
 import SubredditPostItemView from './components/SubredditPostItemView';
 import { getAllUniqueFlairs } from './utils';
 
@@ -48,77 +46,18 @@ const keyExtractor = (item: Post, index: number) => `${item.data.id}.${index}`;
 
 const SortOrderView = (props: {
   sortOrder: string;
-  onSortOrderChanged: (value: 'hot' | 'top' | 'new') => void;
+  onSortOrderChanged: (value: string) => void;
   flairs: string[];
   selectedFlair: string | null;
   onFlairTapped: (value: string) => void;
 }) => {
-  const _renderFlair = useCallback(
-    ({ item }: { item: string }) => {
-      return (
-        <TouchableOpacity onPress={() => props.onFlairTapped(item)}>
-          <View
-            style={{
-              flex: 0,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor:
-                item === props.selectedFlair ? Palette.surfaceVariant : Palette.surface,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: Palette.surfaceVariant,
-              paddingHorizontal: Spacing.small,
-              paddingVertical: Spacing.xsmall,
-              marginRight: Spacing.small,
-            }}>
-            <Text style={{ color: Palette.onBackground, fontSize: 11 }}>{item}</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    },
-    [props.flairs, props.selectedFlair, props.onFlairTapped]
-  );
-
   return (
-    <>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          paddingHorizontal: Spacing.regular,
-          paddingVertical: Spacing.small,
-        }}>
-        <SortTab
-          tabId={'hot'}
-          tabIconName={'local-fire-department'}
-          tabSelectedId={props.sortOrder}
-          onPress={props.onSortOrderChanged}
-        />
-        <SortTab
-          tabId={'top'}
-          tabIconName={'leaderboard'}
-          tabSelectedId={props.sortOrder}
-          onPress={props.onSortOrderChanged}
-        />
-        <SortTab
-          tabId={'new'}
-          tabIconName={'schedule'}
-          tabSelectedId={props.sortOrder}
-          onPress={props.onSortOrderChanged}
-        />
-      </View>
-      {props.flairs?.length > 0 && (
-        <View style={{ marginTop: Spacing.small, marginBottom: Spacing.regular }}>
-          <FlatList
-            horizontal
-            data={props.flairs}
-            renderItem={_renderFlair}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingLeft: Spacing.small }}
-          />
-        </View>
-      )}
-    </>
+    <Tabs
+      selectedTabId={props.sortOrder}
+      tabIds={['hot', 'top', 'new']}
+      tabIconNames={['local-fire-department', 'leaderboard', 'schedule']}
+      onPress={props.onSortOrderChanged}
+    />
   );
 };
 
@@ -326,6 +265,7 @@ const SubRedditView = (props: Props) => {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'flex-end',
+                  columnGap: 8,
                 }}>
                 <Link
                   href={{
@@ -336,12 +276,8 @@ const SubRedditView = (props: Props) => {
                   <TouchableNativeFeedback
                     hitSlop={5}
                     background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
-                    <View style={{ marginLeft: Spacing.regular }}>
-                      <Ionicons
-                        name="information-circle-outline"
-                        size={26}
-                        color={Palette.onBackgroundLowest}
-                      />
+                    <View>
+                      <MaterialIcons name="info-outline" size={26} color={Palette.onBackground} />
                     </View>
                   </TouchableNativeFeedback>
                 </Link>
@@ -350,11 +286,11 @@ const SubRedditView = (props: Props) => {
                   hitSlop={5}
                   onPress={toggleSubreddit}
                   background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
-                  <View style={{ marginLeft: Spacing.regular }}>
-                    <Ionicons
+                  <View>
+                    <MaterialIcons
                       name={isFavorite ? 'bookmark' : 'bookmark-outline'}
                       size={24}
-                      color={Palette.onBackgroundLowest}
+                      color={Palette.onBackground}
                     />
                   </View>
                 </TouchableNativeFeedback>
@@ -363,8 +299,8 @@ const SubRedditView = (props: Props) => {
                   hitSlop={5}
                   onPress={searchPosts}
                   background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
-                  <View style={{ marginLeft: Spacing.regular }}>
-                    <Ionicons name={'search'} size={24} color={Palette.onBackgroundLowest} />
+                  <View>
+                    <MaterialIcons name={'search'} size={24} color={Palette.onBackground} />
                   </View>
                 </TouchableNativeFeedback>
               </View>
@@ -376,7 +312,7 @@ const SubRedditView = (props: Props) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: Palette.backgroundLowest,
+          backgroundColor: Palette.surface,
         }}>
         <FlatList
           ref={flatListRef}
@@ -392,8 +328,8 @@ const SubRedditView = (props: Props) => {
           }
           renderItem={renderItem}
           onEndReachedThreshold={2}
-          onEndReached={fetchMoreData}
           ItemSeparatorComponent={ItemSeparator}
+          onEndReached={fetchMoreData}
           keyExtractor={keyExtractor}
           refreshControl={
             <RefreshControl
@@ -423,7 +359,7 @@ const SubRedditView = (props: Props) => {
             />
             <Text
               style={{
-                color: Palette.onBackgroundLowest,
+                color: Palette.onBackground,
                 fontWeight: '600',
                 fontSize: 36,
                 textAlign: 'center',

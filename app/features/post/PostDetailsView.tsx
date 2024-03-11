@@ -1,13 +1,25 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Constants from 'expo-constants';
 import { Image } from 'expo-image';
 import { Stack, useFocusEffect } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { BackHandler, FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  BackHandler,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  Share,
+  StyleSheet,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import PhotoZoom from 'react-native-photo-zoom';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Comment, Post, RedditApi, RedditMediaMedata } from '../../services/api';
+import { useStore } from '../../services/store';
 import { Palette } from '../colors';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import { Spacing } from '../typography';
@@ -56,7 +68,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
   const flatListRef = useRef<FlatList>(null);
 
   // variables
-  const snapPoints = useMemo(() => ['25%', '35%'], []);
+  const snapPoints = useMemo(() => ['25%', '42%'], []);
 
   // Android: handle back button when media is displayed
   useFocusEffect(
@@ -260,11 +272,70 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: Palette.surface,
       }}>
       <Stack.Screen
         options={{
           title: queryData.post?.data.subreddit_name_prefixed ?? '',
+          headerRight: () => {
+            const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
+              state.savedPosts,
+              state.addToSavedPosts,
+              state.removeFromSavedPosts,
+            ]);
+
+            const isSaved = !!savedPosts.find((sP) => sP.data.id === queryData.post?.data.id);
+
+            const toggleSavedPost = () => {
+              if (queryData.post) {
+                const post = savedPosts.find((sP) => sP.data.id === queryData.post?.data.id);
+                if (post) {
+                  removeFromSavedPosts(post);
+                } else {
+                  addToSavedPosts(queryData.post);
+                }
+              }
+            };
+
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  columnGap: 8,
+                }}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    await Share.share({ message: queryData?.post?.data.url ?? '' });
+                  }}
+                  hitSlop={20}>
+                  <MaterialIcons name="share" size={24} color={Palette.onSurfaceVariant} />
+                </TouchableOpacity>
+                <TouchableNativeFeedback
+                  disabled={!queryData}
+                  hitSlop={5}
+                  onPress={toggleSavedPost}
+                  background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
+                  <View>
+                    <MaterialIcons
+                      name={isSaved ? 'bookmark' : 'bookmark-outline'}
+                      size={24}
+                      color={Palette.onBackground}
+                    />
+                  </View>
+                </TouchableNativeFeedback>
+                <TouchableNativeFeedback
+                  disabled={true}
+                  hitSlop={5}
+                  background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
+                  <View>
+                    <MaterialIcons name={'search'} size={24} color={Palette.onBackground} />
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+            );
+          },
         }}
       />
       <FlatList
@@ -274,6 +345,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         keyExtractor={keyExtractor}
         ListHeaderComponent={Header}
         refreshControl={refreshControl}
+        contentContainerStyle={{ paddingBottom: 20 }}
       />
       {queryData.loading && <IndeterminateProgressBarView />}
       {showingModal && (
@@ -294,7 +366,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
             style={[
               {
                 flex: 1,
-                backgroundColor: Palette.backgroundLowest,
+                backgroundColor: Palette.scrim,
               },
               animatedStyle,
             ]}
@@ -323,7 +395,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                 bottom: 0,
                 right: 0,
                 left: 0,
-                backgroundColor: Palette.backgroundLowest,
+                backgroundColor: Palette.scrim,
               },
               animatedStyle,
             ]}

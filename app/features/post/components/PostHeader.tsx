@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
@@ -7,12 +7,24 @@ import { Pressable, Text, TouchableOpacity, View, useWindowDimensions } from 're
 import { Post } from '../../../services/api';
 import { Palette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
+import PostKarmaButton from '../../components/PostKarmaButton';
+import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import PostPreview from '../../subreddit/components/PostPreview';
 import { Spacing } from '../../typography';
 import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, markdownStyles } from '../utils';
 import PollOption from './PollOption';
+
+function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: string | null): string {
+  let sort = forcedSortOrder ?? suggestedSort ?? 'best';
+  // confidence is deprecated. Display "best" instead
+  if (sort === 'confidence') {
+    sort = 'best';
+  }
+
+  return sort[0].toLocaleUpperCase() + sort.slice(1);
+}
 
 const PostHeader = ({
   post,
@@ -65,23 +77,15 @@ const PostHeader = ({
     return true;
   }, []);
 
-  let displayedSortOrder = forcedSortOrder ?? post.data.suggested_sort ?? 'best';
-  // confidence is deprecated. Display "best" instead
-  if (displayedSortOrder === 'confidence') {
-    displayedSortOrder = 'best';
-  }
+  const displayedSortOrder = getDisplaySortOrder(forcedSortOrder, post.data.suggested_sort);
 
   return (
     <View>
-      <View style={{ flexDirection: 'row', marginLeft: 8 }}>
-        <Text
-          style={{
-            color: Palette.primary,
-            fontSize: 16,
-            fontWeight: 'bold',
-          }}>
+      <View
+        style={{ flexDirection: 'row', marginHorizontal: 12, columnGap: 8, alignItems: 'center' }}>
+        <Typography variant="overline" style={{ color: Palette.primary }}>
           {post.data.author}
-        </Text>
+        </Typography>
         <FlairTextView
           flair_richtext={post.data.author_flair_richtext}
           flair_text={post.data.author_flair_text}
@@ -89,44 +93,24 @@ const PostHeader = ({
           pinned={false}
           flair_type={post.data.author_flair_type}
           flair_background_color={post.data.author_flair_background_color}
-          containerStyle={{ marginHorizontal: 4 }}
+          containerStyle={{}}
         />
-
-        <Text style={{ color: Palette.secondary, fontSize: 16, fontWeight: '300' }}>
+        <Typography variant="overline" style={{ color: Palette.secondary }}>
           • {timeDifference(post.data.created_utc * 1000)}
-        </Text>
+        </Typography>
       </View>
       <Pressable onPress={onPress}>
-        <Text
+        <Typography
+          variant="titleMedium"
           style={{
-            color: Palette.onBackgroundLowest,
-            fontSize: 18,
+            color: Palette.onSurface,
+            paddingTop: 4,
             paddingHorizontal: Spacing.small,
           }}>
-          {decode(post.data.title)} ({post.data.domain})
-        </Text>
+          {decode(post.data.title)}
+        </Typography>
       </Pressable>
-      <View style={{ padding: Spacing.small, flexDirection: 'row' }}>
-        <View
-          style={{
-            flex: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: Palette.surfaceVariant,
-            borderRadius: 8,
-            paddingHorizontal: 6,
-            flexDirection: 'row',
-            marginRight: Spacing.small,
-          }}>
-          <MaterialCommunityIcons
-            name="arrow-up-down-bold"
-            color={Palette.onSurfaceVariant}
-            size={16}
-          />
-          <Text style={{ color: Palette.onSurfaceVariant, fontSize: 16, fontWeight: 'bold' }}>
-            {(post.data.ups - post.data.downs).toLocaleString('en-US')}
-          </Text>
-        </View>
+      <View style={{ padding: Spacing.small, paddingTop: Spacing.xsmall, flexDirection: 'row' }}>
         {post.data.link_flair_text && (
           <FlairTextView
             flair_text={post.data.link_flair_text}
@@ -135,7 +119,7 @@ const PostHeader = ({
             flair_background_color={post.data.link_flair_background_color}
             textStyle={{
               color: Palette.onSurfaceVariant,
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: 'bold',
             }}
             pinned={post.data.pinned}
@@ -144,27 +128,30 @@ const PostHeader = ({
               flex: 0,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: Palette.surfaceVariant,
-              borderRadius: 8,
-              paddingHorizontal: Spacing.small,
+              backgroundColor: Palette.surfaceContainerHigh,
+              borderRadius: Spacing.xsmall,
+              paddingHorizontal: Spacing.xsmall,
+              paddingVertical: Spacing.xxsmall,
               flexDirection: 'row',
             }}
           />
         )}
       </View>
 
-      <PostPreview post={post} imageWidth={dimensions.width} />
-      {maxGaleryResolutions && (
-        <CarouselView resolutions={maxGaleryResolutions} width={dimensions.width} />
-      )}
+      <View style={{ marginHorizontal: 12 }}>
+        <PostPreview post={post} imageWidth={dimensions.width - 24} />
+        {maxGaleryResolutions && (
+          <CarouselView resolutions={maxGaleryResolutions} width={dimensions.width - 24} />
+        )}
+      </View>
 
       {post.data.selftext.length > 0 && (
         <View
           style={{
-            borderColor: Palette.outline,
             padding: Spacing.small,
             margin: Spacing.small,
-            borderWidth: 1,
+
+            backgroundColor: Palette.surfaceContainer,
             borderRadius: 8,
           }}>
           {post.data.poll_data && (
@@ -179,14 +166,14 @@ const PostHeader = ({
                 ))}
               </View>
 
-              <Text style={{ color: Palette.onBackgroundLowest, alignSelf: 'flex-end' }}>
+              <Text style={{ color: Palette.onSurface, alignSelf: 'flex-end' }}>
                 {post.data.poll_data.total_vote_count} votes
               </Text>
 
               {post.data.poll_data.voting_end_timestamp - Date.now() > 0 ? (
-                <Text style={{ color: Palette.onBackgroundLowest }}>Voting still open</Text>
+                <Text style={{ color: Palette.onSurface }}>Voting still open</Text>
               ) : (
-                <Text style={{ color: Palette.onBackgroundLowest }}>
+                <Text style={{ color: Palette.onSurface }}>
                   Voting closed {timeDifference(post.data.poll_data.voting_end_timestamp)}
                 </Text>
               )}
@@ -203,21 +190,36 @@ const PostHeader = ({
       )}
       <View
         style={{
-          backgroundColor: Palette.background,
+          backgroundColor: Palette.surface,
           padding: Spacing.small,
           marginBottom: Spacing.small,
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text style={{ color: Palette.onBackground }}>
-          {(post.data.num_comments ?? 0).toLocaleString('en-US')} comments
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={{ color: Palette.onBackground, fontWeight: '300' }}>sorted by </Text>
+        <PostKarmaButton karma={post.data.score} />
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 8 }}>
+          <MaterialIcons name="question-answer" size={14} color={Palette.secondary} />
+          <Typography variant="labelMedium" style={{ color: Palette.secondary }}>
+            {(post.data.num_comments ?? 0).toLocaleString('en-US')}
+          </Typography>
           <TouchableOpacity onPress={onChangeSort}>
-            <Text style={{ fontWeight: 'bold', color: Palette.secondary }}>
-              {displayedSortOrder}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                borderRadius: 8,
+                backgroundColor: Palette.secondaryContainer,
+                paddingLeft: 16,
+                paddingVertical: 6,
+                paddingRight: 8,
+                columnGap: 8,
+                alignItems: 'center',
+              }}>
+              <Text style={{ fontWeight: 'bold', color: Palette.onSurfaceVariant }}>
+                {displayedSortOrder}
+              </Text>
+              <MaterialIcons name="arrow-drop-down" color={Palette.onSurfaceVariant} size={18} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>

@@ -78,7 +78,7 @@ export const onLinkPress = (post: Post): HrefObject => {
         reddit_video: base64.encode(JSON.stringify(originalPost.data?.media?.reddit_video)),
       },
     };
-  } /*else if (
+  } else if (
     domain.startsWith('dubz.co') ||
     domain.startsWith('dubz.link') ||
     domain.startsWith('dubz.live')
@@ -87,16 +87,10 @@ export const onLinkPress = (post: Post): HrefObject => {
       pathname: 'features/media/video',
       params: {
         title,
-        reddit_video: base64.encode(
-          JSON.stringify({
-            hls_url: getVideoUrlFromDubz(originalPost.data.url),
-            height: '100%',
-            width: '100%',
-          })
-        ),
+        prefetchuri: originalPost.data.url,
       },
     };
-  }*/ else if (domain.startsWith('imgur.com')) {
+  } else if (domain.startsWith('imgur.com')) {
     // usually, that's a video?
     return {
       pathname: 'features/media/video',

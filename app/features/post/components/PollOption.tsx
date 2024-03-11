@@ -37,9 +37,9 @@ const PollOption = (props: Props) => {
           paddingVertical: Spacing.small,
           paddingHorizontal: Spacing.regular,
         }}>
-        <Text style={{ color: Palette.onBackgroundLowest }}>{props.option.text}</Text>
+        <Text style={{ color: Palette.onBackground }}>{props.option.text}</Text>
         {showVotes && (
-          <Text style={{ color: Palette.onBackgroundLowest }}>{props.option.vote_count}</Text>
+          <Text style={{ color: Palette.onBackground }}>{props.option.vote_count}</Text>
         )}
       </View>
     </View>

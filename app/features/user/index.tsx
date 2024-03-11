@@ -10,7 +10,7 @@ export default function Page() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: Palette.surface,
         justifyContent: 'center',
         alignItems: 'center',
       }}>

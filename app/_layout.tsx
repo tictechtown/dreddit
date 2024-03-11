@@ -10,12 +10,10 @@ export default function Layout() {
         <Stack
           screenOptions={{
             headerStyle: {
-              backgroundColor: Palette.backgroundLowest,
+              backgroundColor: Palette.surface,
             },
-            headerTintColor: Palette.onBackgroundLowest,
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
+            headerTintColor: Palette.onSurface,
+            navigationBarColor: 'transparent',
           }}>
           <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
           <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" />

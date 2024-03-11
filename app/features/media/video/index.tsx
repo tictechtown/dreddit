@@ -29,6 +29,7 @@ export default function Page() {
       const html = await req.text();
       const result = extractMetaTags(html, { customMetaTags: [] });
       if (result && 'ogVideo' in result) {
+        console.log('loading', result);
         setRVideo({ hls_url: result.ogVideo.url, height: '100%', width: '100%' });
       } else {
         setErrorMessage(`cant load video from url ${uri}`);
@@ -51,15 +52,22 @@ export default function Page() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: Palette.scrim,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Stack.Screen options={{ title: decode(title as string) }} />
+      <Stack.Screen
+        options={{
+          title: decode(title as string),
+          headerStyle: {
+            backgroundColor: Palette.scrim,
+          },
+        }}
+      />
       {errorMessage && (
         <View
           style={{
-            backgroundColor: Palette.backgroundLowest,
+            backgroundColor: Palette.scrim,
             width: '100%',
             height: '100%',
           }}>

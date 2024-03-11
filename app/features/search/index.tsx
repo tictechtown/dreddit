@@ -9,9 +9,11 @@ import { FlatList, Keyboard, Pressable, StyleSheet, Text, TextInput, View } from
 import { Post, RedditApi, SubReddit, User } from '../../services/api';
 import { Palette } from '../colors';
 import FilterChip from '../components/FilterChip';
+import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
 import { Spacing } from '../typography';
 
+// @ts-ignore
 import defaultSubredditIcon = require('../../../assets/images/subbit.png');
 
 function getSubredditIcon(icon: string | undefined): string {
@@ -57,10 +59,10 @@ const SearchResultSub = (props: { result: SubReddit }) => {
         params: { icon: icon },
       }}
       asChild>
-      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: Spacing.xsmall }}>
+      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: 2 }}>
         <View
           style={{
-            backgroundColor: Palette.surface,
+            backgroundColor: Palette.surfaceContainer,
             borderRadius: 8,
             flex: 1,
             paddingHorizontal: 12,
@@ -69,9 +71,9 @@ const SearchResultSub = (props: { result: SubReddit }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
               style={{
-                width: 64,
-                height: 64,
-                borderRadius: 32,
+                width: 68,
+                height: 68,
+                borderRadius: 34,
                 marginRight: Spacing.regular,
                 flex: 0,
               }}
@@ -84,31 +86,36 @@ const SearchResultSub = (props: { result: SubReddit }) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{ color: Palette.onBackground, fontSize: 18, fontWeight: 'bold' }}>
+                <Typography variant="titleMedium" style={{ fontWeight: 'bold' }}>
                   {data.display_name_prefixed}
-                </Text>
+                </Typography>
+
                 {data.over18 && <Text style={{ flex: 0, color: Palette.error }}>NSFW</Text>}
               </View>
+              <View style={{ flexDirection: 'row', columnGap: 4, alignItems: 'center' }}>
+                <Ionicons name="people" size={12} color={Palette.onSurfaceVariant} />
 
-              <Text style={{ color: Palette.onBackground, fontWeight: '300' }}>
-                <Ionicons
-                  name="people"
-                  size={14}
-                  color="grey"
-                  style={{ paddingRight: Spacing.small }}
-                />
-                {(data.subscribers ?? 0).toLocaleString('en-US')} members
-              </Text>
-              <Text
-                style={{ color: Palette.onSurfaceVariant, fontSize: 16, flex: 1 }}
+                <Typography
+                  variant="bodySmall"
+                  style={{ color: Palette.onSurfaceVariant, opacity: 0.8 }}>
+                  {(data.subscribers ?? 0).toLocaleString('en-US')} members
+                </Typography>
+              </View>
+
+              <Typography
+                variant="bodyMedium"
+                style={{ color: Palette.onSurfaceVariant, flex: 1 }}
                 numberOfLines={1}>
                 {decode(data.title)}
-              </Text>
+              </Typography>
 
               {data.public_description && (
-                <Text style={{ color: Palette.onBackground }} numberOfLines={2}>
+                <Typography
+                  variant="bodySmall"
+                  style={{ color: Palette.onSurfaceVariant, opacity: 0.8 }}
+                  numberOfLines={2}>
                   {decode(data.public_description)}
-                </Text>
+                </Typography>
               )}
             </View>
           </View>
@@ -140,9 +147,9 @@ const SearchResultUser = (props: { result: User }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
               style={{
-                width: 64,
-                height: 64,
-                borderRadius: 32,
+                width: 68,
+                height: 68,
+                borderRadius: 34,
                 marginRight: Spacing.regular,
                 flex: 0,
               }}
@@ -155,33 +162,29 @@ const SearchResultUser = (props: { result: User }) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{ color: Palette.onBackground, fontSize: 18, fontWeight: 'bold' }}>
+                <Typography variant="titleMedium" style={{ fontWeight: 'bold' }}>
                   {data.name}
-                </Text>
-                {data.subreddit?.over_18 && (
-                  <Text style={{ flex: 0, color: Palette.error }}>NSFW</Text>
-                )}
-                {data.is_mod && <Text style={{ flex: 0, color: Palette.secondary }}>Mod</Text>}
+                </Typography>
+
+                <View style={{ flexDirection: 'row', columnGap: 4 }}>
+                  {data.subreddit?.over_18 && (
+                    <Text style={{ flex: 0, color: Palette.error }}>NSFW</Text>
+                  )}
+                  {data.is_mod && <Text style={{ flex: 0, color: Palette.secondary }}>Mod</Text>}
+                </View>
               </View>
 
-              <Text style={{ color: Palette.onBackground, fontWeight: '300' }}>
-                <Ionicons
-                  name="people"
-                  size={14}
-                  color="grey"
-                  style={{ paddingRight: Spacing.small }}
-                />
-                {(data.link_karma + data.comment_karma).toLocaleString('en-US')} karma
-              </Text>
-              <Text
-                style={{ color: Palette.onSurfaceVariant, fontSize: 16, flex: 1 }}
-                numberOfLines={1}>
+              <Typography
+                variant="bodySmall"
+                style={{ color: Palette.onSurfaceVariant, opacity: 0.8 }}>
+                {((data.link_karma ?? 0) + (data.comment_karma ?? 0)).toLocaleString('en-US')} karma
+                •{' '}
                 {new Date(data.created_utc * 1000).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
                 })}
-              </Text>
+              </Typography>
 
               {data.subreddit?.public_description && (
                 <Text style={{ color: Palette.onBackground }} numberOfLines={2}>
@@ -276,7 +279,7 @@ const HomeSearch = () => {
   }, [searchText, searchType]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: Palette.background }}>
       <Stack.Screen
         options={{
           title: '',

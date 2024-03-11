@@ -14,7 +14,7 @@ export default function Page() {
   console.log('showing', uri);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ flex: 1, backgroundColor: Palette.scrim }}>
       <Stack.Screen
         options={{
           title: decode(title as string),

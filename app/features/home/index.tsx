@@ -27,7 +27,7 @@ const Home = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: Palette.background,
       }}>
       <Stack.Screen
         options={{
@@ -39,7 +39,7 @@ const Home = () => {
                   pathname: 'features/settings',
                   params: {},
                 }}>
-                <Ionicons name="settings-sharp" size={24} color={Palette.onBackgroundLowest} />
+                <Ionicons name="settings-sharp" size={24} color={Palette.onBackground} />
               </Link>
             );
           },

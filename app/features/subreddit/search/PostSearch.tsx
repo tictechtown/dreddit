@@ -59,7 +59,7 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ flex: 1, backgroundColor: Palette.background }}>
       <Stack.Screen
         options={{
           title: '',

@@ -23,7 +23,7 @@ export const markdownIt = MarkdownIt({
   .use(markdownItRedditSpoiler);
 
 export const markdownStyles = {
-  body: { color: Palette.onBackgroundLowest },
+  body: { color: Palette.onSurface },
   heading1: {
     fontSize: 26,
     borderBottomWidth: 1,
@@ -73,8 +73,8 @@ export const markdownStyles = {
     marginVertical: Spacing.xsmall,
   },
   blockquote: {
-    backgroundColor: Palette.backgroundLowest,
-    borderColor: Palette.surfaceVariant,
+    backgroundColor: Palette.surface,
+    borderColor: Palette.outlineVariant,
     borderLeftWidth: 2,
     marginLeft: 0,
     paddingLeft: 6,
@@ -84,6 +84,12 @@ export const markdownStyles = {
     backgroundColor: Palette.surfaceVariant,
     borderWidth: 0,
     marginVertical: Spacing.xsmall,
+  },
+  table: {
+    borderWidth: 0,
+  },
+  tr: {
+    borderBottomWidth: 0,
   },
 };
 

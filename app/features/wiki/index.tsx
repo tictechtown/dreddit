@@ -75,7 +75,7 @@ const Page = () => {
   };
 
   return (
-    <View style={{ backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ backgroundColor: Palette.surface }}>
       <Stack.Screen options={{ title: subreddit as string }} />
       <ScrollView style={{ width: '100%' }}>
         <View style={{ alignItems: 'center', flex: 1, paddingHorizontal: Spacing.regular }}>

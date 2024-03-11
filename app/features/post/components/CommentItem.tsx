@@ -5,6 +5,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
 import { Palette } from '../../colors';
+import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import { Spacing } from '../../typography';
 import { timeDifference } from '../../utils';
@@ -21,7 +22,10 @@ const CommentItem = ({
   fetchMoreComments: (commentId: string, childrenIds: string[]) => void;
 }) => {
   const fetchMore = useCallback(() => {
-    fetchMoreComments(comment.data.id, comment.data.children);
+    if ('children' in comment.data) {
+      fetchMoreComments(comment.data.id, comment.data.children);
+    }
+    // @ts-ignore
   }, [fetchMoreComments, comment.data.id, comment.data.children]);
 
   const isGifReply = useMemo(() => {
@@ -33,10 +37,13 @@ const CommentItem = ({
   }, [comment.data]);
 
   const goToUserPage = useCallback(() => {
-    router.push({
-      pathname: 'features/user',
-      params: { userid: comment.data.author },
-    });
+    if ('author' in comment.data) {
+      router.push({
+        pathname: 'features/user',
+        params: { userid: comment.data.author },
+      });
+    }
+    // @ts-ignore
   }, [comment.data.author]);
 
   const _onLinkPress = useCallback((url: string) => {
@@ -96,31 +103,34 @@ const CommentItem = ({
     );
   }
 
-  let fontColor = comment.data.is_submitter ? Palette.primary : 'grey';
+  let fontColor = comment.data.is_submitter ? Palette.primary : Palette.onSurfaceVariant;
   fontColor =
     comment.data.author === 'AutoModerator' || comment.data.distinguished !== null
       ? '#aed285'
       : fontColor;
-
+  const opacity = fontColor === Palette.onSurfaceVariant ? 0.6 : 1;
   const hasReplies = comment.data.replies !== undefined;
 
   return (
     <View
       style={{
-        paddingRight: Spacing.xsmall,
-        paddingLeft: comment.data.depth ? Spacing.regular * comment.data.depth : Spacing.xsmall,
-        marginBottom: hasReplies ? 0 : Spacing.small,
+        paddingRight: Spacing.small,
+        paddingLeft: comment.data.depth
+          ? Spacing.small + Spacing.regular * comment.data.depth
+          : Spacing.small,
+        marginBottom: hasReplies ? 0 : Spacing.xsmall,
       }}>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', columnGap: 4 }}>
         <TouchableOpacity onPress={goToUserPage}>
-          <Text
+          <Typography
+            variant="labelMedium"
             style={{
               color: fontColor,
-              fontSize: 12,
               fontWeight: 'bold',
+              opacity,
             }}>
             {comment.data.author}
-          </Text>
+          </Typography>
         </TouchableOpacity>
         <FlairTextView
           flair_richtext={comment.data.author_flair_richtext}
@@ -129,17 +139,14 @@ const CommentItem = ({
           pinned={false}
           flair_type={comment.data.author_flair_type}
           flair_background_color={comment.data.author_flair_background_color}
-          containerStyle={{ marginLeft: 4 }}
+          containerStyle={{}}
         />
-        <Text style={{ color: fontColor, fontSize: 12, fontWeight: '300' }}>
-          {' '}
+        <Typography variant="labelMedium" style={{ color: fontColor, fontWeight: '300', opacity }}>
           • {comment.data.score} {comment.data.score > 1 ? 'points' : 'point'} •{' '}
-        </Text>
-        <Text style={{ color: fontColor, fontSize: 12, fontWeight: '300' }}>
           {timeDifference(comment.data.created_utc * 1000)}
-        </Text>
+        </Typography>
       </View>
-      <View style={{ marginBottom: 8, flex: 0 }}>
+      <View style={{ marginBottom: Spacing.xxsmall, flex: 0 }}>
         {isGifReply ? (
           <CommentMediaView item={isGifReply} showGif={showGif} body={comment.data.body} />
         ) : (

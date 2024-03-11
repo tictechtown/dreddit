@@ -145,10 +145,10 @@ const VideoPlayer = (props: Props) => {
         status.positionMillis === status.durationMillis
           ? PlaybackStates.Ended
           : status.isBuffering && (status?.playableDurationMillis ?? 0) <= status.positionMillis
-          ? PlaybackStates.Buffering
-          : status.shouldPlay
-          ? PlaybackStates.Playing
-          : PlaybackStates.Paused;
+            ? PlaybackStates.Buffering
+            : status.shouldPlay
+              ? PlaybackStates.Playing
+              : PlaybackStates.Paused;
       setPlaybackInstanceInfo({
         ...playbackInstanceInfo,
         position: status.positionMillis,
@@ -312,7 +312,7 @@ const VideoPlayer = (props: Props) => {
     return (
       <View
         style={{
-          backgroundColor: Palette.backgroundLowest,
+          backgroundColor: Palette.scrim,
           width: '100%',
           height: '100%',
         }}>
@@ -345,7 +345,7 @@ const VideoPlayer = (props: Props) => {
           playbackInstanceInfo.duration === 0 && (
             <View
               style={{
-                backgroundColor: Palette.backgroundLowest,
+                backgroundColor: Palette.scrim,
                 width: '100%',
                 height: '100%',
                 justifyContent: 'center',
@@ -465,10 +465,10 @@ const VideoPlayer = (props: Props) => {
                           playbackInstanceInfo.state === PlaybackStates.Playing
                             ? 'pause'
                             : playbackInstanceInfo.state === PlaybackStates.Paused
-                            ? 'play-arrow'
-                            : playbackInstanceInfo.state === PlaybackStates.Ended
-                            ? 'replay'
-                            : 'cloud-download'
+                              ? 'play-arrow'
+                              : playbackInstanceInfo.state === PlaybackStates.Ended
+                                ? 'replay'
+                                : 'cloud-download'
                         }
                         size={34}
                         color={Palette.surface}
@@ -482,7 +482,7 @@ const VideoPlayer = (props: Props) => {
                 style={{
                   position: 'absolute',
                   bottom: 0,
-                  backgroundColor: Palette.background,
+                  backgroundColor: Palette.scrim,
                   opacity: 0.8,
                   borderRadius: 10,
                   paddingVertical: 10,
@@ -496,7 +496,7 @@ const VideoPlayer = (props: Props) => {
                     alignItems: 'center',
                     paddingBottom: 10,
                   }}>
-                  <Text style={{ color: Palette.onBackgroundLowest }}>
+                  <Text style={{ color: Palette.onBackground }}>
                     {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)} /{' '}
                     {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
                   </Text>

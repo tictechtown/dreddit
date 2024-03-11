@@ -14,7 +14,7 @@ const SortOptions = ({
     <View style={styles.contentContainer}>
       <Text
         style={{
-          color: Palette.onBackgroundLowest,
+          color: Palette.onBackground,
           fontSize: 24,
           marginBottom: Spacing.regular,
         }}>

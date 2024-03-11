@@ -4,9 +4,11 @@ import { Link, Stack, router, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import queryString from 'query-string';
 import { useEffect, useMemo, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { RedditApi, User } from '../../../services/api';
 import { Palette } from '../../colors';
+import ItemSeparator from '../../components/ItemSeparator';
+import Typography from '../../components/Typography';
 import { markdownIt, markdownRenderRules, markdownStyles } from '../../post/utils';
 import { Spacing } from '../../typography';
 
@@ -24,6 +26,7 @@ type SubredditData = {
   community_icon: string;
   banner_background_image: string;
   description: string;
+  created_utc: number;
 };
 
 type Wikipage = {
@@ -118,75 +121,40 @@ const Page = () => {
   };
 
   return (
-    <View style={{ backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ backgroundColor: Palette.background }}>
       <Stack.Screen options={{ title: about.display_name_prefixed }} />
       <ScrollView style={{ width: '100%' }}>
-        <View style={{ alignItems: 'center', flex: 1 }}>
+        <View style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 16 }}>
           <Image
-            style={{ width: 128, height: 128, borderRadius: 64, marginVertical: Spacing.small }}
+            style={{ width: 140, height: 140, borderRadius: 70, marginBottom: 10 }}
             source={subredditIcon}></Image>
           <Link
             href={{
               pathname: `features/subreddit/${about.display_name}`,
               params: { icon: subredditIcon },
             }}>
-            <Text style={{ color: Palette.onBackgroundLowest, fontWeight: 'bold', fontSize: 20 }}>
-              {about.display_name_prefixed}
-            </Text>
+            <Typography variant="headlineMedium">{about.display_name_prefixed}</Typography>
           </Link>
-          <View
-            style={{
-              marginVertical: Spacing.regular,
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-            }}>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: Palette.secondaryContainer,
-                marginLeft: Spacing.regular,
-                marginRight: Spacing.small,
-                padding: Spacing.regular,
-                borderRadius: 16,
-                alignItems: 'center',
-              }}>
-              <Text style={{ color: Palette.onSecondaryContainer, marginBottom: Spacing.small }}>
-                Subscribers
-              </Text>
-              <Text style={{ color: Palette.onBackgroundLowest, fontWeight: 'bold', fontSize: 20 }}>
-                {about.subscribers.toLocaleString('en-US')}
-              </Text>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: Palette.secondaryContainer,
-                marginLeft: Spacing.small,
-                marginRight: Spacing.regular,
-                padding: Spacing.regular,
-                borderRadius: 16,
-                alignItems: 'center',
-              }}>
-              <Text style={{ color: Palette.onSecondaryContainer, marginBottom: Spacing.small }}>
-                Online
-              </Text>
-              <Text style={{ color: Palette.onBackgroundLowest, fontWeight: 'bold', fontSize: 20 }}>
-                {about.accounts_active.toLocaleString('en-US')}
-              </Text>
-            </View>
-          </View>
+          <Typography
+            variant="bodyMedium"
+            style={{ color: Palette.onSurfaceVariant, opacity: 0.8 }}>
+            {(about.subscribers ?? 0).toLocaleString('en-US')} karma •{' '}
+            {new Date(about.created_utc * 1000).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </Typography>
         </View>
-        <View style={{ paddingHorizontal: Spacing.small, marginBottom: 50 }}>
-          <Text style={{ color: Palette.onBackgroundLowest, fontSize: 26, fontWeight: 'bold' }}>
-            About
-          </Text>
-          <Text style={{ color: Palette.onBackgroundLowest, marginBottom: Spacing.large }}>
-            {about.public_description}
-          </Text>
-          <Text style={{ color: Palette.onBackgroundLowest, fontSize: 26, fontWeight: 'bold' }}>
-            {wiki?.content_md ? 'Wiki' : 'Description'}
-          </Text>
+        <View
+          style={{
+            paddingHorizontal: Spacing.small,
+            marginBottom: 50,
+            flexDirection: 'column',
+            rowGap: Spacing.regular,
+          }}>
+          <Typography variant="bodyMedium">{about.public_description}</Typography>
+          <ItemSeparator fullWidth />
           {wiki?.content_md ? (
             <Markdown
               markdownit={markdownIt}

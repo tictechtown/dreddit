@@ -38,11 +38,11 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
   }, [_uri]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ flex: 1, backgroundColor: Palette.scrim }}>
       {Constants.appOwnership === 'expo' && !!errorMessage && (
         <View
           style={{
-            backgroundColor: Palette.backgroundLowest,
+            backgroundColor: Palette.scrim,
             width: '100%',
             height: '100%',
           }}>

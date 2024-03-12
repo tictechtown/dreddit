@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Post, RedditApi } from '../../services/api';
 import { useStore } from '../../services/store';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import ItemSeparator from '../components/ItemSeparator';
 import Tabs from '../components/Tabs';
@@ -64,6 +64,7 @@ const SortOrderView = (props: {
 const SortOrderViewMemo = React.memo(SortOrderView);
 
 const SubRedditView = (props: Props) => {
+  const theme = useTheme();
   const [sortOrder, setSortOrder] = useState<'hot' | 'new' | 'top'>('hot');
   const [subredditData, setSubredditData] = useState<SubredditData | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -190,13 +191,14 @@ const SubRedditView = (props: Props) => {
       return (
         <SubredditPostItemView
           post={item}
+          theme={theme}
           isSaved={savedPostIds[item.data.id]}
           addToSavedPosts={addToSavedPosts}
           removeFromSavedPosts={removeFromSavedPosts}
         />
       );
     },
-    [savedPosts]
+    [savedPosts, theme]
   );
 
   const onFlairTapped = useCallback(
@@ -275,9 +277,9 @@ const SubRedditView = (props: Props) => {
                   asChild>
                   <TouchableNativeFeedback
                     hitSlop={5}
-                    background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
+                    background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                     <View>
-                      <MaterialIcons name="info-outline" size={26} color={Palette.onBackground} />
+                      <MaterialIcons name="info-outline" size={26} color={theme.onBackground} />
                     </View>
                   </TouchableNativeFeedback>
                 </Link>
@@ -285,12 +287,12 @@ const SubRedditView = (props: Props) => {
                   disabled={!subredditData}
                   hitSlop={5}
                   onPress={toggleSubreddit}
-                  background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
+                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
                     <MaterialIcons
                       name={isFavorite ? 'bookmark' : 'bookmark-outline'}
                       size={24}
-                      color={Palette.onBackground}
+                      color={theme.onBackground}
                     />
                   </View>
                 </TouchableNativeFeedback>
@@ -298,9 +300,9 @@ const SubRedditView = (props: Props) => {
                   disabled={!subredditData}
                   hitSlop={5}
                   onPress={searchPosts}
-                  background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
+                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
-                    <MaterialIcons name={'search'} size={24} color={Palette.onBackground} />
+                    <MaterialIcons name={'search'} size={24} color={theme.onBackground} />
                   </View>
                 </TouchableNativeFeedback>
               </View>
@@ -312,7 +314,7 @@ const SubRedditView = (props: Props) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: Palette.surface,
+          backgroundColor: theme.surface,
         }}>
         <FlatList
           ref={flatListRef}
@@ -335,8 +337,8 @@ const SubRedditView = (props: Props) => {
             <RefreshControl
               refreshing={refreshLoading}
               onRefresh={refreshData}
-              colors={[Palette.primary]}
-              progressBackgroundColor={Palette.background}
+              colors={[theme.primary]}
+              progressBackgroundColor={theme.background}
             />
           }
         />
@@ -359,7 +361,7 @@ const SubRedditView = (props: Props) => {
             />
             <Text
               style={{
-                color: Palette.onBackground,
+                color: theme.onBackground,
                 fontWeight: '600',
                 fontSize: 36,
                 textAlign: 'center',

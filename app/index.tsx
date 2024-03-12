@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import { Palette } from './features/colors';
 import Home from './features/home';
 
 export default function Page() {
@@ -15,6 +14,5 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Palette.surface,
   },
 });

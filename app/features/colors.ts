@@ -1,18 +1,70 @@
-import { argbFromHex, themeFromSourceColor } from '@material/material-color-utilities';
+// import { argbFromHex, themeFromSourceColor } from '@material/material-color-utilities';
 
-// // Get the theme from a hex color
-const theme = themeFromSourceColor(argbFromHex('#4285f4'), []);
+// // // Get the theme from a hex color
+// const theme = themeFromSourceColor(argbFromHex('#4285f4'), []);
 
-// const scheme = theme.schemes.dark.toJSON();
-// for (const key in scheme) {
-//   // @ts-ignore
-//   console.log(key, hexFromArgb(scheme[key] as number));
-// }
+// // const scheme = theme.schemes.dark.toJSON();
+// // for (const key in scheme) {
+// //   // @ts-ignore
+// //   console.log(key, hexFromArgb(scheme[key] as number));
+// // }
 
-// Print out the theme as JSON
-console.log(JSON.stringify(theme, null, 2));
+// // Print out the theme as JSON
+// console.log(JSON.stringify(theme, null, 2));
 
-export const PaletteDark = {
+export type Palette = {
+  primary: string;
+  surfaceTint: string;
+  onPrimary: string;
+  primaryContainer: string;
+  onPrimaryContainer: string;
+  secondary: string;
+  onSecondary: string;
+  secondaryContainer: string;
+  onSecondaryContainer: string;
+  tertiary: string;
+  onTertiary: string;
+  tertiaryContainer: string;
+  onTertiaryContainer: string;
+  error: string;
+  onError: string;
+  errorContainer: string;
+  onErrorContainer: string;
+  background: string;
+  onBackground: string;
+  surface: string;
+  onSurface: string;
+  surfaceVariant: string;
+  onSurfaceVariant: string;
+  outline: string;
+  outlineVariant: string;
+  shadow: string;
+  scrim: string;
+  inverseSurface: string;
+  inverseOnSurface: string;
+  inversePrimary: string;
+  primaryFixed: string;
+  onPrimaryFixed: string;
+  primaryFixedDim: string;
+  onPrimaryFixedVariant: string;
+  secondaryFixed: string;
+  onSecondaryFixed: string;
+  secondaryFixedDim: string;
+  onSecondaryFixedVariant: string;
+  tertiaryFixed: string;
+  onTertiaryFixed: string;
+  tertiaryFixedDim: string;
+  onTertiaryFixedVariant: string;
+  surfaceDim: string;
+  surfaceBright: string;
+  surfaceContainerLowest: string;
+  surfaceContainerLow: string;
+  surfaceContainer: string;
+  surfaceContainerHigh: string;
+  surfaceContainerHighest: string;
+};
+
+export const PaletteDark: Palette = {
   primary: '#AAC7FF',
   surfaceTint: '#AAC7FF',
   onPrimary: '#0A305F',
@@ -65,7 +117,7 @@ export const PaletteDark = {
 };
 
 /* Default Palette Light*/
-export const PaletteLight = {
+export const PaletteLight: Palette = {
   primary: '#415F91',
   surfaceTint: '#415F91',
   onPrimary: '#FFFFFF',
@@ -220,4 +272,4 @@ export const PaletteLight = {
 //   },
 // };
 
-export const Palette = PaletteDark;
+export const Palette: Palette = PaletteDark;

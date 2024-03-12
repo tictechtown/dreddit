@@ -5,7 +5,7 @@ import * as React from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { Post } from '../../../services/api';
-import { Palette } from '../../colors';
+import { PaletteDark } from '../../colors';
 import { Spacing } from '../../typography';
 import ImageView from '../image/ImageView';
 
@@ -68,7 +68,7 @@ const CarouselView = ({
         style={[
           {
             height: 70,
-            backgroundColor: Palette.surfaceVariant,
+            backgroundColor: PaletteDark.surfaceVariant,
             paddingHorizontal: Spacing.small,
           },
         ]}>
@@ -108,12 +108,12 @@ export default function Page() {
   }, [gallery_data]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.scrim }}>
+    <View style={{ flex: 1, backgroundColor: PaletteDark.scrim }}>
       <Stack.Screen
         options={{
           title: decode(title as string),
           headerStyle: {
-            backgroundColor: Palette.scrim,
+            backgroundColor: PaletteDark.scrim,
           },
         }}
       />

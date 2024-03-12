@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
 import { TouchableOpacity, View } from 'react-native';
 import { useStore } from '../../../services/store';
-import { Palette } from '../../colors';
+import useTheme from '../../../services/theme/useTheme';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../typography';
 
 const SavedPostsFooter = () => {
+  const theme = useTheme();
   const totalSavedPost = useStore((state) => state.savedPosts.length);
 
   return (
@@ -27,7 +28,7 @@ const SavedPostsFooter = () => {
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            borderTopColor: Palette.outlineVariant,
+            borderTopColor: theme.outlineVariant,
             borderTopWidth: 1,
             paddingVertical: Spacing.regular,
           }}>

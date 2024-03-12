@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 import React from 'react';
 import { Text, View } from 'react-native';
 import PhotoZoom from 'react-native-photo-zoom';
-import { Palette } from '../../colors';
+import { PaletteDark } from '../../colors';
 import ImageZoom from '../../components/react-native-image-zoom';
 import { Spacing } from '../../typography';
 
@@ -38,11 +38,11 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
   }, [_uri]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.scrim }}>
+    <View style={{ flex: 1, backgroundColor: PaletteDark.scrim }}>
       {Constants.appOwnership === 'expo' && !!errorMessage && (
         <View
           style={{
-            backgroundColor: Palette.scrim,
+            backgroundColor: PaletteDark.scrim,
             width: '100%',
             height: '100%',
           }}>
@@ -55,15 +55,15 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
               right: 0,
               paddingHorizontal: 20,
               paddingVertical: 10,
-              backgroundColor: Palette.errorContainer,
+              backgroundColor: PaletteDark.errorContainer,
               borderRadius: 10,
               flexDirection: 'row',
               flexWrap: 'wrap',
             }}>
-            <MaterialIcons name="error" size={36} color={Palette.onErrorContainer} />
+            <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
             <Text
               numberOfLines={2}
-              style={{ flex: 0, color: Palette.onErrorContainer, marginLeft: Spacing.regular }}>
+              style={{ flex: 0, color: PaletteDark.onErrorContainer, marginLeft: Spacing.regular }}>
               {errorMessage}
             </Text>
           </View>

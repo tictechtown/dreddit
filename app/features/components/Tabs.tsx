@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 import { Spacing } from '../typography';
 import Typography from './Typography';
 
@@ -20,6 +20,8 @@ const Tab = <T extends string>({
   tabSelectedId,
   onPress,
 }: TabProps<T>) => {
+  const theme = useTheme();
+
   return (
     <TouchableOpacity
       style={{
@@ -43,13 +45,13 @@ const Tab = <T extends string>({
             // @ts-ignore
             name={tabIconName}
             size={24}
-            color={tabSelectedId === tabId ? Palette.primary : Palette.onSurfaceVariant}
+            color={tabSelectedId === tabId ? theme.primary : theme.onSurfaceVariant}
           />
         )}
         <Typography
           variant="titleSmall"
           style={{
-            color: tabSelectedId === tabId ? Palette.primary : Palette.onSurfaceVariant,
+            color: tabSelectedId === tabId ? theme.primary : theme.onSurfaceVariant,
           }}>
           {tabName ?? tabId.toUpperCase()}
         </Typography>
@@ -60,7 +62,7 @@ const Tab = <T extends string>({
             left: 0,
             right: 0,
             height: tabSelectedId === tabId ? 3 : 0,
-            backgroundColor: Palette.primary,
+            backgroundColor: theme.primary,
             borderTopStartRadius: 3,
             borderTopEndRadius: 3,
           }}></View>
@@ -78,19 +80,21 @@ type Props = {
 };
 
 const Tabs = ({ selectedTabId, tabIds, tabNames, tabIconNames, onPress }: Props) => {
+  const theme = useTheme();
   return (
     <View
       style={{
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingHorizontal: Spacing.regular,
-        backgroundColor: Palette.surface,
+        backgroundColor: theme.surface,
         borderBottomWidth: 1,
-        borderBottomColor: Palette.surfaceVariant,
+        borderBottomColor: theme.surfaceVariant,
       }}>
       {tabIds.map((tabId, idx) => {
         return (
           <Tab
+            key={tabId}
             tabId={tabId}
             tabName={tabNames ? tabNames[idx] : null}
             tabIconName={tabIconNames ? tabIconNames[idx] : null}

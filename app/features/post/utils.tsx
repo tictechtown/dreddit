@@ -1,6 +1,7 @@
 import { MarkdownIt, RenderRules, hasParents } from '@ronradtke/react-native-markdown-display';
 import { Link } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
+import { useMemo } from 'react';
 import { ScrollView, Share, Text, View } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { Comment, Post } from '../../services/api';
@@ -22,96 +23,108 @@ export const markdownIt = MarkdownIt({
   .use(markdownItRedditLink)
   .use(markdownItRedditSpoiler);
 
-export const markdownStyles = {
-  body: { color: Palette.onSurface },
-  heading1: {
-    fontSize: 26,
-    borderBottomWidth: 1,
-    borderColor: Palette.surfaceVariant,
-    marginTop: Spacing.small,
-    paddingBottom: Spacing.small,
-    marginBottom: Spacing.small,
-    fontWeight: 'bold',
-  },
-  heading2: {
-    fontSize: 20,
-    borderBottomWidth: 1,
-    borderColor: Palette.surfaceVariant,
-    marginTop: Spacing.small,
-    paddingBottom: Spacing.small,
-    marginBottom: Spacing.small,
-    fontWeight: 'bold',
-  },
-  heading3: {
-    marginVertical: Spacing.xsmall,
-    fontWeight: 'bold',
-  },
-  heading4: {
-    marginVertical: Spacing.xsmall,
-  },
-  heading5: {
-    marginVertical: Spacing.xsmall,
-  },
-  heading6: {
-    marginVertical: Spacing.xsmall,
-  },
-  bullet_list: {
-    marginVertical: Spacing.small,
-  },
-  ordered_list: {
-    marginVertical: Spacing.small,
-  },
-  hr: { backgroundColor: Palette.onSurface, marginVertical: Spacing.regular },
-  link: { color: Palette.primary },
-  paragraph: { marginTop: 0, marginBottom: 0 },
-  code_inline: {
-    backgroundColor: Palette.surfaceVariant,
-  },
-  code_block: {
-    backgroundColor: Palette.surfaceVariant,
-    borderWidth: 0,
-    marginVertical: Spacing.xsmall,
-  },
-  blockquote: {
-    backgroundColor: Palette.surface,
-    borderColor: Palette.outlineVariant,
-    borderLeftWidth: 2,
-    marginLeft: 0,
-    paddingLeft: 6,
-    marginBottom: Spacing.xsmall,
-  },
-  fence: {
-    backgroundColor: Palette.surfaceVariant,
-    borderWidth: 0,
-    marginVertical: Spacing.xsmall,
-  },
-  table: {
-    borderWidth: 0,
-  },
-  tr: {
-    borderBottomWidth: 0,
-  },
-};
+export function useMarkdownStyle(theme: Palette) {
+  const style = useMemo(() => {
+    return {
+      body: { color: theme.onSurface },
+      heading1: {
+        fontSize: 26,
+        borderBottomWidth: 1,
+        borderColor: theme.surfaceVariant,
+        marginTop: Spacing.small,
+        paddingBottom: Spacing.small,
+        marginBottom: Spacing.small,
+        fontWeight: 'bold',
+      },
+      heading2: {
+        fontSize: 20,
+        borderBottomWidth: 1,
+        borderColor: theme.surfaceVariant,
+        marginTop: Spacing.small,
+        paddingBottom: Spacing.small,
+        marginBottom: Spacing.small,
+        fontWeight: 'bold',
+      },
+      heading3: {
+        marginVertical: Spacing.xsmall,
+        fontWeight: 'bold',
+      },
+      heading4: {
+        marginVertical: Spacing.xsmall,
+      },
+      heading5: {
+        marginVertical: Spacing.xsmall,
+      },
+      heading6: {
+        marginVertical: Spacing.xsmall,
+      },
+      bullet_list: {
+        marginVertical: Spacing.small,
+      },
+      ordered_list: {
+        marginVertical: Spacing.small,
+      },
+      hr: { backgroundColor: theme.onSurface, marginVertical: Spacing.regular },
+      link: { color: theme.primary },
+      paragraph: { marginTop: 0, marginBottom: 0 },
+      code_inline: {
+        backgroundColor: theme.surfaceVariant,
+      },
+      code_block: {
+        backgroundColor: theme.surfaceVariant,
+        borderWidth: 0,
+        marginVertical: Spacing.xsmall,
+      },
+      blockquote: {
+        backgroundColor: theme.surface,
+        borderColor: theme.outlineVariant,
+        borderLeftWidth: 2,
+        marginLeft: 0,
+        paddingLeft: 6,
+        marginBottom: Spacing.xsmall,
+      },
+      fence: {
+        backgroundColor: theme.surfaceVariant,
+        borderWidth: 0,
+        marginVertical: Spacing.xsmall,
+      },
+      table: {
+        borderWidth: 0,
+      },
+      tr: {
+        borderBottomWidth: 0,
+      },
+      theme: theme,
+    };
+  }, [theme]);
+  return style;
+}
 
-export const commentMarkdownStyles = {
-  ...markdownStyles,
-  heading1: {
-    fontSize: 18,
-    borderColor: Palette.surfaceVariant,
-    marginTop: Spacing.small,
-    paddingBottom: Spacing.small,
-    marginBottom: Spacing.small,
-    fontWeight: 'bold',
-  },
-  heading2: {
-    fontSize: 18,
-    borderColor: Palette.surfaceVariant,
-    marginTop: Spacing.small,
-    paddingBottom: Spacing.small,
-    marginBottom: Spacing.small,
-    fontWeight: 'bold',
-  },
-};
+export function useCommentMarkdownStyle(theme: Palette) {
+  const prevStyle = useMarkdownStyle(theme);
+  const style = useMemo(() => {
+    return {
+      ...prevStyle,
+      heading1: {
+        fontSize: 18,
+        borderColor: theme.surfaceVariant,
+        marginTop: Spacing.small,
+        paddingBottom: Spacing.small,
+        marginBottom: Spacing.small,
+        fontWeight: 'bold',
+      },
+      heading2: {
+        fontSize: 18,
+        borderColor: theme.surfaceVariant,
+        marginTop: Spacing.small,
+        paddingBottom: Spacing.small,
+        marginBottom: Spacing.small,
+        fontWeight: 'bold',
+      },
+    };
+  }, [theme]);
+  return style;
+}
 
 export function getMaxPreviewByDomain(post: Post | null | undefined) {
   if (!post?.data.preview) return null;
@@ -233,7 +246,7 @@ export const markdownRenderRules: RenderRules = {
     </Text>
   ),
   spoiler: (node) => {
-    return <PostSpoiler content={node.content.trim()} />;
+    return <PostSpoiler key={node.key} content={node.content.trim()} />;
   },
   subreddit: (node, children, parent, styles) => {
     let fontSize = undefined;
@@ -257,7 +270,9 @@ export const markdownRenderRules: RenderRules = {
           pathname: `features/subreddit/${subreddit}`,
         }}>
         {' '}
-        <Text style={[styles.link, { color: Palette.error, fontSize }]}>{node.content.trim()}</Text>
+        <Text style={[styles.link, { color: styles.theme.error, fontSize }]}>
+          {node.content.trim()}
+        </Text>
       </Link>
     );
   },
@@ -283,7 +298,9 @@ export const markdownRenderRules: RenderRules = {
           pathname: 'features/user',
           params: { userid: node.content.replace('/u/', '').replace('u/', '').trim() },
         }}>
-        <Text style={[styles.link, { color: Palette.tertiary, fontSize }]}>{node.content}</Text>
+        <Text style={[styles.link, { color: styles.theme.tertiary, fontSize }]}>
+          {node.content}
+        </Text>
       </Link>
     );
   },

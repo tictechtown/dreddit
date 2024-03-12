@@ -4,13 +4,15 @@ import React, { useCallback, useMemo } from 'react';
 import { FlatList, View } from 'react-native';
 import postCache from '../../services/postCache';
 import { useStore } from '../../services/store';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 import HomeItem from './components/HomeItem';
 import SavedPostsFooter from './components/SavedPostsFooter';
 import SearchHeader from './components/SearchHeader';
 import { SUBREDDITS } from './fixtures';
 
 const Home = () => {
+  const theme = useTheme();
+
   const [favorites] = useStore((state) => [state.favorites]);
 
   useFocusEffect(
@@ -27,7 +29,7 @@ const Home = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.background,
+        backgroundColor: theme.background,
       }}>
       <Stack.Screen
         options={{
@@ -39,7 +41,7 @@ const Home = () => {
                   pathname: 'features/settings',
                   params: {},
                 }}>
-                <Ionicons name="settings-sharp" size={24} color={Palette.onBackground} />
+                <Ionicons name="settings-sharp" size={24} color={theme?.onBackground} />
               </Link>
             );
           },

@@ -3,7 +3,7 @@ import { decode } from 'html-entities';
 import * as React from 'react';
 import { View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
-import { Palette } from '../../colors';
+import { PaletteDark } from '../../colors';
 import ProgressBarView from '../../components/ProgressBarView';
 import ImageView from './ImageView';
 
@@ -14,10 +14,13 @@ export default function Page() {
   console.log('showing', uri);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.scrim }}>
+    <View style={{ flex: 1, backgroundColor: PaletteDark.scrim }}>
       <Stack.Screen
         options={{
           title: decode(title as string),
+          headerStyle: {
+            backgroundColor: PaletteDark.scrim,
+          },
         }}
       />
       <ProgressBarView progress={progress} />

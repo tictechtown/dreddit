@@ -9,18 +9,22 @@ import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import { Spacing } from '../../typography';
 import { timeDifference } from '../../utils';
-import { commentMarkdownStyles, markdownIt, markdownRenderRules } from '../utils';
+import { markdownIt, markdownRenderRules, useCommentMarkdownStyle } from '../utils';
 import CommentMediaView from './CommentMediaView';
 
 const CommentItem = ({
   comment,
   showGif,
   fetchMoreComments,
+  theme,
 }: {
   comment: Comment;
   showGif: (value: RedditMediaMedata) => void;
   fetchMoreComments: (commentId: string, childrenIds: string[]) => void;
+  theme: Palette;
 }) => {
+  const mdStyle = useCommentMarkdownStyle(theme);
+
   const fetchMore = useCallback(() => {
     if ('children' in comment.data) {
       fetchMoreComments(comment.data.id, comment.data.children);
@@ -92,7 +96,7 @@ const CommentItem = ({
       <TouchableOpacity onPress={fetchMore}>
         <Text
           style={{
-            color: Palette.secondary,
+            color: theme.secondary,
             fontSize: 10,
             paddingLeft: comment.data.depth ? Spacing.regular * comment.data.depth : Spacing.xsmall,
             marginBottom: Spacing.small,
@@ -103,12 +107,12 @@ const CommentItem = ({
     );
   }
 
-  let fontColor = comment.data.is_submitter ? Palette.primary : Palette.onSurfaceVariant;
+  let fontColor = comment.data.is_submitter ? theme.primary : theme.onSurfaceVariant;
   fontColor =
     comment.data.author === 'AutoModerator' || comment.data.distinguished !== null
       ? '#aed285'
       : fontColor;
-  const opacity = fontColor === Palette.onSurfaceVariant ? 0.6 : 1;
+  const opacity = fontColor === theme.onSurfaceVariant ? 0.6 : 1;
   const hasReplies = comment.data.replies !== undefined;
 
   return (
@@ -140,6 +144,7 @@ const CommentItem = ({
           flair_type={comment.data.author_flair_type}
           flair_background_color={comment.data.author_flair_background_color}
           containerStyle={{}}
+          theme={theme}
         />
         <Typography variant="labelMedium" style={{ color: fontColor, fontWeight: '300', opacity }}>
           • {comment.data.score} {comment.data.score > 1 ? 'points' : 'point'} •{' '}
@@ -152,7 +157,7 @@ const CommentItem = ({
         ) : (
           <Markdown
             markdownit={markdownIt}
-            style={commentMarkdownStyles}
+            style={mdStyle}
             rules={markdownRenderRules}
             onLinkPress={_onLinkPress}>
             {decode(comment.data.body)}

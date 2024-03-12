@@ -1,5 +1,5 @@
 import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 
 type Props = React.ComponentProps<typeof Text> & {
   variant:
@@ -26,9 +26,11 @@ type Props = React.ComponentProps<typeof Text> & {
 export default (props: Props) => {
   const { style, children, variant, ...rest } = props;
 
+  const theme = useTheme();
+
   return (
     // @ts-ignore
-    <Text style={[styles.text, { color: Palette.onSurface }, styles[variant], style]} {...rest}>
+    <Text style={[styles.text, { color: theme.onSurface }, styles[variant], style]} {...rest}>
       {children}
     </Text>
   );

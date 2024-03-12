@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { TouchableNativeFeedback, View } from 'react-native';
-import { Palette } from '../../colors';
+import useTheme from '../../../services/theme/useTheme';
 import Typography from '../../components/Typography';
 
 const HomeItem = ({
@@ -13,6 +13,8 @@ const HomeItem = ({
   icon: string | null | undefined;
   description: string | null | undefined;
 }) => {
+  const theme = useTheme();
+
   return (
     <View style={{ flex: 1 }}>
       <Link
@@ -24,7 +26,7 @@ const HomeItem = ({
         }}
         asChild>
         <TouchableNativeFeedback
-          background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, false)}>
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, false)}>
           <View
             style={{
               flex: 1,
@@ -49,13 +51,13 @@ const HomeItem = ({
               style={{
                 flex: 1,
               }}>
-              <Typography variant="titleMedium" style={{ fontWeight: 'bold' }}>
+              <Typography variant="titleMedium" style={{ color: theme.onSurface }}>
                 r/{subreddit}
               </Typography>
               {description && (
                 <Typography
                   variant="bodyMedium"
-                  style={{ color: Palette.onSurfaceVariant }}
+                  style={{ color: theme.onSurfaceVariant }}
                   numberOfLines={2}>
                   {description}
                 </Typography>

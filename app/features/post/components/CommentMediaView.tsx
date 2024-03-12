@@ -4,8 +4,9 @@ import { decode } from 'html-entities';
 import { useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { RedditMediaMedata } from '../../../services/api';
+import useTheme from '../../../services/theme/useTheme';
 import { Spacing } from '../../typography';
-import { markdownIt, markdownRenderRules, markdownStyles } from '../utils';
+import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 
 const CommentMediaView = ({
   item,
@@ -16,6 +17,9 @@ const CommentMediaView = ({
   body: string;
   showGif: (value: RedditMediaMedata) => void;
 }) => {
+  const theme = useTheme();
+  const mdStyle = useMarkdownStyle(theme);
+
   const onPress = useCallback(() => {
     showGif(item);
   }, [item]);
@@ -44,7 +48,7 @@ const CommentMediaView = ({
 
   return (
     <Pressable onPress={onPress}>
-      <Markdown markdownit={markdownIt} style={markdownStyles} rules={markdownRenderRules}>
+      <Markdown markdownit={markdownIt} style={mdStyle} rules={markdownRenderRules}>
         {decode(body.replace(item.s.u, ''))}
       </Markdown>
       <Image

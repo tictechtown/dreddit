@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { Palette } from '../colors';
+import { PaletteDark } from '../colors';
 import { Spacing } from '../typography';
 import Typography from './Typography';
 
@@ -70,13 +70,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: Palette.surfaceContainerHigh,
+    backgroundColor: PaletteDark.surfaceContainerHigh,
     borderRadius: 10,
     paddingHorizontal: Spacing.xsmall,
     flexDirection: 'row',
   },
   pageIndexTextColor: {
-    color: Palette.onSurfaceVariant,
+    color: PaletteDark.onSurfaceVariant,
   },
 });
 

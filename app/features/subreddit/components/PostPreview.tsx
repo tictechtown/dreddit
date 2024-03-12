@@ -19,6 +19,7 @@ type PostPreviewImageProps = {
   media: Post['data']['media'];
   preview: Post['data']['preview'];
   imageWidth: number;
+  theme: Palette;
 };
 
 function getVideoDuration(duration: number): string {
@@ -31,10 +32,12 @@ const PostPreviewVideo = ({
   source,
   domain,
   imageWidth,
+  theme,
 }: {
   source: string;
   domain: string;
   imageWidth: number;
+  theme: Palette;
 }) => {
   return (
     <View>
@@ -49,20 +52,20 @@ const PostPreviewVideo = ({
         contentFit="cover"
       />
       <View style={{ position: 'absolute', bottom: 40, right: 10 }}>
-        <MaterialIcons name="play-circle-outline" size={30} color={Palette.onSurfaceVariant} />
+        <MaterialIcons name="play-circle-outline" size={30} color={theme.onSurfaceVariant} />
       </View>
       <View
         style={{
           flexDirection: 'row',
           columnGap: 8,
           alignItems: 'center',
-          backgroundColor: Palette.surfaceContainer,
+          backgroundColor: theme.surfaceContainer,
           borderBottomLeftRadius: 12,
           borderBottomRightRadius: 12,
           padding: 10,
         }}>
-        <MaterialIcons name="link" size={14} color={Palette.onSurface} />
-        <Typography variant="labelSmall" style={{ color: Palette.onSurfaceVariant }}>
+        <MaterialIcons name="link" size={14} color={theme.onSurface} />
+        <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
           {domain}
         </Typography>
       </View>
@@ -70,7 +73,14 @@ const PostPreviewVideo = ({
   );
 };
 
-const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPreviewImageProps) => {
+const PostPreviewImage = ({
+  domain,
+  url,
+  media,
+  preview,
+  imageWidth,
+  theme,
+}: PostPreviewImageProps) => {
   const useLowRes = useStore((state) => state.useLowRes);
   const maxPreviewResolutions = useMemo(() => {
     if (!preview) return null;
@@ -147,6 +157,7 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
         source={getPreviewImageFromYoutube(url, media)}
         imageWidth={imageWidth}
         domain={domain}
+        theme={theme}
       />
     );
   }
@@ -158,6 +169,7 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
         source={getPreviewImageFromStreaminMe(url)}
         imageWidth={imageWidth}
         domain={domain}
+        theme={theme}
       />
     );
   }
@@ -168,6 +180,7 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
         source={getPreviewImageFromDubz(url)}
         imageWidth={imageWidth}
         domain={domain}
+        theme={theme}
       />
     );
   }
@@ -191,14 +204,14 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
             justifyContent: 'center',
             flex: 1,
             paddingHorizontal: 16,
-            backgroundColor: Palette.surfaceContainer,
+            backgroundColor: theme.surfaceContainer,
             borderTopRightRadius: 12,
             borderBottomRightRadius: 12,
           }}>
           <Typography variant="labelMedium">{domain}</Typography>
           <Typography
             variant="labelSmall"
-            style={{ color: Palette.onSurfaceVariant }}
+            style={{ color: theme.onSurfaceVariant }}
             numberOfLines={2}>
             {displayedUrl}
           </Typography>
@@ -226,14 +239,14 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
             flexDirection: 'row',
             columnGap: 8,
             alignItems: 'center',
-            backgroundColor: Palette.surfaceContainer,
+            backgroundColor: theme.surfaceContainer,
             borderBottomLeftRadius: 12,
             borderBottomRightRadius: 12,
             padding: 10,
             top: -1,
           }}>
-          <MaterialIcons name="link" size={14} color={Palette.onSurface} />
-          <Typography variant="labelSmall" style={{ color: Palette.onSurfaceVariant }}>
+          <MaterialIcons name="link" size={14} color={theme.onSurface} />
+          <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
             {domain}
           </Typography>
         </View>
@@ -243,7 +256,7 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
               position: 'absolute',
               bottom: 10,
               right: 10,
-              backgroundColor: Palette.surfaceContainerHigh,
+              backgroundColor: theme.surfaceContainerHigh,
               borderRadius: 10,
               paddingHorizontal: Spacing.xsmall,
               flexDirection: 'row',
@@ -282,14 +295,14 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
             justifyContent: 'center',
             flex: 1,
             paddingHorizontal: 16,
-            backgroundColor: Palette.surfaceContainer,
+            backgroundColor: theme.surfaceContainer,
             borderTopRightRadius: 12,
             borderBottomRightRadius: 12,
           }}>
           <Typography variant="labelMedium">{domain}</Typography>
           <Typography
             variant="labelSmall"
-            style={{ color: Palette.onSurfaceVariant }}
+            style={{ color: theme.onSurfaceVariant }}
             numberOfLines={2}>
             {displayedUrl}
           </Typography>
@@ -305,19 +318,27 @@ const PostPreviewImage = ({ domain, url, media, preview, imageWidth }: PostPrevi
         flexDirection: 'row',
         columnGap: 8,
         alignItems: 'center',
-        backgroundColor: Palette.surfaceContainer,
+        backgroundColor: theme.surfaceContainer,
         borderRadius: 12,
         padding: 10,
       }}>
-      <MaterialIcons name="link" size={14} color={Palette.onSurface} />
-      <Typography variant="labelSmall" style={{ color: Palette.onSurfaceVariant }}>
+      <MaterialIcons name="link" size={14} color={theme.onSurface} />
+      <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
         {domain}
       </Typography>
     </View>
   );
 };
 
-const PostPreview = ({ post, imageWidth }: { post: Post; imageWidth: number }) => {
+const PostPreview = ({
+  post,
+  imageWidth,
+  theme,
+}: {
+  post: Post;
+  imageWidth: number;
+  theme: Palette;
+}) => {
   const isCrosspost = Array.isArray(post.data.crosspost_parent_list);
 
   if (isCrosspost && post.data.crosspost_parent_list !== undefined) {
@@ -329,6 +350,7 @@ const PostPreview = ({ post, imageWidth }: { post: Post; imageWidth: number }) =
         url={xpost.url}
         media={xpost.media}
         imageWidth={imageWidth}
+        theme={theme}
       />
     );
   }
@@ -345,6 +367,7 @@ const PostPreview = ({ post, imageWidth }: { post: Post; imageWidth: number }) =
       url={post.data.url}
       media={post.data.media}
       imageWidth={imageWidth}
+      theme={theme}
     />
   );
 };

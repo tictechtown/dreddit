@@ -20,11 +20,13 @@ const SubredditPostItemView = ({
   isSaved,
   addToSavedPosts,
   removeFromSavedPosts,
+  theme,
 }: {
   post: Post;
   isSaved?: boolean;
   addToSavedPosts?: (post: Post) => void;
   removeFromSavedPosts?: (post: Post) => void;
+  theme: Palette;
 }) => {
   if (!post?.data) {
     console.log('post', post);
@@ -91,13 +93,13 @@ const SubredditPostItemView = ({
           marginVertical: 6,
           paddingHorizontal: Spacing.regular,
           paddingVertical: 10,
-          backgroundColor: Palette.surface,
+          backgroundColor: theme.surface,
         }}>
         <View style={{ width: '100%', rowGap: 4 }}>
           <TouchableOpacity onPress={goToUserPage}>
-            <Typography variant="overline" style={{ color: Palette.primary }}>
+            <Typography variant="overline" style={{ color: theme.primary }}>
               {post.data.author}
-              <Typography variant="overline" style={{ color: Palette.secondary }}>
+              <Typography variant="overline" style={{ color: theme.secondary }}>
                 {' '}
                 • {timeDifference(post.data.created_utc * 1000, 'en')} • r/
                 {post.data.subreddit}
@@ -113,7 +115,7 @@ const SubredditPostItemView = ({
                 flair_richtext={post.data.link_flair_richtext}
                 flair_background_color={post.data.link_flair_background_color}
                 textStyle={{
-                  color: Palette.onSurfaceVariant,
+                  color: theme.onSurfaceVariant,
                   fontSize: 12,
                   fontWeight: 'bold',
                 }}
@@ -123,19 +125,20 @@ const SubredditPostItemView = ({
                   flex: 0,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: Palette.surfaceContainerHigh,
+                  backgroundColor: theme.surfaceContainerHigh,
                   borderRadius: Spacing.xsmall,
                   paddingHorizontal: Spacing.xsmall,
                   paddingVertical: Spacing.xxsmall,
                   flexDirection: 'row',
                 }}
+                theme={theme}
               />
             )}
           </View>
         </View>
 
         <View style={{ paddingVertical: Spacing.regular, paddingTop: Spacing.small }}>
-          <PostPreview post={post} imageWidth={imageWidth} />
+          <PostPreview post={post} imageWidth={imageWidth} theme={theme} />
           {!isCrosspost && maxGaleryResolutions && (
             <CarouselView resolutions={maxGaleryResolutions} width={imageWidth} />
           )}
@@ -146,6 +149,7 @@ const SubredditPostItemView = ({
           isSaved={isSaved}
           addToSavedPosts={addToSavedPosts}
           removeFromSavedPosts={removeFromSavedPosts}
+          theme={theme}
         />
       </View>
     </Pressable>

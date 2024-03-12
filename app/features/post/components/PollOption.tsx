@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { Palette } from '../../colors';
+import useTheme from '../../../services/theme/useTheme';
 import { Spacing } from '../../typography';
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
 };
 
 const PollOption = (props: Props) => {
+  const theme = useTheme();
   const showVotes = props.option.vote_count !== undefined;
 
   return (
@@ -22,7 +23,7 @@ const PollOption = (props: Props) => {
       <View
         style={{
           position: 'absolute',
-          backgroundColor: Palette.secondaryContainer,
+          backgroundColor: theme.secondaryContainer,
           borderRadius: 4,
           top: 0,
           bottom: 0,
@@ -37,10 +38,8 @@ const PollOption = (props: Props) => {
           paddingVertical: Spacing.small,
           paddingHorizontal: Spacing.regular,
         }}>
-        <Text style={{ color: Palette.onBackground }}>{props.option.text}</Text>
-        {showVotes && (
-          <Text style={{ color: Palette.onBackground }}>{props.option.vote_count}</Text>
-        )}
+        <Text style={{ color: theme.onBackground }}>{props.option.text}</Text>
+        {showVotes && <Text style={{ color: theme.onBackground }}>{props.option.vote_count}</Text>}
       </View>
     </View>
   );

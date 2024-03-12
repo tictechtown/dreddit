@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import React from 'react';
 import { Share, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { Post } from '../../../services/api';
-import { Palette } from '../../colors';
+import { PaletteDark } from '../../colors';
 import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
 
@@ -12,13 +12,20 @@ type Props = {
   isSaved: boolean | undefined;
   addToSavedPosts: ((post: Post) => void) | undefined;
   removeFromSavedPosts: ((post: Post) => void) | undefined;
+  theme: typeof PaletteDark;
 };
 
-const PostCommentButton = ({ comments }: { comments: number }) => {
+const PostCommentButton = ({
+  comments,
+  theme,
+}: {
+  comments: number;
+  theme: typeof PaletteDark;
+}) => {
   return (
     <View
       style={{
-        backgroundColor: Palette.secondaryContainer,
+        backgroundColor: theme.secondaryContainer,
         borderRadius: 8,
         paddingVertical: 6,
         paddingHorizontal: 10,
@@ -26,15 +33,15 @@ const PostCommentButton = ({ comments }: { comments: number }) => {
         alignItems: 'center',
         columnGap: 8,
       }}>
-      <MaterialIcons name="question-answer" size={14} color={Palette.onSurface} />
-      <Typography variant="labelMedium" style={{ color: Palette.onSecondaryContainer }}>
+      <MaterialIcons name="question-answer" size={14} color={theme.onSurface} />
+      <Typography variant="labelMedium" style={{ color: theme.onSecondaryContainer }}>
         {comments.toLocaleString('en-US')}
       </Typography>
     </View>
   );
 };
 
-const PostToolbar = ({ post, isSaved, addToSavedPosts, removeFromSavedPosts }: Props) => {
+const PostToolbar = ({ post, isSaved, addToSavedPosts, removeFromSavedPosts, theme }: Props) => {
   return (
     <View
       style={{
@@ -55,9 +62,9 @@ const PostToolbar = ({ post, isSaved, addToSavedPosts, removeFromSavedPosts }: P
           asChild>
           <TouchableNativeFeedback
             hitSlop={20}
-            background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true, 20)}>
+            background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true, 20)}>
             <View>
-              <PostCommentButton comments={post.data.num_comments} />
+              <PostCommentButton comments={post.data.num_comments} theme={theme} />
             </View>
           </TouchableNativeFeedback>
         </Link>
@@ -74,12 +81,12 @@ const PostToolbar = ({ post, isSaved, addToSavedPosts, removeFromSavedPosts }: P
             await Share.share({ message: post.data.url });
           }}
           hitSlop={20}>
-          <MaterialIcons name="share" size={24} color={Palette.onSurfaceVariant} />
+          <MaterialIcons name="share" size={24} color={theme.onSurfaceVariant} />
         </TouchableOpacity>
 
         {/* Save */}
         <TouchableNativeFeedback
-          background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true, 20)}
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true, 20)}
           onPress={async () => {
             if (isSaved) {
               removeFromSavedPosts?.(post);
@@ -92,16 +99,16 @@ const PostToolbar = ({ post, isSaved, addToSavedPosts, removeFromSavedPosts }: P
             <MaterialIcons
               name={isSaved ? 'bookmark' : 'bookmark-outline'}
               size={24}
-              color={isSaved ? Palette.onSurface : Palette.onSurfaceVariant}
+              color={isSaved ? theme.onSurface : theme.onSurfaceVariant}
             />
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true, 20)}
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true, 20)}
           onPress={() => {}}
           hitSlop={20}>
           <View>
-            <MaterialIcons name={'more-vert'} size={24} color={Palette.onSurfaceVariant} />
+            <MaterialIcons name={'more-vert'} size={24} color={theme.onSurfaceVariant} />
           </View>
         </TouchableNativeFeedback>
       </View>
@@ -114,7 +121,6 @@ const PostToolbar = ({ post, isSaved, addToSavedPosts, removeFromSavedPosts }: P
       }}
       asChild>
       <TouchableOpacity hitSlop={20}>
-        <Ionicons name="person" size={24} color={Palette.onSurface} />
       </TouchableOpacity>
     </Link> */}
     </View>

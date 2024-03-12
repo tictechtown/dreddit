@@ -6,10 +6,10 @@ import queryString from 'query-string';
 import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { RedditApi, User } from '../../../services/api';
-import { Palette } from '../../colors';
+import useTheme from '../../../services/theme/useTheme';
 import ItemSeparator from '../../components/ItemSeparator';
 import Typography from '../../components/Typography';
-import { markdownIt, markdownRenderRules, markdownStyles } from '../../post/utils';
+import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../post/utils';
 import { Spacing } from '../../typography';
 
 // TODO -merge that with RedditApi t5
@@ -40,6 +40,8 @@ type Wikipage = {
 };
 
 const Page = () => {
+  const theme = useTheme();
+  const mdStyle = useMarkdownStyle(theme);
   const { subreddit } = useLocalSearchParams();
   const [about, setAbout] = useState<null | SubredditData>(null);
   const [wiki, setWiki] = useState<null | Wikipage>(null);
@@ -121,7 +123,7 @@ const Page = () => {
   };
 
   return (
-    <View style={{ backgroundColor: Palette.background }}>
+    <View style={{ backgroundColor: theme.background }}>
       <Stack.Screen options={{ title: about.display_name_prefixed }} />
       <ScrollView style={{ width: '100%' }}>
         <View style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 16 }}>
@@ -135,9 +137,7 @@ const Page = () => {
             }}>
             <Typography variant="headlineMedium">{about.display_name_prefixed}</Typography>
           </Link>
-          <Typography
-            variant="bodyMedium"
-            style={{ color: Palette.onSurfaceVariant, opacity: 0.8 }}>
+          <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant, opacity: 0.8 }}>
             {(about.subscribers ?? 0).toLocaleString('en-US')} karma •{' '}
             {new Date(about.created_utc * 1000).toLocaleDateString('en-US', {
               year: 'numeric',
@@ -155,23 +155,13 @@ const Page = () => {
           }}>
           <Typography variant="bodyMedium">{about.public_description}</Typography>
           <ItemSeparator fullWidth />
-          {wiki?.content_md ? (
-            <Markdown
-              markdownit={markdownIt}
-              style={markdownStyles}
-              rules={markdownRenderRules}
-              onLinkPress={onLinkPress}>
-              {decode(wiki?.content_md)}
-            </Markdown>
-          ) : (
-            <Markdown
-              markdownit={markdownIt}
-              style={markdownStyles}
-              rules={markdownRenderRules}
-              onLinkPress={onLinkPress}>
-              {decode(about?.description)}
-            </Markdown>
-          )}
+          <Markdown
+            markdownit={markdownIt}
+            style={mdStyle}
+            rules={markdownRenderRules}
+            onLinkPress={onLinkPress}>
+            {wiki?.content_md ? decode(wiki?.content_md) : decode(about?.description)}
+          </Markdown>
         </View>
       </ScrollView>
     </View>

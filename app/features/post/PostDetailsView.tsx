@@ -11,7 +11,6 @@ import {
   Pressable,
   RefreshControl,
   Share,
-  StyleSheet,
   TouchableNativeFeedback,
   TouchableOpacity,
   View,
@@ -20,9 +19,8 @@ import PhotoZoom from 'react-native-photo-zoom';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Comment, Post, RedditApi, RedditMediaMedata } from '../../services/api';
 import { useStore } from '../../services/store';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
-import { Spacing } from '../typography';
 import CommentItem from './components/CommentItem';
 import PostHeader from './components/PostHeader';
 import SortOptions from './components/SortOptions';
@@ -53,10 +51,18 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
     cached: true,
     loading: true,
   });
+
+  const theme = useTheme();
   const [sortOrder, setSortOrder] = useState<string | null>(null);
   const [showingModal, setShowingModal] = useState(false);
   const [refreshLoading, setRefreshLoading] = useState(false);
   const [showMediaItem, setShowMediaItem] = useState<RedditMediaMedata | null>(null);
+
+  const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
+    state.savedPosts,
+    state.addToSavedPosts,
+    state.removeFromSavedPosts,
+  ]);
 
   const opacityValue = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
@@ -135,9 +141,10 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         forcedSortOrder={sortOrder}
         onPress={_onHeaderPressed}
         onChangeSort={_onChangeSort}
+        theme={theme}
       />
     );
-  }, [queryData.post?.data.id, getMaxPreview(queryData.post)?.url, sortOrder]);
+  }, [queryData.post?.data.id, getMaxPreview(queryData.post)?.url, sortOrder, theme]);
 
   const onSortPressed = useCallback((newChoice: string) => {
     setSortOrder(newChoice);
@@ -252,9 +259,10 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         comment={item}
         showGif={displayMediaItem}
         fetchMoreComments={fetchMoreComments}
+        theme={theme}
       />
     ),
-    [displayMediaItem, fetchMoreComments]
+    [displayMediaItem, fetchMoreComments, theme]
   );
 
   const refreshControl = useMemo(() => {
@@ -262,28 +270,22 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       <RefreshControl
         refreshing={refreshLoading}
         onRefresh={refreshData}
-        colors={[Palette.primary]}
-        progressBackgroundColor={Palette.background}
+        colors={[theme.primary]}
+        progressBackgroundColor={theme.background}
       />
     );
-  }, [refreshLoading, refreshData]);
+  }, [refreshLoading, refreshData, theme]);
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.surface,
+        backgroundColor: theme.surface,
       }}>
       <Stack.Screen
         options={{
           title: queryData.post?.data.subreddit_name_prefixed ?? '',
           headerRight: () => {
-            const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
-              state.savedPosts,
-              state.addToSavedPosts,
-              state.removeFromSavedPosts,
-            ]);
-
             const isSaved = !!savedPosts.find((sP) => sP.data.id === queryData.post?.data.id);
 
             const toggleSavedPost = () => {
@@ -310,27 +312,27 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                     await Share.share({ message: queryData?.post?.data.url ?? '' });
                   }}
                   hitSlop={20}>
-                  <MaterialIcons name="share" size={24} color={Palette.onSurfaceVariant} />
+                  <MaterialIcons name="share" size={24} color={theme.onSurfaceVariant} />
                 </TouchableOpacity>
                 <TouchableNativeFeedback
                   disabled={!queryData}
                   hitSlop={5}
                   onPress={toggleSavedPost}
-                  background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
+                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
                     <MaterialIcons
                       name={isSaved ? 'bookmark' : 'bookmark-outline'}
                       size={24}
-                      color={Palette.onBackground}
+                      color={theme.onBackground}
                     />
                   </View>
                 </TouchableNativeFeedback>
                 <TouchableNativeFeedback
                   disabled={true}
                   hitSlop={5}
-                  background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}>
+                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
-                    <MaterialIcons name={'search'} size={24} color={Palette.onBackground} />
+                    <MaterialIcons name={'search'} size={24} color={theme.onBackground} />
                   </View>
                 </TouchableNativeFeedback>
               </View>
@@ -366,7 +368,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
             style={[
               {
                 flex: 1,
-                backgroundColor: Palette.scrim,
+                backgroundColor: theme.scrim,
               },
               animatedStyle,
             ]}
@@ -395,7 +397,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                 bottom: 0,
                 right: 0,
                 left: 0,
-                backgroundColor: Palette.scrim,
+                backgroundColor: theme.scrim,
               },
               animatedStyle,
             ]}
@@ -427,9 +429,15 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
           ref={bottomSheetModalRef}
           index={1}
           snapPoints={snapPoints}
-          backgroundStyle={styles.backgroundStyle}
-          handleStyle={styles.handleStyle}
-          handleIndicatorStyle={styles.handleIndicatorStyle}>
+          backgroundStyle={{ backgroundColor: theme.surface }}
+          handleStyle={{
+            backgroundColor: theme.surface,
+            borderTopLeftRadius: 14,
+            borderTopRightRadius: 14,
+          }}
+          handleIndicatorStyle={{
+            backgroundColor: theme.onSurface,
+          }}>
           <SortOptions
             currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
             onSortPressed={onSortPressed}
@@ -439,30 +447,5 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  backgroundStyle: {
-    backgroundColor: Palette.surface,
-  },
-  handleStyle: {
-    backgroundColor: Palette.surface,
-    borderTopLeftRadius: 14,
-    borderTopRightRadius: 14,
-  },
-  handleIndicatorStyle: {
-    backgroundColor: Palette.onSurface,
-  },
-  contentContainer: {
-    flex: 1,
-    backgroundColor: Palette.surface,
-    paddingHorizontal: Spacing.regular,
-  },
-  choice: {
-    color: Palette.onSurface,
-    fontSize: 16,
-    marginVertical: Spacing.small,
-    marginLeft: Spacing.small,
-  },
-});
 
 export default PostDetailsView;

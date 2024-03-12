@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
 import Animated, { SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 
 function ProgressBarView({ progress }: { progress: SharedValue<number> }) {
+  const theme = useTheme();
   const dimensions = useWindowDimensions();
   const progressBarContainerStyles: ViewStyle[] = [styles.progressBarContainer];
 
@@ -26,7 +27,11 @@ function ProgressBarView({ progress }: { progress: SharedValue<number> }) {
     };
   }, [progress, dimensions.width]);
 
-  const progressBarStyles: ViewStyle[] = [styles.progressBar, progressBarWidthAnimated];
+  const progressBarStyles: ViewStyle[] = [
+    styles.progressBar,
+    { backgroundColor: theme.secondary },
+    progressBarWidthAnimated,
+  ];
 
   if (progress.value === 1) {
     progressBarStyles.push({ borderBottomRightRadius: 0 });
@@ -52,7 +57,6 @@ const styles = StyleSheet.create({
   progressBar: {
     height: 4,
     width: 0,
-    backgroundColor: Palette.secondary,
     borderTopLeftRadius: borderRadius,
     borderTopRightRadius: borderRadius,
     borderBottomRightRadius: borderRadius,

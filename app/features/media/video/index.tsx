@@ -6,7 +6,7 @@ import * as React from 'react';
 import { DimensionValue, Text, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
-import { Palette } from '../../colors';
+import { PaletteDark } from '../../colors';
 import { Spacing } from '../../typography';
 import VideoPlayer from './VideoPlayer';
 import { extractMetaTags } from './metadata';
@@ -52,7 +52,7 @@ export default function Page() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.scrim,
+        backgroundColor: PaletteDark.scrim,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
@@ -60,14 +60,14 @@ export default function Page() {
         options={{
           title: decode(title as string),
           headerStyle: {
-            backgroundColor: Palette.scrim,
+            backgroundColor: PaletteDark.scrim,
           },
         }}
       />
       {errorMessage && (
         <View
           style={{
-            backgroundColor: Palette.scrim,
+            backgroundColor: PaletteDark.scrim,
             width: '100%',
             height: '100%',
           }}>
@@ -80,12 +80,12 @@ export default function Page() {
               right: 0,
               paddingHorizontal: 20,
               paddingVertical: 10,
-              backgroundColor: Palette.errorContainer,
+              backgroundColor: PaletteDark.errorContainer,
               borderRadius: 10,
               flexDirection: 'row',
             }}>
-            <MaterialIcons name="error" size={36} color={Palette.onErrorContainer} />
-            <Text style={{ color: Palette.onErrorContainer, marginLeft: Spacing.regular }}>
+            <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
+            <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.regular }}>
               {errorMessage}
             </Text>
           </View>

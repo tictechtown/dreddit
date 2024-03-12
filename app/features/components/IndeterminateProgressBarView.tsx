@@ -8,9 +8,10 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 
 function IndeterminateProgressBarView() {
+  const theme = useTheme();
   const progress = useSharedValue(0);
   const dimensions = useWindowDimensions();
   const progressBarContainerStyles: ViewStyle[] = [styles.progressBarContainer];
@@ -39,7 +40,7 @@ function IndeterminateProgressBarView() {
 
   const progressBarStyles: ViewStyle[] = [
     styles.progressBar,
-    { width: dimensions.width / 4 },
+    { backgroundColor: theme.secondary, width: dimensions.width / 4 },
     progressBarWidthAnimated,
   ];
 
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
   progressBar: {
     height: 4,
     width: 0,
-    backgroundColor: Palette.secondary,
     borderTopLeftRadius: borderRadius,
     borderTopRightRadius: borderRadius,
     borderBottomRightRadius: borderRadius,

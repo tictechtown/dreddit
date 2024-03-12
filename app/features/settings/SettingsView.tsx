@@ -2,6 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
+import useTheme from '../../services/theme/useTheme';
 import { Palette } from '../colors';
 import Typography from '../components/Typography';
 
@@ -9,10 +10,11 @@ type RowProps = {
   icon: string;
   title: string;
   supporting: string;
+  theme: Palette;
   onPress: () => void;
 };
 
-const Row = ({ icon, title, supporting, onPress }: RowProps) => {
+const Row = ({ icon, title, supporting, theme, onPress }: RowProps) => {
   return (
     <Pressable onPress={onPress}>
       <View
@@ -25,10 +27,10 @@ const Row = ({ icon, title, supporting, onPress }: RowProps) => {
           columnGap: 16,
           alignItems: 'center',
         }}>
-        <MaterialIcons name={icon} size={24} color={Palette.onSurfaceVariant} />
+        <MaterialIcons name={icon} size={24} color={theme.onSurfaceVariant} />
         <View>
           <Typography variant="bodyLarge">{title}</Typography>
-          <Typography variant="bodyMedium" style={{ color: Palette.onSurfaceVariant }}>
+          <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant }}>
             {supporting}
           </Typography>
         </View>
@@ -38,8 +40,10 @@ const Row = ({ icon, title, supporting, onPress }: RowProps) => {
 };
 
 const SettingsView = () => {
+  const theme = useTheme();
+
   return (
-    <View style={{ backgroundColor: Palette.background }}>
+    <View style={{ backgroundColor: theme.background }}>
       <Typography
         variant="headlineMedium"
         style={{ marginTop: 40, marginBottom: 28, paddingHorizontal: 16 }}>
@@ -51,6 +55,7 @@ const SettingsView = () => {
           icon={'dark-mode'}
           title={'Theme'}
           supporting={'Customize app theme'}
+          theme={theme}
           onPress={() => {
             router.push('features/settings/appTheme');
           }}
@@ -59,11 +64,18 @@ const SettingsView = () => {
           icon={'download'}
           title={'Data Usage'}
           supporting={'Customize how picture are loaded'}
+          theme={theme}
           onPress={() => {
             router.push('features/settings/dataUsage');
           }}
         />
-        <Row icon={'person'} title={'App Info'} supporting={'v1.0.0'} onPress={() => {}} />
+        <Row
+          icon={'person'}
+          title={'App Info'}
+          theme={theme}
+          supporting={'v1.0.0'}
+          onPress={() => {}}
+        />
       </View>
     </View>
   );

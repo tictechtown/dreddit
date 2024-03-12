@@ -1,17 +1,20 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
+import { useStore } from '../../../services/store';
+import useTheme from '../../../services/theme/useTheme';
 import { Palette } from '../../colors';
 import Typography from '../../components/Typography';
 
 type RowProps = {
   icon: string;
   title: string;
+  theme: Palette;
   isSelected: boolean;
   onPress: () => void;
 };
 
-const Row = ({ icon, title, isSelected, onPress }: RowProps) => {
+const Row = ({ icon, title, theme, isSelected, onPress }: RowProps) => {
   return (
     <Pressable onPress={onPress}>
       <View
@@ -24,14 +27,14 @@ const Row = ({ icon, title, isSelected, onPress }: RowProps) => {
           columnGap: 16,
           alignItems: 'center',
         }}>
-        <MaterialIcons name={icon} size={24} color={Palette.onSurfaceVariant} />
+        <MaterialIcons name={icon} size={24} color={theme.onSurfaceVariant} />
         <View style={{ flex: 1 }}>
           <Typography variant="bodyLarge">{title}</Typography>
         </View>
         <MaterialIcons
           name={isSelected ? 'radio-button-checked' : 'radio-button-unchecked'}
           size={24}
-          color={isSelected ? Palette.primary : Palette.onSurface}
+          color={isSelected ? theme.primary : theme.onSurface}
         />
       </View>
     </Pressable>
@@ -39,12 +42,14 @@ const Row = ({ icon, title, isSelected, onPress }: RowProps) => {
 };
 
 const AppThemeView = () => {
-  const [selectedOption, setSelectedOption] = React.useState<'os' | 'light' | 'dark' | 'amoled'>(
-    'os'
-  );
+  const theme = useTheme();
+  const store = useStore((state) => ({
+    colorScheme: state.colorScheme,
+    updateColorScheme: state.updateColorScheme,
+  }));
 
   return (
-    <View style={{ backgroundColor: Palette.background }}>
+    <View style={{ backgroundColor: theme.background }}>
       <Typography
         variant="headlineMedium"
         style={{ marginTop: 40, paddingHorizontal: 16, marginBottom: 28 }}>
@@ -55,33 +60,37 @@ const AppThemeView = () => {
         <Row
           icon={'brightness-medium'}
           title={'Follow OS setting'}
-          isSelected={selectedOption === 'os'}
+          theme={theme}
+          isSelected={store.colorScheme === 'os'}
           onPress={() => {
-            setSelectedOption('os');
+            store.updateColorScheme('os');
           }}
         />
         <Row
           icon={'light-mode'}
           title={'Light'}
-          isSelected={selectedOption === 'light'}
+          theme={theme}
+          isSelected={store.colorScheme === 'light'}
           onPress={() => {
-            setSelectedOption('light');
+            store.updateColorScheme('light');
           }}
         />
         <Row
           icon={'dark-mode'}
           title={'Dark'}
-          isSelected={selectedOption === 'dark'}
+          theme={theme}
+          isSelected={store.colorScheme === 'dark'}
           onPress={() => {
-            setSelectedOption('dark');
+            store.updateColorScheme('dark');
           }}
         />
         <Row
           icon={'dark-mode'}
           title={'AMOLED Dark'}
-          isSelected={selectedOption === 'amoled'}
+          theme={theme}
+          isSelected={store.colorScheme === 'amoled'}
           onPress={() => {
-            setSelectedOption('amoled');
+            store.updateColorScheme('amoled');
           }}
         />
       </View>

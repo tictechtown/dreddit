@@ -14,6 +14,7 @@ type Props = {
   over_18?: boolean | undefined;
   containerStyle: any;
   textStyle?: any;
+  theme: Palette;
 };
 
 const FlairTextView = (props: Props) => {
@@ -62,7 +63,9 @@ const FlairTextView = (props: Props) => {
               numberOfLines={1}
               key={`${it.t}.${index}`}
               style={
-                props.textStyle ? props.textStyle : { color: Palette.onBackground, fontSize: 11 }
+                props.textStyle
+                  ? props.textStyle
+                  : { color: props.theme.onBackground, fontSize: 11 }
               }>
               {displayedItem}
             </Text>

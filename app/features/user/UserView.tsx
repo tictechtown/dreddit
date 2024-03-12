@@ -3,6 +3,7 @@ import { decode } from 'html-entities';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Comment, Post, RedditApi, Trophy, User } from '../../services/api';
+import useTheme from '../../services/theme/useTheme';
 import { Palette } from '../colors';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
@@ -27,7 +28,13 @@ const TabView = (props: { sortOrder: string; onSortOrderChanged: (value: string)
   );
 };
 
-const CommentItem = ({ commentOrPost }: { commentOrPost: CommentOrPostOrTrophy }) => {
+const CommentItem = ({
+  commentOrPost,
+  theme,
+}: {
+  commentOrPost: CommentOrPostOrTrophy;
+  theme: Palette;
+}) => {
   const onPress = useCallback(() => {
     if (commentOrPost.kind === 't3') {
       router.push({
@@ -46,7 +53,7 @@ const CommentItem = ({ commentOrPost }: { commentOrPost: CommentOrPostOrTrophy }
     // Post
     return (
       <TouchableOpacity onPress={onPress}>
-        <SubredditPostItemView post={commentOrPost} />
+        <SubredditPostItemView post={commentOrPost} theme={theme} />
       </TouchableOpacity>
     );
   }
@@ -65,12 +72,12 @@ const CommentItem = ({ commentOrPost }: { commentOrPost: CommentOrPostOrTrophy }
               {/* @ts-ignore */}
               {decode(commentOrPost.data.link_title)}
             </Typography>
-            <Typography variant="bodySmall" style={{ color: Palette.onSurfaceVariant }}>
+            <Typography variant="bodySmall" style={{ color: theme.onSurfaceVariant }}>
               {commentOrPost.data.subreddit_name_prefixed} •{' '}
               {timeDifference(commentOrPost.data.created_utc * 1000)}
             </Typography>
 
-            <Typography variant="bodyMedium" style={{ color: Palette.onSurfaceVariant }}>
+            <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant }}>
               {decode(commentOrPost.data.body)}
             </Typography>
           </View>
@@ -107,6 +114,7 @@ const CommentItem = ({ commentOrPost }: { commentOrPost: CommentOrPostOrTrophy }
 type CommentsData = { data: CommentOrPostOrTrophy[]; isLoaded: boolean };
 
 const UserView = (props: Props) => {
+  const theme = useTheme();
   const [commentsData, setCommentsData] = useState<CommentsData>({ data: [], isLoaded: false });
   const [userData, setUserData] = useState<User>();
   const [userTrophies, setUserTrophies] = useState<Trophy[]>();
@@ -172,7 +180,7 @@ const UserView = (props: Props) => {
               </Text>
             )}
 
-            <Typography variant="bodyMedium" style={{ color: Palette.onSurfaceVariant }}>
+            <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant }}>
               {userData.data.total_karma.toLocaleString('en-US')} karma •{' '}
               {new Date(userData.data.created_utc * 1000).toLocaleDateString('en-US', {
                 year: 'numeric',
@@ -210,12 +218,12 @@ const UserView = (props: Props) => {
       style={{
         flex: 1,
         width: '100%',
-        backgroundColor: Palette.surface,
+        backgroundColor: theme.surface,
       }}>
       <Stack.Screen options={{ title: props.userId }} />
       <FlatList
         data={filteredData}
-        renderItem={({ item }) => <CommentItem commentOrPost={item} />}
+        renderItem={({ item }) => <CommentItem commentOrPost={item} theme={theme} />}
         keyExtractor={(item) => item.data.id ?? item.data.name}
         ListHeaderComponent={Header}
         contentContainerStyle={{ rowGap: 10 }}
@@ -224,13 +232,13 @@ const UserView = (props: Props) => {
             return (
               <View
                 style={{
-                  borderColor: Palette.outline,
+                  borderColor: theme.outline,
                   padding: Spacing.small,
                   margin: Spacing.small,
                   borderWidth: 1,
                   borderRadius: 8,
                 }}>
-                <Text style={{ color: Palette.onSurface }}>
+                <Text style={{ color: theme.onSurface }}>
                   No{' '}
                   {sortOrder === 'posts'
                     ? 'post'
@@ -250,41 +258,3 @@ const UserView = (props: Props) => {
 };
 
 export default UserView;
-
-/**
- * 
- *         { <View
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: Spacing.small,
-            justifyContent: 'space-between',
-          }}>
-          <View>
-            <Text
-              style={{
-                color: Palette.onSurfaceVariant,
-                ...TypographyStyles.overline,
-                opacity: 0.6,
-              }}>
-              Post Karma
-            </Text>
-            <Text style={{ color: Palette.onSurfaceVariant, ...TypographyStyles.bodyLarge }}>
-              {userData.data.link_karma.toLocaleString('en-US')}
-            </Text>
-          </View>
-          <View>
-            <Text
-              style={{
-                color: Palette.onSurfaceVariant,
-                ...TypographyStyles.overline,
-                opacity: 0.6,
-              }}>
-              Comment Karma
-            </Text>
-            <Text style={{ color: Palette.onSurfaceVariant, ...TypographyStyles.bodyLarge }}>
-              {userData.data.comment_karma.toLocaleString('en-US')}
-            </Text>
-          </View>
-        </View> }
-
- */

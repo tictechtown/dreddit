@@ -6,10 +6,10 @@
     "start": "expo start",
     "start:android": "expo start --android",
     "lint": "eslint .",
-    "android": "expo run:android",
+    "android": "rm -rf android/ && expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "build:android": "eas build --platform android --profile preview --local --output=\"builds/dreddit.apk\""
+    "build:android": "rm -rf android/ && eas build --platform android --profile preview --local --output=\"builds/dreddit.apk\""
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.1",

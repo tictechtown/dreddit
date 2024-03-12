@@ -11,7 +11,10 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "prod"
+      }
     }
   },
   "submit": {

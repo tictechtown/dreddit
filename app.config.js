@@ -1,8 +1,8 @@
-const IS_DEV = process.env.APP_VARIANT === 'development';
+const IS_PROD = process.env.APP_VARIANT === 'prod';
 
 export default {
   expo: {
-    name: IS_DEV ? '[Debug] Dreddit' : 'Dreddit',
+    name: IS_PROD ? 'Dreddit' : '[Debug] Dreddit',
     slug: 'dreddit',
     version: '1.0.0',
     orientation: 'portrait',
@@ -24,7 +24,7 @@ export default {
         foregroundImage: './assets/adaptive-icon.png',
         monochromeImage: './assets/monochrone-icon.png',
       },
-      package: 'com.tictechtown.app.dreddit',
+      package: IS_PROD ? 'com.tictechtown.app.dreddit' : 'com.tictechtown.app.dreddit.dev',
     },
     web: {
       favicon: './assets/favicon.png',

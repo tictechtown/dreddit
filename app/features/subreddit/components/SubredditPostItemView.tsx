@@ -46,11 +46,28 @@ const SubredditPostItemView = ({
   postCache.setCache(post.data.id, post);
 
   const onPress = useCallback(() => {
-    const href = onLinkPress(post);
-    if (href.pathname === 'features/full' && href.params) {
-      WebBrowser.openBrowserAsync(href.params.uri as string, { createTask: false });
+    if (post.data.domain !== 'reddit.com') {
+      const href = onLinkPress(post);
+      if (href.pathname === 'features/full' && href.params) {
+        WebBrowser.openBrowserAsync(href.params.uri as string, { createTask: false });
+      } else {
+        router.push(href);
+      }
     } else {
-      router.push(href);
+      // a bit dirty, reddit.com is usually from a previously shared post
+      // so we fetch the post (async) to get the redirected url
+      // then parse the url to get the final postId
+      fetch(post.data.url).then((data) => {
+        const postId = data.url.split('comments/')[1].split('/')[0];
+        if (postId !== undefined) {
+          router.push({
+            pathname: `features/post/${postId}`,
+            params: { postid: postId },
+          });
+        } else {
+          console.warn('couldnt get postId from url:', data.url);
+        }
+      });
     }
   }, [post.data.id]);
 
@@ -66,8 +83,6 @@ const SubredditPostItemView = ({
   const isCrosspost = Array.isArray(post.data.crosspost_parent_list);
   const imageWidth = width - 16 * 2;
 
-  const hasFlair = post.data.link_flair_text || post.data.pinned || post.data.stickied;
-
   return (
     <Pressable onPress={onPress}>
       <View
@@ -78,65 +93,45 @@ const SubredditPostItemView = ({
           paddingVertical: 10,
           backgroundColor: Palette.surface,
         }}>
-        <View style={{ width: '100%' }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: hasFlair ? 'flex-start' : 'flex-end',
-            }}>
-            <View style={{ rowGap: 0 }}>
-              {hasFlair && (
-                <FlairTextView
-                  flair_text={post.data.link_flair_text}
-                  flair_richtext={post.data.link_flair_richtext}
-                  flair_background_color={post.data.link_flair_background_color}
-                  pinned={post.data.pinned}
-                  stickied={post.data.stickied}
-                  flair_type={post.data.link_flair_type}
-                  over_18={post.data.over_18}
-                  containerStyle={{}}
-                />
-              )}
-
-              <TouchableOpacity onPress={goToUserPage}>
-                <Typography variant="overline" style={{ color: Palette.primary }}>
-                  {post.data.author} • {timeDifference(post.data.created_utc * 1000, 'en')}
-                </Typography>
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity
-              onPress={() => {
-                router.push({
-                  pathname: `features/subreddit/${post.data.subreddit}`,
-                  params: {
-                    icon: require('../../../../assets/images/subbit.png'),
-                  },
-                });
-              }}>
-              <View
-                style={{
-                  paddingHorizontal: 6,
-                  paddingBottom: 2,
-                  borderWidth: 1,
-                  borderRadius: 4,
-                  borderColor: Palette.outlineVariant,
-                }}>
-                <Typography variant="labelSmall" style={{ color: Palette.onSurfaceVariant }}>
-                  {post.data.subreddit}
-                </Typography>
-              </View>
-            </TouchableOpacity>
+        <View style={{ width: '100%', rowGap: 4 }}>
+          <TouchableOpacity onPress={goToUserPage}>
+            <Typography variant="overline" style={{ color: Palette.primary }}>
+              {post.data.author}
+              <Typography variant="overline" style={{ color: Palette.secondary }}>
+                {' '}
+                • {timeDifference(post.data.created_utc * 1000, 'en')} • r/
+                {post.data.subreddit}
+              </Typography>
+            </Typography>
+          </TouchableOpacity>
+          <Typography variant="titleMedium">{decode(post.data.title)}</Typography>
+          <View style={{ flexDirection: 'row', paddingTop: 4 }}>
+            {post.data.link_flair_text && (
+              <FlairTextView
+                flair_text={post.data.link_flair_text}
+                flair_type={post.data.link_flair_type}
+                flair_richtext={post.data.link_flair_richtext}
+                flair_background_color={post.data.link_flair_background_color}
+                textStyle={{
+                  color: Palette.onSurfaceVariant,
+                  fontSize: 12,
+                  fontWeight: 'bold',
+                }}
+                pinned={post.data.pinned}
+                stickied={post.data.stickied}
+                containerStyle={{
+                  flex: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: Palette.surfaceContainerHigh,
+                  borderRadius: Spacing.xsmall,
+                  paddingHorizontal: Spacing.xsmall,
+                  paddingVertical: Spacing.xxsmall,
+                  flexDirection: 'row',
+                }}
+              />
+            )}
           </View>
-          <Typography
-            variant="titleMedium"
-            style={{
-              flex: 0,
-              paddingTop: 2,
-            }}>
-            {decode(post.data.title)}
-          </Typography>
         </View>
 
         <View style={{ paddingVertical: Spacing.regular, paddingTop: Spacing.small }}>

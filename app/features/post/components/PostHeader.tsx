@@ -103,7 +103,6 @@ const PostHeader = ({
         <Typography
           variant="titleMedium"
           style={{
-            color: Palette.onSurface,
             paddingTop: 4,
             paddingHorizontal: Spacing.small,
           }}>

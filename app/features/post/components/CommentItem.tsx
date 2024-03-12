@@ -118,7 +118,7 @@ const CommentItem = ({
   return (
     <View
       style={{
-        paddingRight: Spacing.small,
+        paddingRight: Spacing.regular,
         paddingLeft: comment.data.depth
           ? Spacing.small + Spacing.regular * comment.data.depth
           : Spacing.small,

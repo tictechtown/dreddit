@@ -16,6 +16,7 @@ import useTheme from '../../services/theme/useTheme';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import ItemSeparator from '../components/ItemSeparator';
 import Tabs from '../components/Tabs';
+import Typography from '../components/Typography';
 import SubredditPostItemView from './components/SubredditPostItemView';
 import { getAllUniqueFlairs } from './utils';
 
@@ -359,16 +360,15 @@ const SubRedditView = (props: Props) => {
                   : require('../../../assets/images/subbit.png')
               }
             />
-            <Text
+            <Typography
+              variant="headlineLarge"
               style={{
                 color: theme.onBackground,
-                fontWeight: '600',
-                fontSize: 36,
                 textAlign: 'center',
               }}
               onPress={scrollToTop}>
               r/{props.subreddit}
-            </Text>
+            </Typography>
           </View>
         )}
       </View>

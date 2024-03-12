@@ -106,7 +106,9 @@ const SubredditPostItemView = ({
               </Typography>
             </Typography>
           </TouchableOpacity>
-          <Typography variant="titleMedium">{decode(post.data.title)}</Typography>
+          <Typography variant="titleMedium" style={{ fontWeight: '400' }}>
+            {decode(post.data.title)}
+          </Typography>
           <View style={{ flexDirection: 'row', paddingTop: 4 }}>
             {post.data.link_flair_text && (
               <FlairTextView

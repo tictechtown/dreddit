@@ -40,6 +40,33 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'left',
   },
+
+  displayLarge: {
+    fontSize: 57,
+    lineHeight: 64,
+    letterSpacing: -0.25,
+    fontWeight: '400',
+  },
+  displayMedium: {
+    fontSize: 45,
+    lineHeight: 52,
+    letterSpacing: 0,
+    fontWeight: '400',
+  },
+  displaySmall: {
+    fontSize: 36,
+    lineHeight: 44,
+    letterSpacing: 0,
+    fontWeight: '400',
+  },
+
+  headlineLarge: {
+    fontSize: 32,
+    lineHeight: 40,
+    letterSpacing: 0,
+    fontWeight: '400',
+  },
+
   headlineMedium: {
     fontSize: 28,
     lineHeight: 36,

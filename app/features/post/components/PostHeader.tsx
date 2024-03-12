@@ -109,6 +109,7 @@ const PostHeader = ({
           style={{
             paddingTop: 4,
             paddingHorizontal: Spacing.small,
+            fontWeight: '400',
           }}>
           {decode(post.data.title)}
         </Typography>

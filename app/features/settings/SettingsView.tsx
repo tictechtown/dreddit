@@ -1,4 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
+import * as Application from 'expo-application';
 import { router } from 'expo-router';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
@@ -73,7 +74,7 @@ const SettingsView = () => {
           icon={'person'}
           title={'App Info'}
           theme={theme}
-          supporting={'v1.0.0'}
+          supporting={`${Application.nativeApplicationVersion}#${Application.nativeBuildVersion}`}
           onPress={() => {}}
         />
       </View>

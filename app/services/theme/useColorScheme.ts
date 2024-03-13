@@ -7,8 +7,5 @@ export default () => {
   if (storedValue === 'os') {
     return colorScheme ?? 'light';
   }
-  if (storedValue === 'amoled') {
-    return 'dark';
-  }
   return storedValue;
 };

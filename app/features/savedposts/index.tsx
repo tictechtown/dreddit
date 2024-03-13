@@ -46,6 +46,7 @@ export default function Page() {
               isSaved={savedPostIds[item.data.id]}
               addToSavedPosts={addToSavedPosts}
               removeFromSavedPosts={removeFromSavedPosts}
+              theme={theme}
             />
           )}
           ItemSeparatorComponent={ItemSeparator}

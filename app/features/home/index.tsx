@@ -41,7 +41,7 @@ const Home = () => {
                   pathname: 'features/settings',
                   params: {},
                 }}>
-                <Ionicons name="settings-sharp" size={24} color={theme?.onBackground} />
+                <Ionicons name="settings-sharp" size={24} color={theme.onBackground} />
               </Link>
             );
           },

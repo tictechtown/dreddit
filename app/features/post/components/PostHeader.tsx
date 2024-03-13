@@ -82,11 +82,19 @@ const PostHeader = ({
 
   const displayedSortOrder = getDisplaySortOrder(forcedSortOrder, post.data.suggested_sort);
 
+  const authorColor = post.data.stickied ? '#aed285' : theme.primary;
+
   return (
     <View>
       <View
-        style={{ flexDirection: 'row', marginHorizontal: 12, columnGap: 8, alignItems: 'center' }}>
-        <Typography variant="overline" style={{ color: theme.primary }}>
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          marginHorizontal: 12,
+          columnGap: 8,
+          alignItems: 'center',
+        }}>
+        <Typography variant="overline" style={{ color: authorColor }}>
           {post.data.author}
         </Typography>
         <FlairTextView
@@ -96,24 +104,21 @@ const PostHeader = ({
           pinned={false}
           flair_type={post.data.author_flair_type}
           flair_background_color={post.data.author_flair_background_color}
-          containerStyle={{}}
           theme={theme}
         />
         <Typography variant="overline" style={{ color: theme.secondary }}>
           • {timeDifference(post.data.created_utc * 1000)}
         </Typography>
       </View>
-      <Pressable onPress={onPress}>
-        <Typography
-          variant="titleMedium"
-          style={{
-            paddingTop: 4,
-            paddingHorizontal: Spacing.small,
-            fontWeight: '400',
-          }}>
-          {decode(post.data.title)}
-        </Typography>
-      </Pressable>
+      <Typography
+        variant="titleMedium"
+        style={{
+          paddingTop: 4,
+          paddingHorizontal: Spacing.small,
+          fontWeight: '400',
+        }}>
+        {decode(post.data.title)}
+      </Typography>
       <View style={{ padding: Spacing.small, paddingTop: Spacing.xsmall, flexDirection: 'row' }}>
         {post.data.link_flair_text && (
           <FlairTextView
@@ -121,34 +126,22 @@ const PostHeader = ({
             flair_type={post.data.link_flair_type}
             flair_richtext={post.data.link_flair_richtext}
             flair_background_color={post.data.link_flair_background_color}
-            textStyle={{
-              color: theme.onSurfaceVariant,
-              fontSize: 12,
-              fontWeight: 'bold',
-            }}
             pinned={post.data.pinned}
             stickied={post.data.stickied}
-            containerStyle={{
-              flex: 0,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: theme.surfaceContainerHigh,
-              borderRadius: Spacing.xsmall,
-              paddingHorizontal: Spacing.xsmall,
-              paddingVertical: Spacing.xxsmall,
-              flexDirection: 'row',
-            }}
+            outlined
             theme={theme}
           />
         )}
       </View>
 
-      <View style={{ marginHorizontal: 12 }}>
-        <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
-        {maxGaleryResolutions && (
-          <CarouselView resolutions={maxGaleryResolutions} width={dimensions.width - 24} />
-        )}
-      </View>
+      <Pressable onPress={onPress}>
+        <View style={{ marginHorizontal: 12 }}>
+          <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
+          {maxGaleryResolutions && (
+            <CarouselView resolutions={maxGaleryResolutions} width={dimensions.width - 24} />
+          )}
+        </View>
+      </Pressable>
 
       {post.data.selftext.length > 0 && (
         <View
@@ -186,6 +179,7 @@ const PostHeader = ({
           )}
           <Markdown
             markdownit={markdownIt}
+            // @ts-ignore
             style={mdStyle}
             onLinkPress={_onLinkPress}
             rules={markdownRenderRules}>

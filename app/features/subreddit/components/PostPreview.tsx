@@ -44,7 +44,7 @@ const PostPreviewVideo = ({
       <Image
         style={{
           width: imageWidth,
-          height: 216,
+          height: 210,
           borderTopLeftRadius: 12,
           borderTopRightRadius: 12,
         }}
@@ -59,7 +59,7 @@ const PostPreviewVideo = ({
           flexDirection: 'row',
           columnGap: 8,
           alignItems: 'center',
-          backgroundColor: theme.surfaceContainer,
+          backgroundColor: theme.surfaceContainerHigh,
           borderBottomLeftRadius: 12,
           borderBottomRightRadius: 12,
           padding: 10,
@@ -99,6 +99,8 @@ const PostPreviewImage = ({
   if (domain === 'x.com' || domain === 'twitter.com') {
     const twitterName = url
       .replace('https://x.com/', '')
+      .replace('https://www.x.com/', '')
+      .replace('https://www.twitter.com/', '')
       .replace('https://twitter.com/', '')
       .split('/')[0];
 
@@ -204,7 +206,7 @@ const PostPreviewImage = ({
             justifyContent: 'center',
             flex: 1,
             paddingHorizontal: 16,
-            backgroundColor: theme.surfaceContainer,
+            backgroundColor: theme.surfaceContainerHigh,
             borderTopRightRadius: 12,
             borderBottomRightRadius: 12,
           }}>
@@ -239,11 +241,10 @@ const PostPreviewImage = ({
             flexDirection: 'row',
             columnGap: 8,
             alignItems: 'center',
-            backgroundColor: theme.surfaceContainer,
+            backgroundColor: theme.surfaceContainerHigh,
             borderBottomLeftRadius: 12,
             borderBottomRightRadius: 12,
             padding: 10,
-            top: -1,
           }}>
           <MaterialIcons name="link" size={14} color={theme.onSurface} />
           <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
@@ -256,7 +257,7 @@ const PostPreviewImage = ({
               position: 'absolute',
               bottom: 10,
               right: 10,
-              backgroundColor: theme.surfaceContainerHigh,
+              backgroundColor: theme.surfaceContainerHighest,
               borderRadius: 10,
               paddingHorizontal: Spacing.xsmall,
               flexDirection: 'row',
@@ -295,7 +296,7 @@ const PostPreviewImage = ({
             justifyContent: 'center',
             flex: 1,
             paddingHorizontal: 16,
-            backgroundColor: theme.surfaceContainer,
+            backgroundColor: theme.surfaceContainerHigh,
             borderTopRightRadius: 12,
             borderBottomRightRadius: 12,
           }}>
@@ -318,7 +319,7 @@ const PostPreviewImage = ({
         flexDirection: 'row',
         columnGap: 8,
         alignItems: 'center',
-        backgroundColor: theme.surfaceContainer,
+        backgroundColor: theme.surfaceContainerHigh,
         borderRadius: 12,
         padding: 10,
       }}>

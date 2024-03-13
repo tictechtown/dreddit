@@ -34,23 +34,41 @@ function convertMD3ToReactNavigation(
   };
 }
 
+function convertToAmoledIfNeeded(
+  schemes: Material3Theme,
+  colorScheme: 'light' | 'dark' | 'amoled'
+): { schemes: Material3Theme; color: ColorSchemeName } {
+  if (colorScheme === 'amoled') {
+    schemes.dark.background = '#000';
+    schemes.dark.surface = '#000';
+    schemes.dark.surfaceContainerLowest = '#000';
+    schemes.dark.surfaceContainerLow = '#000';
+    schemes.dark.surfaceContainer = '#000';
+    schemes.dark.onSurface = '#fff';
+    return { schemes, color: 'dark' };
+  }
+  return { schemes, color: colorScheme };
+}
+
 export default function Layout() {
   const colorScheme = useColorScheme();
   // If the device is not compatible, it will return a theme based on the fallback source color (optional, default to #6750A4)
-  const { theme: schemes } = useMaterial3Theme({ fallbackSourceColor: '#AAC7FF' });
+  const { theme } = useMaterial3Theme({ fallbackSourceColor: '#AAC7FF' });
+
+  const { schemes, color } = convertToAmoledIfNeeded(theme, colorScheme);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* @ts-ignore */}
-      <ThemeContext.Provider value={schemes[colorScheme ?? 'light']}>
-        <ThemeProvider value={convertMD3ToReactNavigation(schemes, colorScheme)}>
+      <ThemeContext.Provider value={schemes[color ?? 'light']}>
+        <ThemeProvider value={convertMD3ToReactNavigation(schemes, color)}>
           <Stack
             screenOptions={{
               headerStyle: {
-                backgroundColor: schemes[colorScheme ?? 'light'].surface,
+                backgroundColor: schemes[color ?? 'light'].surface,
               },
               headerShadowVisible: false,
-              headerTintColor: schemes[colorScheme ?? 'light'].onSurface,
+              headerTintColor: schemes[color ?? 'light'].onSurface,
               navigationBarColor: 'transparent',
             }}>
             <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />

@@ -143,7 +143,6 @@ const CommentItem = ({
           pinned={false}
           flair_type={comment.data.author_flair_type}
           flair_background_color={comment.data.author_flair_background_color}
-          containerStyle={{}}
           theme={theme}
         />
         <Typography variant="labelMedium" style={{ color: fontColor, fontWeight: '300', opacity }}>

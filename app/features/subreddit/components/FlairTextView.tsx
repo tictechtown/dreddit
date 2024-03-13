@@ -3,6 +3,7 @@ import { decode } from 'html-entities';
 import { Text, View } from 'react-native';
 import { FlairRichText, Post } from '../../../services/api';
 import { Palette } from '../../colors';
+import { Spacing } from '../../typography';
 
 type Props = {
   flair_text: string | null;
@@ -12,8 +13,7 @@ type Props = {
   stickied: boolean | undefined;
   flair_type: Post['data']['link_flair_type'];
   over_18?: boolean | undefined;
-  containerStyle: any;
-  textStyle?: any;
+  outlined?: boolean | undefined;
   theme: Palette;
 };
 
@@ -43,10 +43,36 @@ const FlairTextView = (props: Props) => {
     return null;
   }
 
+  const containerStyle = props.outlined
+    ? {
+        flex: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: props.theme.outlineVariant,
+        borderWidth: 1,
+        borderRadius: Spacing.xsmall,
+        paddingHorizontal: Spacing.xsmall,
+        paddingVertical: Spacing.xxsmall,
+        flexDirection: 'row',
+      }
+    : {};
+
+  const textStyle = props.outlined
+    ? {
+        color: props.theme.onSurfaceVariant,
+        fontSize: 12,
+        fontWeight: '500',
+      }
+    : {
+        color: props.theme.onSurfaceVariant,
+        fontSize: 11,
+        fontWeight: '400',
+      };
+
   return (
     <View
       style={{
-        ...props.containerStyle,
+        ...containerStyle,
         flexDirection: 'row',
         alignItems: 'center',
         columnGap: 2,
@@ -59,14 +85,7 @@ const FlairTextView = (props: Props) => {
           }
 
           return (
-            <Text
-              numberOfLines={1}
-              key={`${it.t}.${index}`}
-              style={
-                props.textStyle
-                  ? props.textStyle
-                  : { color: props.theme.onBackground, fontSize: 11 }
-              }>
+            <Text numberOfLines={1} key={`${it.t}.${index}`} style={textStyle}>
               {displayedItem}
             </Text>
           );

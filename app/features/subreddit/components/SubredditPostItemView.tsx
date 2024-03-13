@@ -84,6 +84,7 @@ const SubredditPostItemView = ({
 
   const isCrosspost = Array.isArray(post.data.crosspost_parent_list);
   const imageWidth = width - 16 * 2;
+  const authorColor = post.data.stickied ? '#aed285' : theme.primary;
 
   return (
     <Pressable onPress={onPress}>
@@ -97,7 +98,7 @@ const SubredditPostItemView = ({
         }}>
         <View style={{ width: '100%', rowGap: 4 }}>
           <TouchableOpacity onPress={goToUserPage}>
-            <Typography variant="overline" style={{ color: theme.primary }}>
+            <Typography variant="overline" style={{ color: authorColor }}>
               {post.data.author}
               <Typography variant="overline" style={{ color: theme.secondary }}>
                 {' '}
@@ -116,23 +117,9 @@ const SubredditPostItemView = ({
                 flair_type={post.data.link_flair_type}
                 flair_richtext={post.data.link_flair_richtext}
                 flair_background_color={post.data.link_flair_background_color}
-                textStyle={{
-                  color: theme.onSurfaceVariant,
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                }}
                 pinned={post.data.pinned}
                 stickied={post.data.stickied}
-                containerStyle={{
-                  flex: 0,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: theme.surfaceContainerHigh,
-                  borderRadius: Spacing.xsmall,
-                  paddingHorizontal: Spacing.xsmall,
-                  paddingVertical: Spacing.xxsmall,
-                  flexDirection: 'row',
-                }}
+                outlined
                 theme={theme}
               />
             )}

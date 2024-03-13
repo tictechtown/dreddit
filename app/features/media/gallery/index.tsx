@@ -50,7 +50,7 @@ const CarouselView = ({
               aspectRatio: 1,
               borderRadius: 10,
               borderWidth: 2,
-              borderColor: index === pageIndex ? 'yellow' : 'transparent',
+              borderColor: index === pageIndex ? PaletteDark.onSurface : 'transparent',
             }}
             source={item.gif ?? item.u.replaceAll('&amp;', '&')}
             contentFit="cover"
@@ -67,8 +67,6 @@ const CarouselView = ({
       <View
         style={[
           {
-            height: 70,
-            backgroundColor: PaletteDark.surfaceVariant,
             paddingHorizontal: Spacing.small,
           },
         ]}>

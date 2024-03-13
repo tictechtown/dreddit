@@ -48,7 +48,7 @@ const SubredditPostItemView = ({
   postCache.setCache(post.data.id, post);
 
   const onPress = useCallback(() => {
-    if (post.data.domain !== 'reddit.com') {
+    if (post.data.domain !== 'reddit.com' || post.data.is_gallery) {
       const href = onLinkPress(post);
       if (href.pathname === 'features/full' && href.params) {
         WebBrowser.openBrowserAsync(href.params.uri as string, { createTask: false });

@@ -756,6 +756,7 @@ type Post = {
     subreddit_subscribers: number;
     created_utc: number;
     num_crossposts: number;
+    url_overridden_by_dest?: string;
     media:
       | string
       | null

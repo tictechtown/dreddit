@@ -15,19 +15,23 @@ import FlairTextView from './FlairTextView';
 import PostPreview from './PostPreview';
 import PostToolbar from './PostToolbar';
 
+type Props = {
+  post: Post;
+  theme: Palette;
+  isSaved?: boolean;
+  addToSavedPosts?: (post: Post) => void;
+  removeFromSavedPosts?: (post: Post) => void;
+  onMoreOptions?: (post: Post) => void;
+};
+
 const SubredditPostItemView = ({
   post,
   isSaved,
   addToSavedPosts,
   removeFromSavedPosts,
   theme,
-}: {
-  post: Post;
-  isSaved?: boolean;
-  addToSavedPosts?: (post: Post) => void;
-  removeFromSavedPosts?: (post: Post) => void;
-  theme: Palette;
-}) => {
+  onMoreOptions,
+}: Props) => {
   if (!post?.data) {
     console.log('post', post);
     return null;
@@ -139,6 +143,7 @@ const SubredditPostItemView = ({
           addToSavedPosts={addToSavedPosts}
           removeFromSavedPosts={removeFromSavedPosts}
           theme={theme}
+          onMoreOptions={onMoreOptions}
         />
       </View>
     </Pressable>

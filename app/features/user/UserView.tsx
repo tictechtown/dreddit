@@ -5,6 +5,7 @@ import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Comment, Post, RedditApi, Trophy, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { Palette } from '../colors';
+import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
@@ -154,8 +155,8 @@ const UserView = (props: Props) => {
   const Header = useCallback(() => {
     if (!userData) {
       return (
-        <View>
-          <Typography variant="headlineSmall">Loading avatar</Typography>
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+          <IndeterminateProgressBarView />
         </View>
       );
     }

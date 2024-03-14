@@ -1,5 +1,5 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
 import { Spacing } from '../../typography';
 
@@ -12,7 +12,7 @@ const SortOptions = ({
 }) => {
   const theme = useTheme();
 
-  const choiceContainer = {
+  const choiceContainer: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,

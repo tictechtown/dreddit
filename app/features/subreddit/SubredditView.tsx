@@ -61,6 +61,8 @@ const SubRedditView = (props: Props) => {
   const [topOrder, setTopOrder] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('all');
 
   const [subredditData, setSubredditData] = useState<SubReddit['data'] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   const [posts, setPosts] = useState<Post[]>([]);
   const [after, setAfter] = useState<string | null>(null);
   const [flairs] = useState<string[]>([]);
@@ -121,6 +123,7 @@ const SubRedditView = (props: Props) => {
 
   useEffect(() => {
     const goFetch = async () => {
+      setError(null);
       const data = await new RedditApi().getSubmissions(sortOrder, props.subreddit, {
         v: `${Date.now()}`,
         t: topOrder,
@@ -132,6 +135,10 @@ const SubRedditView = (props: Props) => {
       // }
       setPosts(data?.posts ?? []);
       setAfter(data?.after);
+      if (data === undefined) {
+        console.log('data', data);
+        setError('error');
+      }
     };
     goFetch();
     // scroll to top
@@ -254,6 +261,8 @@ const SubRedditView = (props: Props) => {
     }
     return posts;
   }, [selectedFlair, posts]);
+
+  console.log('error', error);
 
   return (
     <>
@@ -404,7 +413,7 @@ const SubRedditView = (props: Props) => {
           </Pressable>
         )}
 
-        {posts.length === 0 && loading && (
+        {posts.length === 0 && (
           <View
             style={{
               flex: 5,
@@ -432,7 +441,7 @@ const SubRedditView = (props: Props) => {
           </View>
         )}
 
-        {!loading && subredditData === undefined && (
+        {error !== null && (
           <View
             style={{
               flex: 5,

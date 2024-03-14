@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 import PhotoZoom from 'react-native-photo-zoom';
 import { PaletteDark } from '../../colors';
 import ImageZoom from '../../components/react-native-image-zoom';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 export default function ImageView({ uri, progress }: { uri: string; progress: any }) {
   const _uri = (uri as string).replaceAll('&amp;', '&');
@@ -63,7 +63,7 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
             <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
             <Text
               numberOfLines={2}
-              style={{ flex: 0, color: PaletteDark.onErrorContainer, marginLeft: Spacing.regular }}>
+              style={{ flex: 0, color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
               {errorMessage}
             </Text>
           </View>

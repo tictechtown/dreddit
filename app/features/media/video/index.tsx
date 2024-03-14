@@ -7,7 +7,7 @@ import { DimensionValue, Text, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
 import { PaletteDark } from '../../colors';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import VideoPlayer from './VideoPlayer';
 import { extractMetaTags } from './metadata';
 
@@ -85,7 +85,7 @@ export default function Page() {
               flexDirection: 'row',
             }}>
             <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
-            <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.regular }}>
+            <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
               {errorMessage}
             </Text>
           </View>

@@ -6,7 +6,7 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { Post } from '../../../services/api';
 import { PaletteDark } from '../../colors';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import ImageView from '../image/ImageView';
 
 const CarouselView = ({
@@ -67,7 +67,7 @@ const CarouselView = ({
       <View
         style={[
           {
-            paddingHorizontal: Spacing.small,
+            paddingHorizontal: Spacing.s12,
           },
         ]}>
         <FlatList horizontal renderItem={renderThumbItem} data={pages} />

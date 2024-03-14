@@ -12,7 +12,7 @@ import { ColorPalette } from '../colors';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
-import { Spacing } from '../typography';
+import { Spacing } from '../tokens';
 
 // @ts-ignore
 import defaultSubredditIcon = require('../../../assets/images/subbit.png');
@@ -76,7 +76,7 @@ const SearchResultSub = (props: { result: SubReddit; theme: ColorPalette }) => {
                 width: 68,
                 height: 68,
                 borderRadius: 34,
-                marginRight: Spacing.regular,
+                marginRight: Spacing.s16,
                 flex: 0,
               }}
               source={icon}
@@ -138,7 +138,7 @@ const SearchResultUser = (props: { result: User; theme: ColorPalette }) => {
         params: { userid: data.name },
       }}
       asChild>
-      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: Spacing.xsmall }}>
+      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: Spacing.s8 }}>
         <View
           style={{
             backgroundColor: theme.surface,
@@ -153,7 +153,7 @@ const SearchResultUser = (props: { result: User; theme: ColorPalette }) => {
                 width: 68,
                 height: 68,
                 borderRadius: 34,
-                marginRight: Spacing.regular,
+                marginRight: Spacing.s16,
                 flex: 0,
               }}
               source={icon}
@@ -329,9 +329,9 @@ const HomeSearch = () => {
       {searchText.length < 3 && (
         <View
           style={{
-            paddingHorizontal: Spacing.small,
-            marginTop: Spacing.regular,
-            marginBottom: Spacing.small,
+            paddingHorizontal: Spacing.s12,
+            marginTop: Spacing.s16,
+            marginBottom: Spacing.s12,
           }}>
           <Typography variant="titleMedium">Trending</Typography>
         </View>

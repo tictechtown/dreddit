@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import useTheme from '../../services/theme/useTheme';
-import { Spacing } from '../typography';
+import { Spacing } from '../tokens';
 import Typography from './Typography';
 
 type TabProps<T extends string> = {
@@ -86,7 +86,7 @@ const Tabs = ({ selectedTabId, tabIds, tabNames, tabIconNames, onPress }: Props)
       style={{
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingHorizontal: Spacing.regular,
+        paddingHorizontal: Spacing.s16,
         backgroundColor: theme.surface,
         borderBottomWidth: 1,
         borderBottomColor: theme.surfaceVariant,

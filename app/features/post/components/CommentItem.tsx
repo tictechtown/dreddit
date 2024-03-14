@@ -7,7 +7,7 @@ import { Comment, RedditMediaMedata } from '../../../services/api';
 import { ColorPalette } from '../../colors';
 import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, useCommentMarkdownStyle } from '../utils';
 import CommentMediaView from './CommentMediaView';
@@ -98,8 +98,8 @@ const CommentItem = ({
           style={{
             color: theme.secondary,
             fontSize: 10,
-            paddingLeft: comment.data.depth ? Spacing.regular * comment.data.depth : Spacing.xsmall,
-            marginBottom: Spacing.small,
+            paddingLeft: comment.data.depth ? Spacing.s16 * comment.data.depth : Spacing.s8,
+            marginBottom: Spacing.s12,
           }}>
           Load {comment.data.count} more {comment.data.count > 1 ? 'comments' : 'comment'}
         </Text>
@@ -118,11 +118,11 @@ const CommentItem = ({
   return (
     <View
       style={{
-        paddingRight: Spacing.regular,
+        paddingRight: Spacing.s16,
         paddingLeft: comment.data.depth
-          ? Spacing.small + Spacing.regular * comment.data.depth
-          : Spacing.small,
-        marginBottom: hasReplies ? 0 : Spacing.xsmall,
+          ? Spacing.s12 + Spacing.s16 * comment.data.depth
+          : Spacing.s12,
+        marginBottom: hasReplies ? 0 : Spacing.s8,
       }}>
       <View style={{ flexDirection: 'row', columnGap: 4 }}>
         <TouchableOpacity onPress={goToUserPage}>
@@ -150,7 +150,7 @@ const CommentItem = ({
           {timeDifference(comment.data.created_utc * 1000)}
         </Typography>
       </View>
-      <View style={{ marginBottom: Spacing.xxsmall, flex: 0 }}>
+      <View style={{ marginBottom: Spacing.s4, flex: 0 }}>
         {isGifReply ? (
           <CommentMediaView item={isGifReply} showGif={showGif} body={comment.data.body} />
         ) : (

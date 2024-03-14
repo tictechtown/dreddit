@@ -9,7 +9,7 @@ import IndeterminateProgressBarView from '../components/IndeterminateProgressBar
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
-import { Spacing } from '../typography';
+import { Spacing } from '../tokens';
 import { timeDifference } from '../utils';
 
 type Props = {
@@ -64,8 +64,8 @@ const CommentItem = ({
       <View
         style={{
           flex: 1,
-          paddingHorizontal: Spacing.small,
-          paddingBottom: Spacing.small,
+          paddingHorizontal: Spacing.s12,
+          paddingBottom: Spacing.s12,
         }}>
         <TouchableOpacity onPress={onPress}>
           <View style={{ flex: 1 }}>
@@ -94,11 +94,11 @@ const CommentItem = ({
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          paddingHorizontal: Spacing.regular,
-          paddingVertical: Spacing.xxsmall,
+          paddingHorizontal: Spacing.s16,
+          paddingVertical: Spacing.s4,
         }}>
         <Image
-          style={{ borderRadius: 10, marginRight: Spacing.regular }}
+          style={{ borderRadius: 10, marginRight: Spacing.s16 }}
           width={40}
           height={40}
           source={{
@@ -176,7 +176,7 @@ const UserView = (props: Props) => {
           <Typography variant="headlineMedium">{props.userId.trim()}</Typography>
           <View style={{ flexDirection: 'row', marginBottom: 20 }}>
             {userData.data.subreddit.over_18 && (
-              <Text style={{ marginRight: Spacing.small, color: 'red', fontWeight: 'bold' }}>
+              <Text style={{ marginRight: Spacing.s12, color: 'red', fontWeight: 'bold' }}>
                 NSFW
               </Text>
             )}
@@ -234,8 +234,8 @@ const UserView = (props: Props) => {
               <View
                 style={{
                   borderColor: theme.outline,
-                  padding: Spacing.small,
-                  margin: Spacing.small,
+                  padding: Spacing.s12,
+                  margin: Spacing.s12,
                   borderWidth: 1,
                   borderRadius: 8,
                 }}>

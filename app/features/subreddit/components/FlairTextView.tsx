@@ -3,7 +3,7 @@ import { decode } from 'html-entities';
 import { Text, View } from 'react-native';
 import { FlairRichText, Post } from '../../../services/api';
 import { ColorPalette } from '../../colors';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 type Props = {
   flair_text: string | null;
@@ -50,9 +50,9 @@ const FlairTextView = (props: Props) => {
         justifyContent: 'center',
         borderColor: props.theme.outlineVariant,
         borderWidth: 1,
-        borderRadius: Spacing.xsmall,
-        paddingHorizontal: Spacing.xsmall,
-        paddingVertical: Spacing.xxsmall,
+        borderRadius: Spacing.s8,
+        paddingHorizontal: Spacing.s8,
+        paddingVertical: Spacing.s4,
         flexDirection: 'row',
       }
     : {};

@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Text, TextInput, View } from 'react-native';
 import { Post, RedditApi } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import SubredditPostItemView from '../components/SubredditPostItemView';
 
 type Props = {
@@ -109,8 +109,8 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
           <View
             style={{
               backgroundColor: theme.background,
-              paddingHorizontal: Spacing.small,
-              paddingVertical: Spacing.xsmall,
+              paddingHorizontal: Spacing.s12,
+              paddingVertical: Spacing.s8,
               borderRadius: 10,
             }}>
             <Text style={{ color: theme.onBackground }}>{initialQuery}</Text>
@@ -121,9 +121,9 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
         style={{
           color: theme.onBackground,
           fontSize: 16,
-          marginHorizontal: Spacing.small,
-          marginTop: Spacing.regular,
-          marginBottom: Spacing.small,
+          marginHorizontal: Spacing.s12,
+          marginTop: Spacing.s16,
+          marginBottom: Spacing.s12,
         }}>
         {'Results'}
       </Text>

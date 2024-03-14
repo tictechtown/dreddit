@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { TouchableNativeFeedback, View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 const SearchHeader = () => {
   const theme = useTheme();
@@ -18,12 +18,12 @@ const SearchHeader = () => {
       <View
         style={{
           height: 48,
-          marginHorizontal: Spacing.small,
-          paddingHorizontal: Spacing.regular,
+          marginHorizontal: Spacing.s12,
+          paddingHorizontal: Spacing.s16,
           borderRadius: 32,
           backgroundColor: theme.surfaceContainerHigh,
           alignItems: 'center',
-          marginBottom: Spacing.regular,
+          marginBottom: Spacing.s16,
           flexDirection: 'row',
           columnGap: 16,
         }}>

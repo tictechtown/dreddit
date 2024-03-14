@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 type Props = {
   option: {
@@ -35,8 +35,8 @@ const PollOption = (props: Props) => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          paddingVertical: Spacing.small,
-          paddingHorizontal: Spacing.regular,
+          paddingVertical: Spacing.s12,
+          paddingHorizontal: Spacing.s16,
         }}>
         <Text style={{ color: theme.onBackground }}>{props.option.text}</Text>
         {showVotes && <Text style={{ color: theme.onBackground }}>{props.option.vote_count}</Text>}

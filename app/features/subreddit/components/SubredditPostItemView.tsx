@@ -8,7 +8,7 @@ import postCache from '../../../services/postCache';
 import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
 import { onLinkPress } from '../utils';
 import FlairTextView from './FlairTextView';
@@ -96,7 +96,7 @@ const SubredditPostItemView = ({
         style={{
           flex: 1,
           marginVertical: 6,
-          paddingHorizontal: Spacing.regular,
+          paddingHorizontal: Spacing.s16,
           paddingVertical: 10,
           backgroundColor: theme.surface,
         }}>
@@ -130,7 +130,7 @@ const SubredditPostItemView = ({
           </View>
         </View>
 
-        <View style={{ paddingVertical: Spacing.regular, paddingTop: Spacing.small }}>
+        <View style={{ paddingVertical: Spacing.s16, paddingTop: Spacing.s12 }}>
           <PostPreview post={post} imageWidth={imageWidth} theme={theme} />
           {!isCrosspost && maxGaleryResolutions && (
             <CarouselView resolutions={maxGaleryResolutions} width={imageWidth} />

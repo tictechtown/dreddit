@@ -10,7 +10,7 @@ import useTheme from '../../../services/theme/useTheme';
 import ItemSeparator from '../../components/ItemSeparator';
 import Typography from '../../components/Typography';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../post/utils';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 type Wikipage = {
   content_md: string;
@@ -131,10 +131,10 @@ const Page = () => {
         </View>
         <View
           style={{
-            paddingHorizontal: Spacing.small,
+            paddingHorizontal: Spacing.s12,
             marginBottom: 50,
             flexDirection: 'column',
-            rowGap: Spacing.regular,
+            rowGap: Spacing.s16,
           }}>
           <Typography variant="bodyMedium">{about.public_description}</Typography>
           <ItemSeparator fullWidth />

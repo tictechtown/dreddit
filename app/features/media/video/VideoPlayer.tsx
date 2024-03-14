@@ -30,7 +30,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { PaletteDark } from '../../colors';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 type Props = VideoProps & { activityIndicator?: any };
 
@@ -330,7 +330,7 @@ const VideoPlayer = (props: Props) => {
             flexDirection: 'row',
           }}>
           <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
-          <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.regular }}>
+          <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
             {errorMessage}
           </Text>
         </View>

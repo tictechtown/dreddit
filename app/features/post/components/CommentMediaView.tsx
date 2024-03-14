@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { RedditMediaMedata } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 
 const CommentMediaView = ({
@@ -54,7 +54,7 @@ const CommentMediaView = ({
       <Image
         style={{
           borderRadius: 8,
-          marginTop: Spacing.small,
+          marginTop: Spacing.s12,
           width: preview.x,
           height: preview.y,
         }}

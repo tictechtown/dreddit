@@ -6,7 +6,7 @@ import { Post } from '../../../services/api';
 import { useStore } from '../../../services/store';
 import { ColorPalette } from '../../colors';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import {
   getPreviewImageFromDubz,
   getPreviewImageFromStreaminMe,
@@ -259,7 +259,7 @@ const PostPreviewImage = ({
               right: 10,
               backgroundColor: theme.surfaceContainerHighest,
               borderRadius: 10,
-              paddingHorizontal: Spacing.xsmall,
+              paddingHorizontal: Spacing.s8,
               flexDirection: 'row',
             }}>
             <Typography variant="labelMedium">

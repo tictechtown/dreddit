@@ -1,7 +1,7 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 const SortOptions = ({
   currentSort,
@@ -28,8 +28,8 @@ const SortOptions = ({
   const choices = {
     color: theme.onSurface,
     fontSize: 16,
-    marginVertical: Spacing.small,
-    marginLeft: Spacing.small,
+    marginVertical: Spacing.s12,
+    marginLeft: Spacing.s12,
   };
 
   return (
@@ -37,13 +37,13 @@ const SortOptions = ({
       style={{
         flex: 1,
         backgroundColor: theme.surface,
-        paddingHorizontal: Spacing.regular,
+        paddingHorizontal: Spacing.s16,
       }}>
       <Text
         style={{
           color: theme.onBackground,
           fontSize: 24,
-          marginBottom: Spacing.regular,
+          marginBottom: Spacing.s16,
         }}>
         Sort options
       </Text>

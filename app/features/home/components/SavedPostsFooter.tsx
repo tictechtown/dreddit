@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { useStore } from '../../../services/store';
 import useTheme from '../../../services/theme/useTheme';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 
 const SavedPostsFooter = () => {
   const theme = useTheme();
@@ -17,11 +17,11 @@ const SavedPostsFooter = () => {
       <View
         style={{
           flex: 1,
-          paddingHorizontal: Spacing.regular,
+          paddingHorizontal: Spacing.s16,
           flexDirection: 'row',
           alignItems: 'center',
-          marginVertical: Spacing.regular,
-          marginHorizontal: Spacing.small,
+          marginVertical: Spacing.s16,
+          marginHorizontal: Spacing.s12,
         }}>
         <View
           style={{
@@ -30,7 +30,7 @@ const SavedPostsFooter = () => {
             justifyContent: 'space-between',
             borderTopColor: theme.outlineVariant,
             borderTopWidth: 1,
-            paddingVertical: Spacing.regular,
+            paddingVertical: Spacing.s16,
           }}>
           <Typography variant="bodyLarge">Saved posts</Typography>
           <Typography variant="labelMedium">{totalSavedPost}</Typography>

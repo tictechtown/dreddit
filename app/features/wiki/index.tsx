@@ -7,7 +7,7 @@ import { ScrollView, View } from 'react-native';
 import { RedditApi, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../post/utils';
-import { Spacing } from '../typography';
+import { Spacing } from '../tokens';
 
 type Wikipage = {
   content_md: string;
@@ -80,7 +80,7 @@ const Page = () => {
     <View style={{ backgroundColor: theme.surface }}>
       <Stack.Screen options={{ title: subreddit as string }} />
       <ScrollView style={{ width: '100%' }}>
-        <View style={{ alignItems: 'center', flex: 1, paddingHorizontal: Spacing.regular }}>
+        <View style={{ alignItems: 'center', flex: 1, paddingHorizontal: Spacing.s16 }}>
           {wiki?.content_md && (
             <Markdown
               markdownit={markdownIt}

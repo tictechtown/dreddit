@@ -11,7 +11,7 @@ import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import PostPreview from '../../subreddit/components/PostPreview';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import PollOption from './PollOption';
@@ -114,12 +114,12 @@ const PostHeader = ({
         variant="titleMedium"
         style={{
           paddingTop: 4,
-          paddingHorizontal: Spacing.small,
+          paddingHorizontal: Spacing.s12,
           fontWeight: '400',
         }}>
         {decode(post.data.title)}
       </Typography>
-      <View style={{ padding: Spacing.small, paddingTop: Spacing.xsmall, flexDirection: 'row' }}>
+      <View style={{ padding: Spacing.s12, paddingTop: Spacing.s8, flexDirection: 'row' }}>
         {post.data.link_flair_text && (
           <FlairTextView
             flair_text={post.data.link_flair_text}
@@ -146,8 +146,8 @@ const PostHeader = ({
       {post.data.selftext.length > 0 && (
         <View
           style={{
-            padding: Spacing.small,
-            margin: Spacing.small,
+            padding: Spacing.s12,
+            margin: Spacing.s12,
 
             backgroundColor: theme.surfaceContainer,
             borderRadius: 8,
@@ -190,8 +190,8 @@ const PostHeader = ({
       <View
         style={{
           backgroundColor: theme.surface,
-          padding: Spacing.small,
-          marginBottom: Spacing.small,
+          padding: Spacing.s12,
+          marginBottom: Spacing.s12,
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>

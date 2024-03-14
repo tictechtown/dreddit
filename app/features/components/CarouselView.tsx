@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { PaletteDark } from '../colors';
-import { Spacing } from '../typography';
+import { Spacing } from '../tokens';
 import Typography from './Typography';
 
 const panGestureHandlerProps = { activeOffsetX: [-10, 10] };
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     right: 10,
     backgroundColor: PaletteDark.surfaceContainerHigh,
     borderRadius: 10,
-    paddingHorizontal: Spacing.xsmall,
+    paddingHorizontal: Spacing.s8,
     flexDirection: 'row',
   },
   pageIndexTextColor: {

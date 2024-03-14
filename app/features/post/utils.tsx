@@ -10,7 +10,7 @@ import markdownItRedditLink from '../../services/markdown/markdownRedditLink';
 import markdownItRedditSpoiler from '../../services/markdown/markdownRedditSpoiler';
 import markdownItRedditSupsubscript from '../../services/markdown/markdownSupSubscript';
 import { ColorPalette } from '../colors';
-import { Spacing } from '../typography';
+import { Spacing } from '../tokens';
 import { getPreviewImageFromStreaminMe, getPreviewImageFromYoutube } from '../utils';
 import PostSpoiler from './PostSpoiler';
 
@@ -31,40 +31,40 @@ export function useMarkdownStyle(theme: ColorPalette) {
         fontSize: 26,
         borderBottomWidth: 1,
         borderColor: theme.surfaceVariant,
-        marginTop: Spacing.small,
-        paddingBottom: Spacing.small,
-        marginBottom: Spacing.small,
+        marginTop: Spacing.s12,
+        paddingBottom: Spacing.s12,
+        marginBottom: Spacing.s12,
         fontWeight: 'bold',
       },
       heading2: {
         fontSize: 20,
         borderBottomWidth: 1,
         borderColor: theme.surfaceVariant,
-        marginTop: Spacing.small,
-        paddingBottom: Spacing.small,
-        marginBottom: Spacing.small,
+        marginTop: Spacing.s12,
+        paddingBottom: Spacing.s12,
+        marginBottom: Spacing.s12,
         fontWeight: 'bold',
       },
       heading3: {
-        marginVertical: Spacing.xsmall,
+        marginVertical: Spacing.s8,
         fontWeight: 'bold',
       },
       heading4: {
-        marginVertical: Spacing.xsmall,
+        marginVertical: Spacing.s8,
       },
       heading5: {
-        marginVertical: Spacing.xsmall,
+        marginVertical: Spacing.s8,
       },
       heading6: {
-        marginVertical: Spacing.xsmall,
+        marginVertical: Spacing.s8,
       },
       bullet_list: {
-        marginVertical: Spacing.small,
+        marginVertical: Spacing.s12,
       },
       ordered_list: {
-        marginVertical: Spacing.small,
+        marginVertical: Spacing.s12,
       },
-      hr: { backgroundColor: theme.onSurface, marginVertical: Spacing.regular },
+      hr: { backgroundColor: theme.onSurface, marginVertical: Spacing.s16 },
       link: { color: theme.primary },
       paragraph: { marginTop: 0, marginBottom: 0 },
       code_inline: {
@@ -73,7 +73,7 @@ export function useMarkdownStyle(theme: ColorPalette) {
       code_block: {
         backgroundColor: theme.surfaceVariant,
         borderWidth: 0,
-        marginVertical: Spacing.xsmall,
+        marginVertical: Spacing.s8,
       },
       blockquote: {
         backgroundColor: theme.surface,
@@ -81,12 +81,12 @@ export function useMarkdownStyle(theme: ColorPalette) {
         borderLeftWidth: 2,
         marginLeft: 0,
         paddingLeft: 6,
-        marginBottom: Spacing.xsmall,
+        marginBottom: Spacing.s8,
       },
       fence: {
         backgroundColor: theme.surfaceVariant,
         borderWidth: 0,
-        marginVertical: Spacing.xsmall,
+        marginVertical: Spacing.s8,
       },
       table: {
         borderWidth: 0,
@@ -108,17 +108,17 @@ export function useCommentMarkdownStyle(theme: ColorPalette) {
       heading1: {
         fontSize: 18,
         borderColor: theme.surfaceVariant,
-        marginTop: Spacing.small,
-        paddingBottom: Spacing.small,
-        marginBottom: Spacing.small,
+        marginTop: Spacing.s12,
+        paddingBottom: Spacing.s12,
+        marginBottom: Spacing.s12,
         fontWeight: 'bold',
       },
       heading2: {
         fontSize: 18,
         borderColor: theme.surfaceVariant,
-        marginTop: Spacing.small,
-        paddingBottom: Spacing.small,
-        marginBottom: Spacing.small,
+        marginTop: Spacing.s12,
+        paddingBottom: Spacing.s12,
+        marginBottom: Spacing.s12,
         fontWeight: 'bold',
       },
     };

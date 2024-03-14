@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { Post, RedditApi } from '../../services/api';
+import { Post, RedditApi, SubReddit } from '../../services/api';
 import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
@@ -27,24 +27,6 @@ import SubredditPostItemView from './components/SubredditPostItemView';
 type Props = {
   subreddit: string;
   icon: string | undefined | null;
-};
-
-// TODO - merge that with t5 RedditApi
-type SubredditData = {
-  id: string;
-  title: string;
-  wiki_enabled: boolean;
-  display_name: string;
-  icon_img: string;
-  created: number;
-  display_name_prefixed: string;
-  accounts_active: number;
-  subscribers: number;
-  name: string;
-  public_description: string;
-  community_icon: string;
-  banner_background_image: string;
-  description: string;
 };
 
 const keyExtractor = (item: Post, index: number) => `${item.data.id}.${index}`;
@@ -78,7 +60,7 @@ const SubRedditView = (props: Props) => {
   // hour, day, week, month, year, all
   const [topOrder, setTopOrder] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('all');
 
-  const [subredditData, setSubredditData] = useState<SubredditData | null>(null);
+  const [subredditData, setSubredditData] = useState<SubReddit['data'] | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [after, setAfter] = useState<string | null>(null);
   const [flairs] = useState<string[]>([]);

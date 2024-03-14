@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { decode } from 'html-entities';
 import { Text, View } from 'react-native';
 import { FlairRichText, Post } from '../../../services/api';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import { Spacing } from '../../typography';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
   flair_type: Post['data']['link_flair_type'];
   over_18?: boolean | undefined;
   outlined?: boolean | undefined;
-  theme: Palette;
+  theme: ColorPalette;
 };
 
 const FlairTextView = (props: Props) => {

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { Comment, Post, RedditApi, Trophy, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
-import { Palette } from '../colors';
+import { ColorPalette } from '../colors';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
@@ -34,7 +34,7 @@ const CommentItem = ({
   theme,
 }: {
   commentOrPost: CommentOrPostOrTrophy;
-  theme: Palette;
+  theme: ColorPalette;
 }) => {
   const onPress = useCallback(() => {
     if (commentOrPost.kind === 't3') {

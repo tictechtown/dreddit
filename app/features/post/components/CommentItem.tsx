@@ -4,7 +4,7 @@ import { decode } from 'html-entities';
 import React, { useCallback, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import { Spacing } from '../../typography';
@@ -21,7 +21,7 @@ const CommentItem = ({
   comment: Comment;
   showGif: (value: RedditMediaMedata) => void;
   fetchMoreComments: (commentId: string, childrenIds: string[]) => void;
-  theme: Palette;
+  theme: ColorPalette;
 }) => {
   const mdStyle = useCommentMarkdownStyle(theme);
 

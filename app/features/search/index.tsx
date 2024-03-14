@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Keyboard, Pressable, Text, TextInput, View } from 'react-native';
 import { Post, RedditApi, SubReddit, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
-import { Palette } from '../colors';
+import { ColorPalette } from '../colors';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
@@ -50,7 +50,7 @@ function sortUserResults(results: User[]): User[] {
   });
 }
 
-const SearchResultSub = (props: { result: SubReddit; theme: Palette }) => {
+const SearchResultSub = (props: { result: SubReddit; theme: ColorPalette }) => {
   const data = props.result.data;
   const theme = props.theme;
   const icon = getSubredditIcon(data.community_icon ?? data.icon);
@@ -127,7 +127,7 @@ const SearchResultSub = (props: { result: SubReddit; theme: Palette }) => {
   );
 };
 
-const SearchResultUser = (props: { result: User; theme: Palette }) => {
+const SearchResultUser = (props: { result: User; theme: ColorPalette }) => {
   const data = props.result.data;
   const theme = props.theme;
   const icon = getSubredditIcon(data.icon_img);
@@ -202,7 +202,7 @@ const SearchResultUser = (props: { result: User; theme: Palette }) => {
   );
 };
 
-const SearchResultItem = (props: { result: SearchResult; theme: Palette }) => {
+const SearchResultItem = (props: { result: SearchResult; theme: ColorPalette }) => {
   if (props.result.kind === 't5') {
     return <SearchResultSub result={props.result} theme={props.theme} />;
   } else if (props.result.kind === 't3') {

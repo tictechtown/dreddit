@@ -3,14 +3,14 @@ import { Link } from 'expo-router';
 import { View } from 'react-native';
 import { Post } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import Typography from '../../components/Typography';
 import { onLinkPress } from '../utils';
 
 type RowProps = {
   icon: string;
   title: string;
-  theme: Palette;
+  theme: ColorPalette;
 };
 
 const Row = ({ icon, title, theme }: RowProps) => {

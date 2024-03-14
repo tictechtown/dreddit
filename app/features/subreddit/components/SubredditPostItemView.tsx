@@ -5,7 +5,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Pressable, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Post } from '../../../services/api';
 import postCache from '../../../services/postCache';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../typography';
@@ -17,7 +17,7 @@ import PostToolbar from './PostToolbar';
 
 type Props = {
   post: Post;
-  theme: Palette;
+  theme: ColorPalette;
   isSaved?: boolean;
   addToSavedPosts?: (post: Post) => void;
   removeFromSavedPosts?: (post: Post) => void;

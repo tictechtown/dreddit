@@ -5,29 +5,12 @@ import { decode } from 'html-entities';
 import queryString from 'query-string';
 import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { RedditApi, User } from '../../../services/api';
+import { RedditApi, SubReddit, User } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
 import ItemSeparator from '../../components/ItemSeparator';
 import Typography from '../../components/Typography';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../post/utils';
 import { Spacing } from '../../typography';
-
-// TODO -merge that with RedditApi t5
-type SubredditData = {
-  wiki_enabled: boolean;
-  display_name: string;
-  icon_img: string;
-  created: number;
-  display_name_prefixed: string;
-  accounts_active: number;
-  subscribers: number;
-  name: string;
-  public_description: string;
-  community_icon: string;
-  banner_background_image: string;
-  description: string;
-  created_utc: number;
-};
 
 type Wikipage = {
   content_md: string;
@@ -43,7 +26,7 @@ const Page = () => {
   const theme = useTheme();
   const mdStyle = useMarkdownStyle(theme);
   const { subreddit } = useLocalSearchParams();
-  const [about, setAbout] = useState<null | SubredditData>(null);
+  const [about, setAbout] = useState<null | SubReddit['data']>(null);
   const [wiki, setWiki] = useState<null | Wikipage>(null);
 
   useEffect(() => {

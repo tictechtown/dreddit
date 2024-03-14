@@ -12,7 +12,7 @@
 // // Print out the theme as JSON
 // console.log(JSON.stringify(theme, null, 2));
 
-export type Palette = {
+export type ColorPalette = {
   primary: string;
   surfaceTint: string;
   onPrimary: string;
@@ -64,7 +64,7 @@ export type Palette = {
   surfaceContainerHighest: string;
 };
 
-export const PaletteDark: Palette = {
+export const PaletteDark: ColorPalette = {
   primary: '#AAC7FF',
   surfaceTint: '#AAC7FF',
   onPrimary: '#0A305F',
@@ -116,8 +116,8 @@ export const PaletteDark: Palette = {
   surfaceContainerHighest: '#33353A',
 };
 
-/* Default Palette Light*/
-export const PaletteLight: Palette = {
+/* Default ColorPalette Light*/
+export const PaletteLight: ColorPalette = {
   primary: '#415F91',
   surfaceTint: '#415F91',
   onPrimary: '#FFFFFF',
@@ -272,4 +272,4 @@ export const PaletteLight: Palette = {
 //   },
 // };
 
-export const Palette: Palette = PaletteDark;
+export const ColorPalette: ColorPalette = PaletteDark;

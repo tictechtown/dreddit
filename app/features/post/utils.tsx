@@ -9,7 +9,7 @@ import markdownRedditHeadingPlugin from '../../services/markdown/mardownRedditHe
 import markdownItRedditLink from '../../services/markdown/markdownRedditLink';
 import markdownItRedditSpoiler from '../../services/markdown/markdownRedditSpoiler';
 import markdownItRedditSupsubscript from '../../services/markdown/markdownSupSubscript';
-import { Palette } from '../colors';
+import { ColorPalette } from '../colors';
 import { Spacing } from '../typography';
 import { getPreviewImageFromStreaminMe, getPreviewImageFromYoutube } from '../utils';
 import PostSpoiler from './PostSpoiler';
@@ -23,7 +23,7 @@ export const markdownIt = MarkdownIt({
   .use(markdownItRedditLink)
   .use(markdownItRedditSpoiler);
 
-export function useMarkdownStyle(theme: Palette) {
+export function useMarkdownStyle(theme: ColorPalette) {
   const style = useMemo(() => {
     return {
       body: { color: theme.onSurface },
@@ -100,7 +100,7 @@ export function useMarkdownStyle(theme: Palette) {
   return style;
 }
 
-export function useCommentMarkdownStyle(theme: Palette) {
+export function useCommentMarkdownStyle(theme: ColorPalette) {
   const prevStyle = useMarkdownStyle(theme);
   const style = useMemo(() => {
     return {

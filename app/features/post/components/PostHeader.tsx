@@ -5,7 +5,7 @@ import { decode } from 'html-entities';
 import React, { useCallback, useMemo } from 'react';
 import { Pressable, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Post } from '../../../services/api';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
 import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
@@ -37,7 +37,7 @@ const PostHeader = ({
   forcedSortOrder: string | null;
   onPress: () => void;
   onChangeSort: () => void;
-  theme: Palette;
+  theme: ColorPalette;
 }) => {
   if (!post) {
     return null;

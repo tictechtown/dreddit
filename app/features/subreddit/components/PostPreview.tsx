@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Post } from '../../../services/api';
 import { useStore } from '../../../services/store';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../typography';
 import {
@@ -19,7 +19,7 @@ type PostPreviewImageProps = {
   media: Post['data']['media'];
   preview: Post['data']['preview'];
   imageWidth: number;
-  theme: Palette;
+  theme: ColorPalette;
 };
 
 function getVideoDuration(duration: number): string {
@@ -37,7 +37,7 @@ const PostPreviewVideo = ({
   source: string;
   domain: string;
   imageWidth: number;
-  theme: Palette;
+  theme: ColorPalette;
 }) => {
   return (
     <View>
@@ -338,7 +338,7 @@ const PostPreview = ({
 }: {
   post: Post;
   imageWidth: number;
-  theme: Palette;
+  theme: ColorPalette;
 }) => {
   const isCrosspost = Array.isArray(post.data.crosspost_parent_list);
 

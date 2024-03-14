@@ -4,14 +4,14 @@ import { router } from 'expo-router';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import useTheme from '../../services/theme/useTheme';
-import { Palette } from '../colors';
+import { ColorPalette } from '../colors';
 import Typography from '../components/Typography';
 
 type RowProps = {
   icon: string;
   title: string;
   supporting: string;
-  theme: Palette;
+  theme: ColorPalette;
   onPress: () => void;
 };
 

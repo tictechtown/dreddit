@@ -3,13 +3,13 @@ import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import { useStore } from '../../../services/store';
 import useTheme from '../../../services/theme/useTheme';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import Typography from '../../components/Typography';
 
 type RowProps = {
   icon: string;
   title: string;
-  theme: Palette;
+  theme: ColorPalette;
   isSelected: boolean;
   onPress: () => void;
 };

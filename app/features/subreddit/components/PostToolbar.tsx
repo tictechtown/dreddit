@@ -3,20 +3,20 @@ import { Link } from 'expo-router';
 import React from 'react';
 import { Share, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { Post } from '../../../services/api';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
 
 type Props = {
   post: Post;
-  theme: Palette;
+  theme: ColorPalette;
   isSaved: boolean | undefined;
   addToSavedPosts: ((post: Post) => void) | undefined;
   removeFromSavedPosts: ((post: Post) => void) | undefined;
   onMoreOptions: ((post: Post) => void) | undefined;
 };
 
-const PostCommentButton = ({ comments, theme }: { comments: number; theme: Palette }) => {
+const PostCommentButton = ({ comments, theme }: { comments: number; theme: ColorPalette }) => {
   return (
     <View
       style={{

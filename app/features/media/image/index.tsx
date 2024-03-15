@@ -1,10 +1,10 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import * as React from 'react';
 import { View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { PaletteDark } from '../../colors';
+import Icons from '../../components/Icons';
 import ProgressBarView from '../../components/ProgressBarView';
 import ImageView from './ImageView';
 
@@ -24,7 +24,7 @@ export default function Page() {
           },
           headerRight: () => {
             return (
-              <MaterialIcons
+              <Icons
                 onPress={() => {
                   // TODO - Download, using expo-file-system
                   // const downloadResumable = FileSystem.createDownloadResumable(
@@ -42,7 +42,7 @@ export default function Page() {
                 }}
                 name="download"
                 size={24}
-                color={PaletteDark.onSurface}></MaterialIcons>
+                color={PaletteDark.onSurface}></Icons>
             );
           },
         }}

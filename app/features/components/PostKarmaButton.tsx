@@ -1,7 +1,7 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { View } from 'react-native';
 import useTheme from '../../services/theme/useTheme';
+import Icons from './Icons';
 import Typography from './Typography';
 
 const PostKarmaButton = ({ karma }: { karma: number }) => {
@@ -20,10 +20,10 @@ const PostKarmaButton = ({ karma }: { karma: number }) => {
         alignItems: 'center',
         columnGap: 4,
       }}>
-      <MaterialIcons name="keyboard-arrow-up" size={14} color={theme.onSurface} />
+      <Icons name="keyboard-arrow-up" size={14} color={theme.onSurface} />
 
       <Typography variant="labelMedium">{displayedKarma}</Typography>
-      <MaterialIcons name="keyboard-arrow-down" size={14} color={theme.onSurface} />
+      <Icons name="keyboard-arrow-down" size={14} color={theme.onSurface} />
     </View>
   );
 };

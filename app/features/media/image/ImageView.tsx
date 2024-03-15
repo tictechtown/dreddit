@@ -1,9 +1,9 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import React from 'react';
 import { Text, View } from 'react-native';
 import PhotoZoom from 'react-native-photo-zoom';
 import { PaletteDark } from '../../colors';
+import Icons from '../../components/Icons';
 import ImageZoom from '../../components/react-native-image-zoom';
 import { Spacing } from '../../tokens';
 
@@ -60,7 +60,7 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
               flexDirection: 'row',
               flexWrap: 'wrap',
             }}>
-            <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
+            <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
             <Text
               numberOfLines={2}
               style={{ flex: 0, color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>

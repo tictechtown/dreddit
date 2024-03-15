@@ -1,7 +1,7 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
+import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
 
 type Props = {
@@ -22,7 +22,7 @@ export default function ModalOptionRow({ title, onPress }: Props) {
           justifyContent: 'space-between',
         }}>
         <Typography variant="titleMedium">{title}</Typography>
-        <MaterialIcons name={'radio-button-unchecked'} size={24} color={theme.onSurface} />
+        <Icons name={'radio-button-unchecked'} size={24} color={theme.onSurface} />
       </View>
     </Pressable>
   );

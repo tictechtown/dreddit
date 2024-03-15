@@ -1,13 +1,13 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import { useStore } from '../../../services/store';
 import useTheme from '../../../services/theme/useTheme';
 import { ColorPalette } from '../../colors';
+import Icons, { IconName } from '../../components/Icons';
 import Typography from '../../components/Typography';
 
 type RowProps = {
-  icon: string;
+  icon: IconName;
   title: string;
   theme: ColorPalette;
   isSelected: boolean;
@@ -27,11 +27,11 @@ const Row = ({ icon, title, theme, isSelected, onPress }: RowProps) => {
           columnGap: 16,
           alignItems: 'center',
         }}>
-        <MaterialIcons name={icon} size={24} color={theme.onSurfaceVariant} />
+        <Icons name={icon} size={24} color={theme.onSurfaceVariant} />
         <View style={{ flex: 1 }}>
           <Typography variant="bodyLarge">{title}</Typography>
         </View>
-        <MaterialIcons
+        <Icons
           name={isSelected ? 'radio-button-checked' : 'radio-button-unchecked'}
           size={24}
           color={isSelected ? theme.primary : theme.onSurface}

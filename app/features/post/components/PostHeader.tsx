@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
@@ -7,6 +6,7 @@ import { Pressable, Text, TouchableOpacity, View, useWindowDimensions } from 're
 import { Post } from '../../../services/api';
 import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
+import Icons from '../../components/Icons';
 import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
@@ -198,7 +198,7 @@ const PostHeader = ({
         <PostKarmaButton karma={post.data.score} />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 8 }}>
-          <MaterialIcons name="question-answer" size={14} color={theme.secondary} />
+          <Icons name="question-answer" size={14} color={theme.secondary} />
           <Typography variant="labelMedium" style={{ color: theme.secondary }}>
             {(post.data.num_comments ?? 0).toLocaleString('en-US')}
           </Typography>
@@ -217,7 +217,7 @@ const PostHeader = ({
               <Text style={{ fontWeight: 'bold', color: theme.onSurfaceVariant }}>
                 {displayedSortOrder}
               </Text>
-              <MaterialIcons name="arrow-drop-down" color={theme.onSurfaceVariant} size={18} />
+              <Icons name="arrow-drop-down" color={theme.onSurfaceVariant} size={18} />
             </View>
           </TouchableOpacity>
         </View>

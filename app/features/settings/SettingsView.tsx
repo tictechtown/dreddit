@@ -1,14 +1,14 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import * as Application from 'expo-application';
 import { router } from 'expo-router';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../colors';
+import Icons, { IconName } from '../components/Icons';
 import Typography from '../components/Typography';
 
 type RowProps = {
-  icon: string;
+  icon: IconName;
   title: string;
   supporting: string;
   theme: ColorPalette;
@@ -28,7 +28,7 @@ const Row = ({ icon, title, supporting, theme, onPress }: RowProps) => {
           columnGap: 16,
           alignItems: 'center',
         }}>
-        <MaterialIcons name={icon} size={24} color={theme.onSurfaceVariant} />
+        <Icons name={icon} size={24} color={theme.onSurfaceVariant} />
         <View>
           <Typography variant="bodyLarge">{title}</Typography>
           <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant }}>

@@ -1,6 +1,7 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
+import Icons from '../../components/Icons';
 import { Spacing } from '../../tokens';
 
 const SortOptions = ({
@@ -60,7 +61,7 @@ const SortOptions = ({
         onPress={() => {
           onSortPressed('top');
         }}>
-        <MaterialIcons name="leaderboard" size={16} color={theme.onSurface} />
+        <Icons name="leaderboard" size={16} color={theme.onSurface} />
         <Text style={choices}>Top</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -77,7 +78,7 @@ const SortOptions = ({
         onPress={() => {
           onSortPressed('controversial');
         }}>
-        <MaterialIcons name="question-answer" size={16} color={theme.onSurface} />
+        <Icons name="question-answer" size={16} color={theme.onSurface} />
         <Text style={choices}>Controversial</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -85,7 +86,7 @@ const SortOptions = ({
         onPress={() => {
           onSortPressed('random');
         }}>
-        <Ionicons name="shuffle" size={16} color={theme.onSurface} />
+        <Icons name="shuffle" size={16} color={theme.onSurface} />
         <Text style={choices}>Random</Text>
       </TouchableOpacity>
     </View>

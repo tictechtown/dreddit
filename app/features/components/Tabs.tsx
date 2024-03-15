@@ -1,14 +1,14 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import useTheme from '../../services/theme/useTheme';
 import { Spacing } from '../tokens';
+import Icons, { IconName } from './Icons';
 import Typography from './Typography';
 
 type TabProps<T extends string> = {
   tabId: T;
   tabName: string | undefined | null;
-  tabIconName: string | undefined | null;
+  tabIconName: IconName | undefined | null;
   tabSelectedId: string;
   onPress: (newValue: T) => void;
 };
@@ -41,8 +41,7 @@ const Tab = <T extends string>({
           height: '100%',
         }}>
         {!!tabIconName && (
-          <MaterialIcons
-            // @ts-ignore
+          <Icons
             name={tabIconName}
             size={24}
             color={tabSelectedId === tabId ? theme.primary : theme.onSurfaceVariant}
@@ -75,7 +74,7 @@ type Props = {
   selectedTabId: string;
   tabIds: string[];
   tabNames?: string[];
-  tabIconNames?: string[] | null | undefined;
+  tabIconNames?: IconName[] | null | undefined;
   onPress: (value: string) => void;
 };
 

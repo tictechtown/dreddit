@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Constants from 'expo-constants';
 import { Image } from 'expo-image';
@@ -20,6 +19,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { Comment, Post, RedditApi, RedditMediaMedata } from '../../services/api';
 import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
+import Icons from '../components/Icons';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import CommentItem from './components/CommentItem';
 import PostHeader from './components/PostHeader';
@@ -312,7 +312,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                     await Share.share({ message: queryData?.post?.data.url ?? '' });
                   }}
                   hitSlop={20}>
-                  <MaterialIcons name="share" size={24} color={theme.onSurfaceVariant} />
+                  <Icons name="share" size={24} color={theme.onSurfaceVariant} />
                 </TouchableOpacity>
                 <TouchableNativeFeedback
                   disabled={!queryData}
@@ -320,7 +320,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                   onPress={toggleSavedPost}
                   background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
-                    <MaterialIcons
+                    <Icons
                       name={isSaved ? 'bookmark' : 'bookmark-outline'}
                       size={24}
                       color={theme.onBackground}
@@ -332,7 +332,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                   hitSlop={5}
                   background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
-                    <MaterialIcons name={'search'} size={24} color={theme.onBackground} />
+                    <Icons name={'search'} size={24} color={theme.onBackground} />
                   </View>
                 </TouchableNativeFeedback>
               </View>

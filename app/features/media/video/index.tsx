@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
@@ -7,6 +6,7 @@ import { DimensionValue, Text, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
 import { PaletteDark } from '../../colors';
+import Icons from '../../components/Icons';
 import { Spacing } from '../../tokens';
 import VideoPlayer from './VideoPlayer';
 import { extractMetaTags } from './metadata';
@@ -84,7 +84,7 @@ export default function Page() {
               borderRadius: 10,
               flexDirection: 'row',
             }}>
-            <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
+            <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
             <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
               {errorMessage}
             </Text>

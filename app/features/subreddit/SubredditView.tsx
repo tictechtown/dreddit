@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 import { Image } from 'expo-image';
@@ -16,6 +15,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { Post, RedditApi, SubReddit } from '../../services/api';
 import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
+import Icons from '../components/Icons';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import ItemSeparator from '../components/ItemSeparator';
 import Tabs from '../components/Tabs';
@@ -324,7 +324,7 @@ const SubRedditView = (props: Props) => {
                     hitSlop={5}
                     background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                     <View>
-                      <MaterialIcons name="info-outline" size={26} color={theme.onBackground} />
+                      <Icons name="info-outline" size={26} color={theme.onBackground} />
                     </View>
                   </TouchableNativeFeedback>
                 </Link>
@@ -334,7 +334,7 @@ const SubRedditView = (props: Props) => {
                   onPress={toggleSubreddit}
                   background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
-                    <MaterialIcons
+                    <Icons
                       name={isFavorite ? 'bookmark' : 'bookmark-outline'}
                       size={24}
                       color={theme.onBackground}
@@ -347,7 +347,7 @@ const SubRedditView = (props: Props) => {
                   onPress={searchPosts}
                   background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
-                    <MaterialIcons name={'search'} size={24} color={theme.onBackground} />
+                    <Icons name={'search'} size={24} color={theme.onBackground} />
                   </View>
                 </TouchableNativeFeedback>
               </View>

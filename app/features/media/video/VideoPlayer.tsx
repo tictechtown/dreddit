@@ -30,6 +30,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { PaletteDark } from '../../colors';
+import Icons from '../../components/Icons';
+import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 
 type Props = VideoProps & { activityIndicator?: any };
@@ -329,7 +331,7 @@ const VideoPlayer = (props: Props) => {
             borderRadius: 10,
             flexDirection: 'row',
           }}>
-          <MaterialIcons name="error" size={36} color={PaletteDark.onErrorContainer} />
+          <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
           <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
             {errorMessage}
           </Text>
@@ -409,7 +411,7 @@ const VideoPlayer = (props: Props) => {
                     opacity: 0.9,
                     alignItems: 'center',
                   }}>
-                  <MaterialIcons name={'fast-rewind'} size={25} color={PaletteDark.surface} />
+                  <Icons name={'fast-rewind'} size={25} color={PaletteDark.surface} />
                   <Text>10s</Text>
                 </View>
               </Animated.View>
@@ -434,7 +436,7 @@ const VideoPlayer = (props: Props) => {
                     opacity: 0.9,
                     alignItems: 'center',
                   }}>
-                  <MaterialIcons name={'fast-forward'} size={25} color={PaletteDark.surface} />
+                  <Icons name={'fast-forward'} size={25} color={PaletteDark.surface} />
                   <Text>10s</Text>
                 </View>
               </Animated.View>
@@ -460,7 +462,7 @@ const VideoPlayer = (props: Props) => {
                         borderRadius: 48,
                         opacity: 0.9,
                       }}>
-                      <MaterialIcons
+                      <Icons
                         name={
                           playbackInstanceInfo.state === PlaybackStates.Playing
                             ? 'pause'
@@ -484,48 +486,58 @@ const VideoPlayer = (props: Props) => {
                   bottom: 0,
                   backgroundColor: PaletteDark.scrim,
                   opacity: 0.8,
-                  borderRadius: 10,
-                  paddingVertical: 10,
-                  paddingBottom: 30,
-                  paddingHorizontal: 10,
+                  paddingVertical: 16,
+                  paddingBottom: 40,
+                  paddingHorizontal: 12,
                   width: '100%',
                 }}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    alignItems: 'center',
+                    alignItems: 'flex-end',
                     paddingBottom: 10,
+                    justifyContent: 'flex-end',
+                    alignContent: 'flex-end',
                   }}>
-                  <Text style={{ color: PaletteDark.onBackground }}>
-                    {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)} /{' '}
-                    {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
-                  </Text>
+                  <View style={{ flex: 1 }}>
+                    <Typography variant="bodyMedium">
+                      {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
+                      <Typography
+                        variant="bodyMedium"
+                        style={{ color: PaletteDark.onSurfaceVariant }}>
+                        / {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
+                      </Typography>
+                    </Typography>
+                  </View>
+                  <Text style={{ color: PaletteDark.onBackground }}></Text>
                   <View
                     style={{
-                      flexDirection: 'row',
+                      flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      flex: 1,
+                      justifyContent: 'center',
+                      rowGap: 8,
+                      flex: 0,
                     }}>
                     <MaterialIcons.Button
                       name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
-                      size={24}
+                      size={15}
                       hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
                       iconStyle={{ marginRight: 0 }}
                       borderRadius={24}
-                      backgroundColor={PaletteDark.surfaceVariant}
+                      style={{ borderColor: PaletteDark.outline, borderWidth: 1 }}
+                      backgroundColor={PaletteDark.surface}
                       color={PaletteDark.onSurface}
                       onPress={toggleMute}
                     />
                     <View style={{ marginLeft: 10, marginRight: 10 }} />
                     <MaterialIcons.Button
                       name={'fullscreen'}
-                      size={24}
+                      size={28}
                       hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
                       iconStyle={{ marginRight: 0 }}
                       borderRadius={24}
-                      backgroundColor={PaletteDark.surfaceVariant}
-                      color={PaletteDark.onSurface}
+                      backgroundColor={PaletteDark.primaryContainer}
+                      color={PaletteDark.onPrimaryContainer}
                       onPress={enterFullScreen}
                     />
                   </View>

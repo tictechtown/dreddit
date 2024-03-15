@@ -1,7 +1,7 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { TouchableNativeFeedback, View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
+import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 
@@ -27,7 +27,7 @@ const SearchHeader = () => {
           flexDirection: 'row',
           columnGap: 16,
         }}>
-        <MaterialIcons name="search" size={24} color={theme.onBackground} />
+        <Icons name="search" size={24} color={theme.onBackground} />
 
         <Typography variant="bodyLarge">Search Reddit</Typography>
       </View>

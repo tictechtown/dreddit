@@ -1,10 +1,10 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Post } from '../../../services/api';
 import { useStore } from '../../../services/store';
 import { ColorPalette } from '../../colors';
+import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 import {
@@ -52,7 +52,7 @@ const PostPreviewVideo = ({
         contentFit="cover"
       />
       <View style={{ position: 'absolute', bottom: 40, right: 10 }}>
-        <MaterialIcons name="play-circle-outline" size={30} color={theme.onSurfaceVariant} />
+        <Icons name="play-circle-outline" size={30} color={theme.onSurfaceVariant} />
       </View>
       <View
         style={{
@@ -64,7 +64,7 @@ const PostPreviewVideo = ({
           borderBottomRightRadius: 12,
           padding: 10,
         }}>
-        <MaterialIcons name="link" size={14} color={theme.onSurface} />
+        <Icons name="link" size={14} color={theme.onSurface} />
         <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
           {domain}
         </Typography>
@@ -246,7 +246,7 @@ const PostPreviewImage = ({
             borderBottomRightRadius: 12,
             padding: 10,
           }}>
-          <MaterialIcons name="link" size={14} color={theme.onSurface} />
+          <Icons name="link" size={14} color={theme.onSurface} />
           <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
             {domain}
           </Typography>
@@ -323,7 +323,7 @@ const PostPreviewImage = ({
         borderRadius: 12,
         padding: 10,
       }}>
-      <MaterialIcons name="link" size={14} color={theme.onSurface} />
+      <Icons name="link" size={14} color={theme.onSurface} />
       <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
         {domain}
       </Typography>

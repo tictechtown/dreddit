@@ -1,9 +1,9 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import React from 'react';
 import { Share, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { Post } from '../../../services/api';
 import { ColorPalette } from '../../colors';
+import Icons from '../../components/Icons';
 import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
 
@@ -28,7 +28,7 @@ const PostCommentButton = ({ comments, theme }: { comments: number; theme: Color
         alignItems: 'center',
         columnGap: 8,
       }}>
-      <MaterialIcons name="question-answer" size={14} color={theme.onSurface} />
+      <Icons name="question-answer" size={14} color={theme.onSurface} />
       <Typography variant="labelMedium" style={{ color: theme.onSecondaryContainer }}>
         {comments.toLocaleString('en-US')}
       </Typography>
@@ -83,7 +83,7 @@ const PostToolbar = ({
             await Share.share({ message: post.data.url });
           }}
           hitSlop={20}>
-          <MaterialIcons name="share" size={24} color={theme.onSurfaceVariant} />
+          <Icons name="share" size={24} color={theme.onSurfaceVariant} />
         </TouchableOpacity>
 
         {/* Save */}
@@ -98,7 +98,7 @@ const PostToolbar = ({
           }}
           hitSlop={20}>
           <View>
-            <MaterialIcons
+            <Icons
               name={isSaved ? 'bookmark' : 'bookmark-outline'}
               size={24}
               color={isSaved ? theme.onSurface : theme.onSurfaceVariant}
@@ -114,7 +114,7 @@ const PostToolbar = ({
             }}
             hitSlop={20}>
             <View>
-              <MaterialIcons name={'more-vert'} size={24} color={theme.onSurfaceVariant} />
+              <Icons name={'more-vert'} size={24} color={theme.onSurfaceVariant} />
             </View>
           </TouchableNativeFeedback>
         )}

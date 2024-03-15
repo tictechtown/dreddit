@@ -41,19 +41,31 @@ const PostPreviewVideo = ({
 }) => {
   return (
     <View>
-      <Image
-        style={{
-          width: imageWidth,
-          height: 210,
-          borderTopLeftRadius: 12,
-          borderTopRightRadius: 12,
-        }}
-        source={source}
-        contentFit="cover"
-      />
-      <View style={{ position: 'absolute', bottom: 40, right: 10 }}>
-        <Icons name="play-circle-outline" size={30} color={theme.onSurfaceVariant} />
+      <View>
+        <Image
+          style={{
+            width: imageWidth,
+            height: 210,
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+          }}
+          source={source}
+          contentFit="cover"
+        />
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 16,
+            right: 12,
+            backgroundColor: theme.surfaceContainerHighest,
+            borderRadius: 6,
+            paddingHorizontal: Spacing.s8,
+            flexDirection: 'row',
+          }}>
+          <Typography variant="labelMedium">VID</Typography>
+        </View>
       </View>
+
       <View
         style={{
           flexDirection: 'row',
@@ -69,6 +81,46 @@ const PostPreviewVideo = ({
           {domain}
         </Typography>
       </View>
+    </View>
+  );
+};
+
+const PostPreviewStaticMedia = ({
+  width,
+  height,
+  source,
+  urlSource,
+  theme,
+}: {
+  width: number;
+  height: number;
+  source: string;
+  urlSource: string;
+  theme: ColorPalette;
+}) => {
+  const isGif = urlSource.includes('.gif');
+
+  return (
+    <View>
+      <Image
+        style={{ width, height, borderRadius: 28 }}
+        source={source.replaceAll('&amp;', '&')}
+        contentFit="cover"
+      />
+      {isGif && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 16,
+            right: 12,
+            backgroundColor: theme.surfaceContainerHighest,
+            borderRadius: 6,
+            paddingHorizontal: Spacing.s8,
+            flexDirection: 'row',
+          }}>
+          <Typography variant="labelMedium">GIF</Typography>
+        </View>
+      )}
     </View>
   );
 };
@@ -107,27 +159,31 @@ const PostPreviewImage = ({
     displayedUrl = `@${twitterName}`;
   }
 
+  const videoDuration =
+    media != undefined && typeof media != 'string' && !!media?.reddit_video
+      ? media.reddit_video.duration
+      : preview?.reddit_video_preview?.duration;
   // Reddit Image
   if (domain === 'i.redd.it' || domain === 'i.imgur.com') {
     if (!preview) {
       return (
-        <Image
-          style={{ width: imageWidth, height: 216, borderRadius: 12 }}
-          source={url.replaceAll('&amp;', '&')}
-          contentFit="cover"
+        <PostPreviewStaticMedia
+          width={imageWidth}
+          height={216}
+          urlSource={url}
+          source={url}
+          theme={theme}
         />
       );
     }
     if (maxPreviewResolutions) {
       return (
-        <Image
-          style={{
-            width: imageWidth,
-            height: (imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width,
-            borderRadius: 12,
-          }}
-          source={maxPreviewResolutions.url.replaceAll('&amp;', '&')}
-          contentFit="cover"
+        <PostPreviewStaticMedia
+          width={imageWidth}
+          height={(imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width}
+          urlSource={url}
+          source={maxPreviewResolutions.url}
+          theme={theme}
         />
       );
     }
@@ -138,14 +194,12 @@ const PostPreviewImage = ({
   if (domain.startsWith('self.')) {
     if (maxPreviewResolutions) {
       return (
-        <Image
-          style={{
-            width: imageWidth,
-            height: (imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width,
-            borderRadius: 12,
-          }}
-          source={maxPreviewResolutions.url.replaceAll('&amp;', '&')}
-          contentFit="cover"
+        <PostPreviewStaticMedia
+          width={imageWidth}
+          height={(imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width}
+          urlSource={url}
+          source={maxPreviewResolutions.url}
+          theme={theme}
         />
       );
     }
@@ -229,7 +283,10 @@ const PostPreviewImage = ({
         <Image
           style={{
             width: imageWidth,
-            height: (imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width,
+            height: Math.min(
+              210,
+              (imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width
+            ),
             borderTopLeftRadius: 12,
             borderTopRightRadius: 12,
           }}
@@ -251,7 +308,7 @@ const PostPreviewImage = ({
             {domain}
           </Typography>
         </View>
-        {media != undefined && typeof media != 'string' && !!media?.reddit_video && (
+        {videoDuration != undefined && (
           <View
             style={{
               position: 'absolute',
@@ -262,9 +319,7 @@ const PostPreviewImage = ({
               paddingHorizontal: Spacing.s8,
               flexDirection: 'row',
             }}>
-            <Typography variant="labelMedium">
-              {getVideoDuration(media.reddit_video.duration)}
-            </Typography>
+            <Typography variant="labelMedium">{getVideoDuration(videoDuration)}</Typography>
           </View>
         )}
       </View>

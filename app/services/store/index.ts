@@ -28,14 +28,19 @@ const createSubredditSlice: StateCreator<FavoriteState> = (set) => ({
     })),
 });
 
+export enum DataUsage {
+  All,
+  Reduced,
+  None,
+}
 interface SettingsState {
-  useLowRes: boolean;
-  setUseLowRes: (entry: boolean) => void;
+  dataUsage: DataUsage;
+  setDataUsage: (entry: DataUsage) => void;
 }
 
 const createSettingsSlice: StateCreator<SettingsState> = (set) => ({
-  useLowRes: false,
-  setUseLowRes: (entry) => set(() => ({ useLowRes: entry })),
+  dataUsage: DataUsage.All,
+  setDataUsage: (entry) => set(() => ({ dataUsage: entry })),
 });
 
 type SavedPost = {

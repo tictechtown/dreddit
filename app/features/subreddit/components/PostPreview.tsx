@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Post } from '../../../services/api';
-import { useStore } from '../../../services/store';
+import { DataUsage, useStore } from '../../../services/store';
 import { ColorPalette } from '../../colors';
 import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
@@ -52,18 +52,6 @@ const PostPreviewVideo = ({
           source={source}
           contentFit="cover"
         />
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 16,
-            right: 12,
-            backgroundColor: theme.surfaceContainerHighest,
-            borderRadius: 6,
-            paddingHorizontal: Spacing.s8,
-            flexDirection: 'row',
-          }}>
-          <Typography variant="labelMedium">VID</Typography>
-        </View>
       </View>
 
       <View
@@ -76,7 +64,7 @@ const PostPreviewVideo = ({
           borderBottomRightRadius: 12,
           padding: 10,
         }}>
-        <Icons name="link" size={14} color={theme.onSurface} />
+        <Icons name="play-circle" size={14} color={theme.onSurface} />
         <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
           {domain}
         </Typography>
@@ -133,11 +121,12 @@ const PostPreviewImage = ({
   imageWidth,
   theme,
 }: PostPreviewImageProps) => {
-  const useLowRes = useStore((state) => state.useLowRes);
+  const dataUsage = useStore((state) => state.dataUsage);
   const maxPreviewResolutions = useMemo(() => {
     if (!preview) return null;
+    if (dataUsage === DataUsage.None) return null;
     const allResolutions = preview?.images[0].resolutions;
-    if (useLowRes) {
+    if (dataUsage === DataUsage.Reduced) {
       const smallerResolutions = allResolutions.filter((r) => r.width < 640);
       if (smallerResolutions.length === 0) {
         return null;
@@ -165,7 +154,7 @@ const PostPreviewImage = ({
       : preview?.reddit_video_preview?.duration;
   // Reddit Image
   if (domain === 'i.redd.it' || domain === 'i.imgur.com') {
-    if (!preview) {
+    if (!preview && dataUsage !== DataUsage.None) {
       return (
         <PostPreviewStaticMedia
           width={imageWidth}
@@ -207,7 +196,7 @@ const PostPreviewImage = ({
   }
 
   // Video Preview (Youtube)
-  if (domain === 'youtube.com' || domain === 'youtu.be') {
+  if (dataUsage !== DataUsage.None && (domain === 'youtube.com' || domain === 'youtu.be')) {
     return (
       <PostPreviewVideo
         source={getPreviewImageFromYoutube(url, media)}
@@ -219,7 +208,7 @@ const PostPreviewImage = ({
   }
 
   // Video Preview
-  if (domain === 'streamin.one' && !preview) {
+  if (dataUsage !== DataUsage.None && domain === 'streamin.one' && !preview) {
     return (
       <PostPreviewVideo
         source={getPreviewImageFromStreaminMe(url)}
@@ -242,7 +231,10 @@ const PostPreviewImage = ({
   }
 
   // Article with Small Image
-  if (maxPreviewResolutions && maxPreviewResolutions.width < 120) {
+  if (
+    maxPreviewResolutions &&
+    (maxPreviewResolutions.width < 120 || dataUsage === DataUsage.Reduced)
+  ) {
     return (
       <View style={{ flexDirection: 'row' }}>
         <Image
@@ -327,7 +319,7 @@ const PostPreviewImage = ({
   }
   // No Preview with Twitter/X
   // we make an http call to get the picture
-  if (domain === 'x.com' || domain === 'twitter.com') {
+  if (dataUsage !== DataUsage.None && (domain === 'x.com' || domain === 'twitter.com')) {
     const twitterName = url
       .replace('https://x.com/', '')
       .replace('https://twitter.com/', '')

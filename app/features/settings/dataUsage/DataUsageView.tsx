@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
-import { useStore } from '../../../services/store';
+import { DataUsage, useStore } from '../../../services/store';
 import useTheme from '../../../services/theme/useTheme';
 import { ColorPalette } from '../../colors';
 import Icons, { IconName } from '../../components/Icons';
@@ -43,9 +43,9 @@ const Row = ({ icon, title, theme, isSelected, onPress }: RowProps) => {
 
 const DataUsageView = () => {
   const theme = useTheme();
-  const store = useStore((state) => ({
-    colorScheme: state.colorScheme,
-    updateColorScheme: state.updateColorScheme,
+  const { dataUsage, setDataUsage } = useStore((state) => ({
+    dataUsage: state.dataUsage,
+    setDataUsage: state.setDataUsage,
   }));
 
   return (
@@ -59,29 +59,29 @@ const DataUsageView = () => {
       <View>
         <Row
           icon={'data-usage'}
-          title={'Download everything'}
+          title={'Highest resolution preview'}
           theme={theme}
-          isSelected={store.colorScheme === 'os'}
+          isSelected={dataUsage === DataUsage.All}
           onPress={() => {
-            // store.updateColorScheme('os');
+            setDataUsage(DataUsage.All);
           }}
         />
         <Row
           icon={'data-usage'}
-          title={'Low resolution preview'}
+          title={'Lowest resolution preview'}
           theme={theme}
-          isSelected={store.colorScheme === 'light'}
+          isSelected={dataUsage === DataUsage.Reduced}
           onPress={() => {
-            // store.updateColorScheme('light');
+            setDataUsage(DataUsage.Reduced);
           }}
         />
         <Row
           icon={'data-usage'}
           title={'No Preview'}
           theme={theme}
-          isSelected={store.colorScheme === 'dark'}
+          isSelected={dataUsage === DataUsage.None}
           onPress={() => {
-            // store.updateColorScheme('dark');
+            setDataUsage(DataUsage.None);
           }}
         />
       </View>

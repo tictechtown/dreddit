@@ -756,6 +756,7 @@ type Post = {
     subreddit_subscribers: number;
     created_utc: number;
     num_crossposts: number;
+    url_overridden_by_dest?: string;
     media:
       | string
       | null
@@ -793,16 +794,24 @@ type SubReddit = {
   kind: 't5';
   data: {
     id: string;
-    community_icon?: string;
-    icon?: string;
     title: string;
+    wiki_enabled: boolean;
     display_name: string;
+    icon_img: string;
+    created: number;
+    created_utc: number;
     display_name_prefixed: string;
-    over18: boolean;
+    accounts_active: number;
+    subscribers: number;
+    name: string;
     public_description: string;
+    community_icon: string;
+    banner_background_image: string;
+    description: string;
+    icon?: string;
+    over18: boolean;
     public_description_html: string;
     subreddit_type: 'public' | 'private' | 'restricted';
-    subscribers: number | null;
   };
 };
 

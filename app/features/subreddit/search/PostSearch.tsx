@@ -2,10 +2,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Text, TextInput, View } from 'react-native';
 import { Post, RedditApi } from '../../../services/api';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import useTheme from '../../../services/theme/useTheme';
+import { Spacing } from '../../tokens';
 import SubredditPostItemView from '../components/SubredditPostItemView';
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
 };
 
 const PostSearch = ({ subreddit, initialQuery }: Props) => {
+  const theme = useTheme();
   const [searchText, setSearchText] = useState('');
   const [results, setResults] = useState<Post[]>([]);
   const flatListRef = React.useRef<FlatList>(null);
@@ -59,7 +60,7 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       <Stack.Screen
         options={{
           title: '',
@@ -75,7 +76,7 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
                 name="close"
                 size={24}
                 color={
-                  searchText.length > 0 ? Palette.onSurfaceVariant : 'black'
+                  searchText.length > 0 ? theme.onSurfaceVariant : 'black'
                 }></MaterialCommunityIcons>
             );
           },
@@ -83,17 +84,20 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
             return (
               <TextInput
                 ref={inputRef}
-                style={styles.input}
+                style={{
+                  fontSize: 20,
+                  color: theme.onBackground,
+                }}
                 onChangeText={(txt) => {
                   setSearchText(txt);
                   searchSubReddits(txt);
                 }}
                 value={searchText}
                 placeholder={`Search r/${subreddit}`}
-                placeholderTextColor={Palette.onSurfaceVariant}
+                placeholderTextColor={theme.onSurfaceVariant}
                 autoFocus={true}
                 autoCapitalize="none"
-                cursorColor={Palette.secondary}
+                cursorColor={theme.secondary}
                 returnKeyType="search"
               />
             );
@@ -104,29 +108,29 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
         <View style={{ flexDirection: 'row' }}>
           <View
             style={{
-              backgroundColor: Palette.background,
-              paddingHorizontal: Spacing.small,
-              paddingVertical: Spacing.xsmall,
+              backgroundColor: theme.background,
+              paddingHorizontal: Spacing.s12,
+              paddingVertical: Spacing.s8,
               borderRadius: 10,
             }}>
-            <Text style={{ color: Palette.onBackground }}>{initialQuery}</Text>
+            <Text style={{ color: theme.onBackground }}>{initialQuery}</Text>
           </View>
         </View>
       )}
       <Text
         style={{
-          color: Palette.onBackground,
+          color: theme.onBackground,
           fontSize: 16,
-          marginHorizontal: Spacing.small,
-          marginTop: Spacing.regular,
-          marginBottom: Spacing.small,
+          marginHorizontal: Spacing.s12,
+          marginTop: Spacing.s16,
+          marginBottom: Spacing.s12,
         }}>
         {'Results'}
       </Text>
       <FlatList
         ref={flatListRef}
         data={results}
-        renderItem={({ item }) => <SubredditPostItemView post={item} />}
+        renderItem={({ item }) => <SubredditPostItemView post={item} theme={theme} />}
         keyExtractor={(item) => item.data.id}
         style={{ flex: 1 }}
         keyboardShouldPersistTaps={'handled'}
@@ -134,12 +138,5 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    fontSize: 20,
-    color: Palette.onBackground,
-  },
-});
 
 export default PostSearch;

@@ -4,24 +4,32 @@ import { decode } from 'html-entities';
 import React, { useCallback, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
+import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
-import { commentMarkdownStyles, markdownIt, markdownRenderRules } from '../utils';
+import { markdownIt, markdownRenderRules, useCommentMarkdownStyle } from '../utils';
 import CommentMediaView from './CommentMediaView';
 
 const CommentItem = ({
   comment,
   showGif,
   fetchMoreComments,
+  theme,
 }: {
   comment: Comment;
   showGif: (value: RedditMediaMedata) => void;
   fetchMoreComments: (commentId: string, childrenIds: string[]) => void;
+  theme: ColorPalette;
 }) => {
+  const mdStyle = useCommentMarkdownStyle(theme);
+
   const fetchMore = useCallback(() => {
-    fetchMoreComments(comment.data.id, comment.data.children);
+    if ('children' in comment.data) {
+      fetchMoreComments(comment.data.id, comment.data.children);
+    }
+    // @ts-ignore
   }, [fetchMoreComments, comment.data.id, comment.data.children]);
 
   const isGifReply = useMemo(() => {
@@ -33,10 +41,13 @@ const CommentItem = ({
   }, [comment.data]);
 
   const goToUserPage = useCallback(() => {
-    router.push({
-      pathname: 'features/user',
-      params: { userid: comment.data.author },
-    });
+    if ('author' in comment.data) {
+      router.push({
+        pathname: 'features/user',
+        params: { userid: comment.data.author },
+      });
+    }
+    // @ts-ignore
   }, [comment.data.author]);
 
   const _onLinkPress = useCallback((url: string) => {
@@ -85,10 +96,10 @@ const CommentItem = ({
       <TouchableOpacity onPress={fetchMore}>
         <Text
           style={{
-            color: Palette.secondary,
+            color: theme.secondary,
             fontSize: 10,
-            paddingLeft: comment.data.depth ? Spacing.regular * comment.data.depth : Spacing.xsmall,
-            marginBottom: Spacing.small,
+            paddingLeft: comment.data.depth ? Spacing.s16 * comment.data.depth : Spacing.s8,
+            marginBottom: Spacing.s12,
           }}>
           Load {comment.data.count} more {comment.data.count > 1 ? 'comments' : 'comment'}
         </Text>
@@ -96,31 +107,34 @@ const CommentItem = ({
     );
   }
 
-  let fontColor = comment.data.is_submitter ? Palette.primary : 'grey';
+  let fontColor = comment.data.is_submitter ? theme.primary : theme.onSurfaceVariant;
   fontColor =
     comment.data.author === 'AutoModerator' || comment.data.distinguished !== null
       ? '#aed285'
       : fontColor;
-
+  const opacity = fontColor === theme.onSurfaceVariant ? 0.6 : 1;
   const hasReplies = comment.data.replies !== undefined;
 
   return (
     <View
       style={{
-        paddingRight: Spacing.xsmall,
-        paddingLeft: comment.data.depth ? Spacing.regular * comment.data.depth : Spacing.xsmall,
-        marginBottom: hasReplies ? 0 : Spacing.small,
+        paddingRight: Spacing.s16,
+        paddingLeft: comment.data.depth
+          ? Spacing.s12 + Spacing.s16 * comment.data.depth
+          : Spacing.s12,
+        marginBottom: hasReplies ? 0 : Spacing.s8,
       }}>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', columnGap: 4 }}>
         <TouchableOpacity onPress={goToUserPage}>
-          <Text
+          <Typography
+            variant="labelMedium"
             style={{
               color: fontColor,
-              fontSize: 12,
               fontWeight: 'bold',
+              opacity,
             }}>
             {comment.data.author}
-          </Text>
+          </Typography>
         </TouchableOpacity>
         <FlairTextView
           flair_richtext={comment.data.author_flair_richtext}
@@ -129,23 +143,20 @@ const CommentItem = ({
           pinned={false}
           flair_type={comment.data.author_flair_type}
           flair_background_color={comment.data.author_flair_background_color}
-          containerStyle={{ marginLeft: 4 }}
+          theme={theme}
         />
-        <Text style={{ color: fontColor, fontSize: 12, fontWeight: '300' }}>
-          {' '}
+        <Typography variant="labelMedium" style={{ color: fontColor, fontWeight: '300', opacity }}>
           • {comment.data.score} {comment.data.score > 1 ? 'points' : 'point'} •{' '}
-        </Text>
-        <Text style={{ color: fontColor, fontSize: 12, fontWeight: '300' }}>
           {timeDifference(comment.data.created_utc * 1000)}
-        </Text>
+        </Typography>
       </View>
-      <View style={{ marginBottom: 8, flex: 0 }}>
+      <View style={{ marginBottom: Spacing.s4, flex: 0 }}>
         {isGifReply ? (
           <CommentMediaView item={isGifReply} showGif={showGif} body={comment.data.body} />
         ) : (
           <Markdown
             markdownit={markdownIt}
-            style={commentMarkdownStyles}
+            style={mdStyle}
             rules={markdownRenderRules}
             onLinkPress={_onLinkPress}>
             {decode(comment.data.body)}

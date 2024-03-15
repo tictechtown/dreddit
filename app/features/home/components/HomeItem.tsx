@@ -1,8 +1,8 @@
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { Text, TouchableNativeFeedback, View } from 'react-native';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import { TouchableNativeFeedback, View } from 'react-native';
+import useTheme from '../../../services/theme/useTheme';
+import Typography from '../../components/Typography';
 
 const HomeItem = ({
   subreddit,
@@ -13,8 +13,10 @@ const HomeItem = ({
   icon: string | null | undefined;
   description: string | null | undefined;
 }) => {
+  const theme = useTheme();
+
   return (
-    <View style={{ flex: 1, marginVertical: 2, paddingHorizontal: Spacing.small }}>
+    <View style={{ flex: 1 }}>
       <Link
         href={{
           pathname: `features/subreddit/${subreddit}`,
@@ -24,23 +26,21 @@ const HomeItem = ({
         }}
         asChild>
         <TouchableNativeFeedback
-          background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, false)}>
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, false)}>
           <View
             style={{
               flex: 1,
-              paddingHorizontal: 12,
-              paddingVertical: 10,
-              borderRadius: 8,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
               flexDirection: 'row',
-              backgroundColor: Palette.surface,
               alignItems: 'center',
+              columnGap: 16,
             }}>
             <Image
               style={{
-                width: 64,
-                height: 64,
-                borderRadius: 32,
-                marginRight: Spacing.regular,
+                width: 50,
+                height: 50,
+                borderRadius: 25,
                 flex: 0,
               }}
               source={
@@ -51,13 +51,16 @@ const HomeItem = ({
               style={{
                 flex: 1,
               }}>
-              <Text style={{ color: Palette.onBackground, fontSize: 18, fontWeight: 'bold' }}>
+              <Typography variant="titleMedium" style={{ color: theme.onSurface }}>
                 r/{subreddit}
-              </Text>
+              </Typography>
               {description && (
-                <Text style={{ color: Palette.onBackground }} numberOfLines={2}>
+                <Typography
+                  variant="bodyMedium"
+                  style={{ color: theme.onSurfaceVariant }}
+                  numberOfLines={2}>
                   {description}
-                </Text>
+                </Typography>
               )}
             </View>
           </View>

@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 import { Text } from 'react-native';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 
 const PostSpoiler = ({ content }: { content: string }) => {
+  const theme = useTheme();
   const [isRevealed, setIsRevealed] = useState(false);
 
   const revealPost = useCallback(() => {
@@ -13,8 +14,8 @@ const PostSpoiler = ({ content }: { content: string }) => {
     <Text
       onPress={revealPost}
       style={{
-        backgroundColor: isRevealed ? Palette.backgroundLowest : Palette.surfaceVariant,
-        color: isRevealed ? Palette.secondary : Palette.surfaceVariant,
+        backgroundColor: isRevealed ? theme.surface : theme.surfaceVariant,
+        color: isRevealed ? theme.secondary : theme.surfaceVariant,
       }}>
       {content}
     </Text>

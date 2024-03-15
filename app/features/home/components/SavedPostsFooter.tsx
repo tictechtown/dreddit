@@ -1,10 +1,12 @@
 import { router } from 'expo-router';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useStore } from '../../../services/store';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import useTheme from '../../../services/theme/useTheme';
+import Typography from '../../components/Typography';
+import { Spacing } from '../../tokens';
 
 const SavedPostsFooter = () => {
+  const theme = useTheme();
   const totalSavedPost = useStore((state) => state.savedPosts.length);
 
   return (
@@ -15,28 +17,23 @@ const SavedPostsFooter = () => {
       <View
         style={{
           flex: 1,
-          paddingHorizontal: Spacing.regular,
-          paddingVertical: Spacing.regular,
-          borderRadius: 8,
+          paddingHorizontal: Spacing.s16,
           flexDirection: 'row',
-          backgroundColor: Palette.surface,
           alignItems: 'center',
-          marginVertical: Spacing.regular,
-          marginHorizontal: Spacing.small,
+          marginVertical: Spacing.s16,
+          marginHorizontal: Spacing.s12,
         }}>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
+            borderTopColor: theme.outlineVariant,
+            borderTopWidth: 1,
+            paddingVertical: Spacing.s16,
           }}>
-          <Text style={{ color: Palette.onBackground, fontSize: 18, fontWeight: 'bold' }}>
-            Saved posts
-          </Text>
-
-          <Text style={{ color: Palette.onBackground, fontSize: 18, fontWeight: 'bold' }}>
-            {totalSavedPost}
-          </Text>
+          <Typography variant="bodyLarge">Saved posts</Typography>
+          <Typography variant="labelMedium">{totalSavedPost}</Typography>
         </View>
       </View>
     </TouchableOpacity>

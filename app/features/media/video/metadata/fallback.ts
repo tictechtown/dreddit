@@ -141,6 +141,14 @@ const fallback = (ogObject: any, options: any, $: any) => {
     }
   }
 
+  // video fallback
+  if (!ogObject.ogVideo) {
+    const audioElementValue = $('video').attr('src');
+    if (doesElementExist('video', 'src', $)) {
+      ogObject.ogVideo = { url: audioElementValue };
+    }
+  }
+
   return ogObject;
 };
 

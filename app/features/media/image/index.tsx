@@ -3,7 +3,8 @@ import { decode } from 'html-entities';
 import * as React from 'react';
 import { View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
-import { Palette } from '../../colors';
+import { PaletteDark } from '../../colors';
+import Icons from '../../components/Icons';
 import ProgressBarView from '../../components/ProgressBarView';
 import ImageView from './ImageView';
 
@@ -14,10 +15,36 @@ export default function Page() {
   console.log('showing', uri);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ flex: 1, backgroundColor: PaletteDark.scrim }}>
       <Stack.Screen
         options={{
           title: decode(title as string),
+          headerStyle: {
+            backgroundColor: PaletteDark.scrim,
+          },
+          headerRight: () => {
+            return (
+              <Icons
+                onPress={() => {
+                  // TODO - Download, using expo-file-system
+                  // const downloadResumable = FileSystem.createDownloadResumable(
+                  //   'http://techslides.com/demos/sample-videos/small.mp4',
+                  //   FileSystem.documentDirectory + 'small.mp4',
+                  //   {},
+                  //   () => {}
+                  // );
+                  // try {
+                  //   const { uri } = await downloadResumable.downloadAsync();
+                  //   console.log('Finished downloading to ', uri);
+                  // } catch (e) {
+                  //   console.error(e);
+                  // }
+                }}
+                name="download"
+                size={24}
+                color={PaletteDark.onSurface}></Icons>
+            );
+          },
         }}
       />
       <ProgressBarView progress={progress} />

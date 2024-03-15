@@ -3,11 +3,12 @@ import * as React from 'react';
 import { FlatList, View } from 'react-native';
 import { Post } from '../../services/api';
 import { useStore } from '../../services/store';
-import { Palette } from '../colors';
+import useTheme from '../../services/theme/useTheme';
 import ItemSeparator from '../components/ItemSeparator';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
 
 export default function Page() {
+  const theme = useTheme();
   const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
     state.savedPosts,
     state.addToSavedPosts,
@@ -27,7 +28,7 @@ export default function Page() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: theme.background,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
@@ -35,7 +36,7 @@ export default function Page() {
       <View
         style={{
           flex: 1,
-          backgroundColor: Palette.backgroundLowest,
+          backgroundColor: theme.background,
         }}>
         <FlatList
           data={savedPosts}
@@ -45,6 +46,7 @@ export default function Page() {
               isSaved={savedPostIds[item.data.id]}
               addToSavedPosts={addToSavedPosts}
               removeFromSavedPosts={removeFromSavedPosts}
+              theme={theme}
             />
           )}
           ItemSeparatorComponent={ItemSeparator}

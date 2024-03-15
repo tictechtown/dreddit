@@ -1,9 +1,10 @@
 import { Image } from 'expo-image';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { Palette } from '../colors';
-import { Spacing } from '../typography';
+import { PaletteDark } from '../colors';
+import { Spacing } from '../tokens';
+import Typography from './Typography';
 
 const panGestureHandlerProps = { activeOffsetX: [-10, 10] };
 
@@ -23,6 +24,7 @@ const CarouselView = ({
     return (
       <Image
         style={{
+          borderRadius: 12,
           width: width,
           height: (width * resolutions[0].y) / resolutions[0].x,
         }}
@@ -51,9 +53,10 @@ const CarouselView = ({
         autoFillData={false}
       />
       <View style={styles.pageIndexContainer}>
-        <Text style={styles.pageIndexTextColor}>
-          {pageIndex + 1}/{resolutions.length}
-        </Text>
+        <Typography variant="labelMedium">{pageIndex + 1}</Typography>
+        <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
+          /{resolutions.length}
+        </Typography>
       </View>
     </View>
   );
@@ -67,13 +70,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: Palette.surfaceVariant,
+    backgroundColor: PaletteDark.surfaceContainerHigh,
     borderRadius: 10,
-    paddingHorizontal: Spacing.small,
-    opacity: 0.6,
+    paddingHorizontal: Spacing.s8,
+    flexDirection: 'row',
   },
   pageIndexTextColor: {
-    color: Palette.onBackgroundLowest,
+    color: PaletteDark.onSurfaceVariant,
   },
 });
 

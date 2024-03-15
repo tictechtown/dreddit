@@ -5,9 +5,9 @@ import queryString from 'query-string';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { RedditApi, User } from '../../services/api';
-import { Palette } from '../colors';
-import { markdownIt, markdownRenderRules, markdownStyles } from '../post/utils';
-import { Spacing } from '../typography';
+import useTheme from '../../services/theme/useTheme';
+import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../post/utils';
+import { Spacing } from '../tokens';
 
 type Wikipage = {
   content_md: string;
@@ -20,6 +20,8 @@ type Wikipage = {
 };
 
 const Page = () => {
+  const theme = useTheme();
+  const mdStyle = useMarkdownStyle(theme);
   const { subreddit, path } = useLocalSearchParams();
   const [wiki, setWiki] = useState<null | Wikipage>(null);
 
@@ -75,14 +77,14 @@ const Page = () => {
   };
 
   return (
-    <View style={{ backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ backgroundColor: theme.surface }}>
       <Stack.Screen options={{ title: subreddit as string }} />
       <ScrollView style={{ width: '100%' }}>
-        <View style={{ alignItems: 'center', flex: 1, paddingHorizontal: Spacing.regular }}>
+        <View style={{ alignItems: 'center', flex: 1, paddingHorizontal: Spacing.s16 }}>
           {wiki?.content_md && (
             <Markdown
               markdownit={markdownIt}
-              style={markdownStyles}
+              style={mdStyle}
               rules={markdownRenderRules}
               onLinkPress={onLinkPress}>
               {decode(wiki?.content_md)}

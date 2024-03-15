@@ -5,13 +5,16 @@ import { Image } from 'expo-image';
 import { Link, Stack } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Keyboard, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Keyboard, Pressable, Text, TextInput, View } from 'react-native';
 import { Post, RedditApi, SubReddit, User } from '../../services/api';
-import { Palette } from '../colors';
-import FilterChip from '../components/FilterChip';
+import useTheme from '../../services/theme/useTheme';
+import { ColorPalette } from '../colors';
+import Tabs from '../components/Tabs';
+import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
-import { Spacing } from '../typography';
+import { Spacing } from '../tokens';
 
+// @ts-ignore
 import defaultSubredditIcon = require('../../../assets/images/subbit.png');
 
 function getSubredditIcon(icon: string | undefined): string {
@@ -47,8 +50,9 @@ function sortUserResults(results: User[]): User[] {
   });
 }
 
-const SearchResultSub = (props: { result: SubReddit }) => {
+const SearchResultSub = (props: { result: SubReddit; theme: ColorPalette }) => {
   const data = props.result.data;
+  const theme = props.theme;
   const icon = getSubredditIcon(data.community_icon ?? data.icon);
   return (
     <Link
@@ -57,10 +61,10 @@ const SearchResultSub = (props: { result: SubReddit }) => {
         params: { icon: icon },
       }}
       asChild>
-      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: Spacing.xsmall }}>
+      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: 2 }}>
         <View
           style={{
-            backgroundColor: Palette.surface,
+            backgroundColor: theme.surfaceContainer,
             borderRadius: 8,
             flex: 1,
             paddingHorizontal: 12,
@@ -69,10 +73,10 @@ const SearchResultSub = (props: { result: SubReddit }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
               style={{
-                width: 64,
-                height: 64,
-                borderRadius: 32,
-                marginRight: Spacing.regular,
+                width: 68,
+                height: 68,
+                borderRadius: 34,
+                marginRight: Spacing.s16,
                 flex: 0,
               }}
               source={icon}
@@ -84,31 +88,36 @@ const SearchResultSub = (props: { result: SubReddit }) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{ color: Palette.onBackground, fontSize: 18, fontWeight: 'bold' }}>
+                <Typography variant="titleMedium" style={{ fontWeight: 'bold' }}>
                   {data.display_name_prefixed}
-                </Text>
-                {data.over18 && <Text style={{ flex: 0, color: Palette.error }}>NSFW</Text>}
+                </Typography>
+
+                {data.over18 && <Text style={{ flex: 0, color: theme.error }}>NSFW</Text>}
+              </View>
+              <View style={{ flexDirection: 'row', columnGap: 4, alignItems: 'center' }}>
+                <Ionicons name="people" size={12} color={theme.onSurfaceVariant} />
+
+                <Typography
+                  variant="bodySmall"
+                  style={{ color: theme.onSurfaceVariant, opacity: 0.8 }}>
+                  {(data.subscribers ?? 0).toLocaleString('en-US')} members
+                </Typography>
               </View>
 
-              <Text style={{ color: Palette.onBackground, fontWeight: '300' }}>
-                <Ionicons
-                  name="people"
-                  size={14}
-                  color="grey"
-                  style={{ paddingRight: Spacing.small }}
-                />
-                {(data.subscribers ?? 0).toLocaleString('en-US')} members
-              </Text>
-              <Text
-                style={{ color: Palette.onSurfaceVariant, fontSize: 16, flex: 1 }}
+              <Typography
+                variant="bodyMedium"
+                style={{ color: theme.onSurfaceVariant, flex: 1 }}
                 numberOfLines={1}>
                 {decode(data.title)}
-              </Text>
+              </Typography>
 
               {data.public_description && (
-                <Text style={{ color: Palette.onBackground }} numberOfLines={2}>
+                <Typography
+                  variant="bodySmall"
+                  style={{ color: theme.onSurfaceVariant, opacity: 0.8 }}
+                  numberOfLines={2}>
                   {decode(data.public_description)}
-                </Text>
+                </Typography>
               )}
             </View>
           </View>
@@ -118,8 +127,9 @@ const SearchResultSub = (props: { result: SubReddit }) => {
   );
 };
 
-const SearchResultUser = (props: { result: User }) => {
+const SearchResultUser = (props: { result: User; theme: ColorPalette }) => {
   const data = props.result.data;
+  const theme = props.theme;
   const icon = getSubredditIcon(data.icon_img);
   return (
     <Link
@@ -128,10 +138,10 @@ const SearchResultUser = (props: { result: User }) => {
         params: { userid: data.name },
       }}
       asChild>
-      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: Spacing.xsmall }}>
+      <Pressable style={{ flex: 1, marginHorizontal: 10, marginVertical: Spacing.s8 }}>
         <View
           style={{
-            backgroundColor: Palette.surface,
+            backgroundColor: theme.surface,
             borderRadius: 8,
             flex: 1,
             paddingHorizontal: 12,
@@ -140,10 +150,10 @@ const SearchResultUser = (props: { result: User }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
               style={{
-                width: 64,
-                height: 64,
-                borderRadius: 32,
-                marginRight: Spacing.regular,
+                width: 68,
+                height: 68,
+                borderRadius: 34,
+                marginRight: Spacing.s16,
                 flex: 0,
               }}
               source={icon}
@@ -155,36 +165,32 @@ const SearchResultUser = (props: { result: User }) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{ color: Palette.onBackground, fontSize: 18, fontWeight: 'bold' }}>
+                <Typography variant="titleMedium" style={{ fontWeight: 'bold' }}>
                   {data.name}
-                </Text>
-                {data.subreddit?.over_18 && (
-                  <Text style={{ flex: 0, color: Palette.error }}>NSFW</Text>
-                )}
-                {data.is_mod && <Text style={{ flex: 0, color: Palette.secondary }}>Mod</Text>}
+                </Typography>
+
+                <View style={{ flexDirection: 'row', columnGap: 4 }}>
+                  {data.subreddit?.over_18 && (
+                    <Text style={{ flex: 0, color: theme.error }}>NSFW</Text>
+                  )}
+                  {data.is_mod && <Text style={{ flex: 0, color: theme.secondary }}>Mod</Text>}
+                </View>
               </View>
 
-              <Text style={{ color: Palette.onBackground, fontWeight: '300' }}>
-                <Ionicons
-                  name="people"
-                  size={14}
-                  color="grey"
-                  style={{ paddingRight: Spacing.small }}
-                />
-                {(data.link_karma + data.comment_karma).toLocaleString('en-US')} karma
-              </Text>
-              <Text
-                style={{ color: Palette.onSurfaceVariant, fontSize: 16, flex: 1 }}
-                numberOfLines={1}>
+              <Typography
+                variant="bodySmall"
+                style={{ color: theme.onSurfaceVariant, opacity: 0.8 }}>
+                {((data.link_karma ?? 0) + (data.comment_karma ?? 0)).toLocaleString('en-US')} karma
+                •{' '}
                 {new Date(data.created_utc * 1000).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
                 })}
-              </Text>
+              </Typography>
 
               {data.subreddit?.public_description && (
-                <Text style={{ color: Palette.onBackground }} numberOfLines={2}>
+                <Text style={{ color: theme.onBackground }} numberOfLines={2}>
                   {decode(data.subreddit.public_description)}
                 </Text>
               )}
@@ -196,13 +202,13 @@ const SearchResultUser = (props: { result: User }) => {
   );
 };
 
-const SearchResultItem = (props: { result: SearchResult }) => {
+const SearchResultItem = (props: { result: SearchResult; theme: ColorPalette }) => {
   if (props.result.kind === 't5') {
-    return <SearchResultSub result={props.result} />;
+    return <SearchResultSub result={props.result} theme={props.theme} />;
   } else if (props.result.kind === 't3') {
-    return <SubredditPostItemView post={props.result} />;
+    return <SubredditPostItemView post={props.result} theme={props.theme} />;
   } else {
-    return <SearchResultUser result={props.result} />;
+    return <SearchResultUser result={props.result} theme={props.theme} />;
   }
 };
 
@@ -215,6 +221,7 @@ enum SearchType {
 }
 
 const HomeSearch = () => {
+  const theme = useTheme();
   const [searchText, setSearchText] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [defaultResults, setDefaultResults] = useState<SubReddit[]>([]);
@@ -276,7 +283,7 @@ const HomeSearch = () => {
   }, [searchText, searchType]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       <Stack.Screen
         options={{
           title: '',
@@ -291,7 +298,7 @@ const HomeSearch = () => {
                 name="close"
                 size={24}
                 color={
-                  searchText.length > 0 ? Palette.onSurfaceVariant : 'black'
+                  searchText.length > 0 ? theme.onSurfaceVariant : theme.onSurface
                 }></MaterialCommunityIcons>
             );
           },
@@ -299,68 +306,48 @@ const HomeSearch = () => {
             return (
               <TextInput
                 ref={inputRef}
-                style={styles.input}
+                style={{
+                  fontSize: 20,
+                  color: theme.onBackground,
+                }}
                 onChangeText={(txt) => {
                   setSearchText(txt);
                 }}
                 value={searchText}
                 placeholder="Search Reddit"
-                placeholderTextColor={Palette.onSurfaceVariant}
+                placeholderTextColor={theme.onSurfaceVariant}
                 autoFocus={true}
                 autoCapitalize="none"
-                cursorColor={Palette.secondary}
+                cursorColor={theme.secondary}
                 returnKeyType="search"
               />
             );
           },
         }}
       />
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <Text
+
+      {searchText.length < 3 && (
+        <View
           style={{
-            color: Palette.onBackground,
-            fontSize: 16,
-            marginHorizontal: Spacing.small,
-            marginTop: Spacing.regular,
-            marginBottom: Spacing.small,
+            paddingHorizontal: Spacing.s12,
+            marginTop: Spacing.s16,
+            marginBottom: Spacing.s12,
           }}>
-          {searchText.length < 3 ? 'Trending' : ''}
-        </Text>
-        {searchText.length >= 3 && (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <FilterChip
-              filterName={'Subreddits'}
-              filterType={SearchType.Subreddits}
-              selected={searchType === SearchType.Subreddits}
-              onTap={setSearchType}
-            />
-            <FilterChip
-              filterName={'Users'}
-              filterType={SearchType.Users}
-              selected={searchType === SearchType.Users}
-              onTap={setSearchType}
-            />
-            <FilterChip
-              filterName={'Posts'}
-              filterType={SearchType.Posts}
-              selected={searchType === SearchType.Posts}
-              onTap={setSearchType}
-            />
-          </View>
-        )}
-      </View>
+          <Typography variant="titleMedium">Trending</Typography>
+        </View>
+      )}
+      {searchText.length >= 3 && (
+        <Tabs
+          selectedTabId={searchType}
+          tabIds={[SearchType.Subreddits, SearchType.Users, SearchType.Posts]}
+          tabNames={['Subreddits', 'Users', 'Posts']}
+          onPress={setSearchType}
+        />
+      )}
       <FlatList
         ref={flatListRef}
         data={searchText.length < 3 ? defaultResults : results}
-        renderItem={({ item }) => <SearchResultItem result={item} />}
+        renderItem={({ item }) => <SearchResultItem result={item} theme={theme} />}
         keyExtractor={(item) => item.data.id}
         style={{ flex: 1 }}
         keyboardShouldPersistTaps={'handled'}
@@ -369,12 +356,5 @@ const HomeSearch = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    fontSize: 20,
-    color: Palette.onBackground,
-  },
-});
 
 export default HomeSearch;

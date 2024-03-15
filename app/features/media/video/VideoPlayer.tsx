@@ -29,8 +29,10 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import { PaletteDark } from '../../colors';
+import Icons from '../../components/Icons';
+import Typography from '../../components/Typography';
+import { Spacing } from '../../tokens';
 
 type Props = VideoProps & { activityIndicator?: any };
 
@@ -145,10 +147,10 @@ const VideoPlayer = (props: Props) => {
         status.positionMillis === status.durationMillis
           ? PlaybackStates.Ended
           : status.isBuffering && (status?.playableDurationMillis ?? 0) <= status.positionMillis
-          ? PlaybackStates.Buffering
-          : status.shouldPlay
-          ? PlaybackStates.Playing
-          : PlaybackStates.Paused;
+            ? PlaybackStates.Buffering
+            : status.shouldPlay
+              ? PlaybackStates.Playing
+              : PlaybackStates.Paused;
       setPlaybackInstanceInfo({
         ...playbackInstanceInfo,
         position: status.positionMillis,
@@ -312,7 +314,7 @@ const VideoPlayer = (props: Props) => {
     return (
       <View
         style={{
-          backgroundColor: Palette.backgroundLowest,
+          backgroundColor: PaletteDark.scrim,
           width: '100%',
           height: '100%',
         }}>
@@ -325,12 +327,12 @@ const VideoPlayer = (props: Props) => {
             right: 0,
             paddingHorizontal: 20,
             paddingVertical: 10,
-            backgroundColor: Palette.errorContainer,
+            backgroundColor: PaletteDark.errorContainer,
             borderRadius: 10,
             flexDirection: 'row',
           }}>
-          <MaterialIcons name="error" size={36} color={Palette.onErrorContainer} />
-          <Text style={{ color: Palette.onErrorContainer, marginLeft: Spacing.regular }}>
+          <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
+          <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
             {errorMessage}
           </Text>
         </View>
@@ -345,7 +347,7 @@ const VideoPlayer = (props: Props) => {
           playbackInstanceInfo.duration === 0 && (
             <View
               style={{
-                backgroundColor: Palette.backgroundLowest,
+                backgroundColor: PaletteDark.scrim,
                 width: '100%',
                 height: '100%',
                 justifyContent: 'center',
@@ -353,7 +355,7 @@ const VideoPlayer = (props: Props) => {
               {
                 <ActivityIndicator
                   {...props.activityIndicator}
-                  color={Palette.onBackground}
+                  color={PaletteDark.onBackground}
                   animating
                   size="large"
                 />
@@ -402,14 +404,14 @@ const VideoPlayer = (props: Props) => {
                 <View
                   style={{
                     marginLeft: 16,
-                    backgroundColor: Palette.onSurface,
+                    backgroundColor: PaletteDark.onSurface,
                     padding: 16,
                     paddingHorizontal: 24,
                     borderRadius: 48,
                     opacity: 0.9,
                     alignItems: 'center',
                   }}>
-                  <MaterialIcons name={'fast-rewind'} size={25} color={Palette.surface} />
+                  <Icons name={'fast-rewind'} size={25} color={PaletteDark.surface} />
                   <Text>10s</Text>
                 </View>
               </Animated.View>
@@ -427,14 +429,14 @@ const VideoPlayer = (props: Props) => {
                 <View
                   style={{
                     marginRight: 16,
-                    backgroundColor: Palette.onSurface,
+                    backgroundColor: PaletteDark.onSurface,
                     padding: 16,
                     paddingHorizontal: 24,
                     borderRadius: 48,
                     opacity: 0.9,
                     alignItems: 'center',
                   }}>
-                  <MaterialIcons name={'fast-forward'} size={25} color={Palette.surface} />
+                  <Icons name={'fast-forward'} size={25} color={PaletteDark.surface} />
                   <Text>10s</Text>
                 </View>
               </Animated.View>
@@ -450,28 +452,28 @@ const VideoPlayer = (props: Props) => {
                   alignItems: 'center',
                 }}>
                 <TouchableNativeFeedback
-                  background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, true)}
+                  background={TouchableNativeFeedback.Ripple(PaletteDark.surfaceVariant, true)}
                   onPress={togglePlay}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View
                       style={{
-                        backgroundColor: Palette.onSurface,
+                        backgroundColor: PaletteDark.onSurface,
                         padding: 16,
                         borderRadius: 48,
                         opacity: 0.9,
                       }}>
-                      <MaterialIcons
+                      <Icons
                         name={
                           playbackInstanceInfo.state === PlaybackStates.Playing
                             ? 'pause'
                             : playbackInstanceInfo.state === PlaybackStates.Paused
-                            ? 'play-arrow'
-                            : playbackInstanceInfo.state === PlaybackStates.Ended
-                            ? 'replay'
-                            : 'cloud-download'
+                              ? 'play-arrow'
+                              : playbackInstanceInfo.state === PlaybackStates.Ended
+                                ? 'replay'
+                                : 'cloud-download'
                         }
                         size={34}
-                        color={Palette.surface}
+                        color={PaletteDark.surface}
                       />
                     </View>
                   </View>
@@ -482,50 +484,60 @@ const VideoPlayer = (props: Props) => {
                 style={{
                   position: 'absolute',
                   bottom: 0,
-                  backgroundColor: Palette.background,
+                  backgroundColor: PaletteDark.scrim,
                   opacity: 0.8,
-                  borderRadius: 10,
-                  paddingVertical: 10,
-                  paddingBottom: 30,
-                  paddingHorizontal: 10,
+                  paddingVertical: 16,
+                  paddingBottom: 40,
+                  paddingHorizontal: 12,
                   width: '100%',
                 }}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    alignItems: 'center',
+                    alignItems: 'flex-end',
                     paddingBottom: 10,
+                    justifyContent: 'flex-end',
+                    alignContent: 'flex-end',
                   }}>
-                  <Text style={{ color: Palette.onBackgroundLowest }}>
-                    {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)} /{' '}
-                    {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
-                  </Text>
+                  <View style={{ flex: 1 }}>
+                    <Typography variant="bodyMedium">
+                      {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
+                      <Typography
+                        variant="bodyMedium"
+                        style={{ color: PaletteDark.onSurfaceVariant }}>
+                        / {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
+                      </Typography>
+                    </Typography>
+                  </View>
+                  <Text style={{ color: PaletteDark.onBackground }}></Text>
                   <View
                     style={{
-                      flexDirection: 'row',
+                      flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      flex: 1,
+                      justifyContent: 'center',
+                      rowGap: 8,
+                      flex: 0,
                     }}>
                     <MaterialIcons.Button
                       name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
-                      size={24}
+                      size={15}
                       hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
                       iconStyle={{ marginRight: 0 }}
                       borderRadius={24}
-                      backgroundColor={Palette.surfaceVariant}
-                      color={Palette.onSurface}
+                      style={{ borderColor: PaletteDark.outline, borderWidth: 1 }}
+                      backgroundColor={PaletteDark.surface}
+                      color={PaletteDark.onSurface}
                       onPress={toggleMute}
                     />
                     <View style={{ marginLeft: 10, marginRight: 10 }} />
                     <MaterialIcons.Button
                       name={'fullscreen'}
-                      size={24}
+                      size={28}
                       hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
                       iconStyle={{ marginRight: 0 }}
                       borderRadius={24}
-                      backgroundColor={Palette.surfaceVariant}
-                      color={Palette.onSurface}
+                      backgroundColor={PaletteDark.primaryContainer}
+                      color={PaletteDark.onPrimaryContainer}
                       onPress={enterFullScreen}
                     />
                   </View>
@@ -533,8 +545,8 @@ const VideoPlayer = (props: Props) => {
                 <Slider
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={{ flex: 1, borderColor: 'white', borderWidth: 1 }}
-                  minimumTrackTintColor={Palette.onSurface}
-                  thumbTintColor={Palette.onSurface}
+                  minimumTrackTintColor={PaletteDark.onSurface}
+                  thumbTintColor={PaletteDark.onSurface}
                   value={
                     playbackInstanceInfo.duration
                       ? playbackInstanceInfo.position / playbackInstanceInfo.duration

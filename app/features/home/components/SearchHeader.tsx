@@ -1,38 +1,35 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
-import { Text, TouchableNativeFeedback, View } from 'react-native';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import { TouchableNativeFeedback, View } from 'react-native';
+import useTheme from '../../../services/theme/useTheme';
+import Icons from '../../components/Icons';
+import Typography from '../../components/Typography';
+import { Spacing } from '../../tokens';
 
 const SearchHeader = () => {
+  const theme = useTheme();
+
   return (
     <TouchableNativeFeedback
       style={{ flex: 1 }}
-      background={TouchableNativeFeedback.Ripple(Palette.surfaceVariant, false)}
+      background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, false)}
       onPress={() => {
         router.push('features/search');
       }}>
       <View
         style={{
           height: 48,
-          marginHorizontal: Spacing.small,
-          paddingHorizontal: Spacing.regular,
+          marginHorizontal: Spacing.s12,
+          paddingHorizontal: Spacing.s16,
           borderRadius: 32,
-          backgroundColor: Palette.background,
+          backgroundColor: theme.surfaceContainerHigh,
           alignItems: 'center',
-          marginBottom: Spacing.regular,
+          marginBottom: Spacing.s16,
           flexDirection: 'row',
+          columnGap: 16,
         }}>
-        <Ionicons name="search" size={20} color={Palette.onBackground} />
+        <Icons name="search" size={24} color={theme.onBackground} />
 
-        <Text
-          style={{
-            marginLeft: Spacing.small,
-            fontSize: 20,
-            color: Palette.onBackground,
-          }}>
-          Search Reddit
-        </Text>
+        <Typography variant="bodyLarge">Search Reddit</Typography>
       </View>
     </TouchableNativeFeedback>
   );

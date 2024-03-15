@@ -63,12 +63,25 @@ const createSavedPostSlice: StateCreator<SavedPostState> = (set) => ({
     })),
 });
 
-export const useStore = create<FavoriteState & SettingsState & SavedPostState>()(
+type ColorScheme = 'os' | 'dark' | 'light' | 'amoled';
+
+interface ColorSchemeState {
+  colorScheme: ColorScheme;
+  updateColorScheme: (entry: ColorScheme) => void;
+}
+
+const createColorSchemeSlice: StateCreator<ColorSchemeState> = (set) => ({
+  colorScheme: 'os',
+  updateColorScheme: (entry) => set(() => ({ colorScheme: entry })),
+});
+
+export const useStore = create<FavoriteState & SettingsState & SavedPostState & ColorSchemeState>()(
   persist(
     (...a) => ({
       ...createSubredditSlice(...a),
       ...createSettingsSlice(...a),
       ...createSavedPostSlice(...a),
+      ...createColorSchemeSlice(...a),
     }),
 
     {

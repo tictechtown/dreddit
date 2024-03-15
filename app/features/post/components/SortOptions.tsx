@@ -1,7 +1,8 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import { Ionicons } from '@expo/vector-icons';
+import { Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import useTheme from '../../../services/theme/useTheme';
+import Icons from '../../components/Icons';
+import { Spacing } from '../../tokens';
 
 const SortOptions = ({
   currentSort,
@@ -10,102 +11,86 @@ const SortOptions = ({
   currentSort: string | null;
   onSortPressed: (value: string) => void;
 }) => {
-  return (
-    <View style={styles.contentContainer}>
-      <Text
-        style={{
-          color: Palette.onBackgroundLowest,
-          fontSize: 24,
-          marginBottom: Spacing.regular,
-        }}>
-        Sort options
-      </Text>
-      <TouchableOpacity
-        style={[
-          styles.choiceContainer,
-          currentSort === 'best' ? styles.selectedChoiceContainer : null,
-        ]}
-        onPress={() => {
-          onSortPressed('best');
-        }}>
-        <Ionicons name="rocket" size={16} color={Palette.onSurface} />
-        <Text style={styles.choice}>Best</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          styles.choiceContainer,
-          currentSort === 'top' ? styles.selectedChoiceContainer : null,
-        ]}
-        onPress={() => {
-          onSortPressed('top');
-        }}>
-        <MaterialIcons name="leaderboard" size={16} color={Palette.onSurface} />
-        <Text style={styles.choice}>Top</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          styles.choiceContainer,
-          currentSort === 'new' ? styles.selectedChoiceContainer : null,
-        ]}
-        onPress={() => {
-          onSortPressed('new');
-        }}>
-        <Ionicons name="time-outline" size={16} color={Palette.onSurface} />
+  const theme = useTheme();
 
-        <Text style={styles.choice}>New</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          styles.choiceContainer,
-          currentSort === 'controversial' ? styles.selectedChoiceContainer : null,
-        ]}
-        onPress={() => {
-          onSortPressed('controversial');
-        }}>
-        <MaterialIcons name="question-answer" size={16} color={Palette.onSurface} />
-        <Text style={styles.choice}>Controversial</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          styles.choiceContainer,
-          currentSort === 'random' ? styles.selectedChoiceContainer : null,
-        ]}
-        onPress={() => {
-          onSortPressed('random');
-        }}>
-        <Ionicons name="shuffle" size={16} color={Palette.onSurface} />
-        <Text style={styles.choice}>Random</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  backgroundStyle: {
-    backgroundColor: Palette.surface,
-  },
-  contentContainer: {
-    flex: 1,
-    backgroundColor: Palette.surface,
-    paddingHorizontal: Spacing.regular,
-  },
-  choiceContainer: {
+  const choiceContainer: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: Palette.surface,
-  },
-  selectedChoiceContainer: {
+    borderColor: theme.surface,
+  };
+
+  const selectedChoiceContainer = {
     borderRadius: 10,
-    borderColor: Palette.secondaryContainer,
-  },
-  choice: {
-    color: Palette.onSurface,
+    borderColor: theme.secondaryContainer,
+  };
+
+  const choices = {
+    color: theme.onSurface,
     fontSize: 16,
-    marginVertical: Spacing.small,
-    marginLeft: Spacing.small,
-  },
-});
+    marginVertical: Spacing.s12,
+    marginLeft: Spacing.s12,
+  };
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.surface,
+        paddingHorizontal: Spacing.s16,
+      }}>
+      <Text
+        style={{
+          color: theme.onBackground,
+          fontSize: 24,
+          marginBottom: Spacing.s16,
+        }}>
+        Sort options
+      </Text>
+      <TouchableOpacity
+        style={[choiceContainer, currentSort === 'best' ? selectedChoiceContainer : null]}
+        onPress={() => {
+          onSortPressed('best');
+        }}>
+        <Ionicons name="rocket" size={16} color={theme.onSurface} />
+        <Text style={choices}>Best</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[choiceContainer, currentSort === 'top' ? selectedChoiceContainer : null]}
+        onPress={() => {
+          onSortPressed('top');
+        }}>
+        <Icons name="leaderboard" size={16} color={theme.onSurface} />
+        <Text style={choices}>Top</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[choiceContainer, currentSort === 'new' ? selectedChoiceContainer : null]}
+        onPress={() => {
+          onSortPressed('new');
+        }}>
+        <Ionicons name="time-outline" size={16} color={theme.onSurface} />
+
+        <Text style={choices}>New</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[choiceContainer, currentSort === 'controversial' ? selectedChoiceContainer : null]}
+        onPress={() => {
+          onSortPressed('controversial');
+        }}>
+        <Icons name="question-answer" size={16} color={theme.onSurface} />
+        <Text style={choices}>Controversial</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[choiceContainer, currentSort === 'random' ? selectedChoiceContainer : null]}
+        onPress={() => {
+          onSortPressed('random');
+        }}>
+        <Icons name="shuffle" size={16} color={theme.onSurface} />
+        <Text style={choices}>Random</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export default SortOptions;

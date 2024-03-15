@@ -4,27 +4,13 @@ import { Link, Stack, router, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import queryString from 'query-string';
 import { useEffect, useMemo, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import { RedditApi, User } from '../../../services/api';
-import { Palette } from '../../colors';
-import { markdownIt, markdownRenderRules, markdownStyles } from '../../post/utils';
-import { Spacing } from '../../typography';
-
-// TODO -merge that with RedditApi t5
-type SubredditData = {
-  wiki_enabled: boolean;
-  display_name: string;
-  icon_img: string;
-  created: number;
-  display_name_prefixed: string;
-  accounts_active: number;
-  subscribers: number;
-  name: string;
-  public_description: string;
-  community_icon: string;
-  banner_background_image: string;
-  description: string;
-};
+import { ScrollView, View } from 'react-native';
+import { RedditApi, SubReddit, User } from '../../../services/api';
+import useTheme from '../../../services/theme/useTheme';
+import ItemSeparator from '../../components/ItemSeparator';
+import Typography from '../../components/Typography';
+import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../post/utils';
+import { Spacing } from '../../tokens';
 
 type Wikipage = {
   content_md: string;
@@ -37,8 +23,10 @@ type Wikipage = {
 };
 
 const Page = () => {
+  const theme = useTheme();
+  const mdStyle = useMarkdownStyle(theme);
   const { subreddit } = useLocalSearchParams();
-  const [about, setAbout] = useState<null | SubredditData>(null);
+  const [about, setAbout] = useState<null | SubReddit['data']>(null);
   const [wiki, setWiki] = useState<null | Wikipage>(null);
 
   useEffect(() => {
@@ -118,92 +106,45 @@ const Page = () => {
   };
 
   return (
-    <View style={{ backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ backgroundColor: theme.background }}>
       <Stack.Screen options={{ title: about.display_name_prefixed }} />
       <ScrollView style={{ width: '100%' }}>
-        <View style={{ alignItems: 'center', flex: 1 }}>
+        <View style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 16 }}>
           <Image
-            style={{ width: 128, height: 128, borderRadius: 64, marginVertical: Spacing.small }}
+            style={{ width: 140, height: 140, borderRadius: 70, marginBottom: 10 }}
             source={subredditIcon}></Image>
           <Link
             href={{
               pathname: `features/subreddit/${about.display_name}`,
               params: { icon: subredditIcon },
             }}>
-            <Text style={{ color: Palette.onBackgroundLowest, fontWeight: 'bold', fontSize: 20 }}>
-              {about.display_name_prefixed}
-            </Text>
+            <Typography variant="headlineMedium">{about.display_name_prefixed}</Typography>
           </Link>
-          <View
-            style={{
-              marginVertical: Spacing.regular,
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-            }}>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: Palette.secondaryContainer,
-                marginLeft: Spacing.regular,
-                marginRight: Spacing.small,
-                padding: Spacing.regular,
-                borderRadius: 16,
-                alignItems: 'center',
-              }}>
-              <Text style={{ color: Palette.onSecondaryContainer, marginBottom: Spacing.small }}>
-                Subscribers
-              </Text>
-              <Text style={{ color: Palette.onBackgroundLowest, fontWeight: 'bold', fontSize: 20 }}>
-                {about.subscribers.toLocaleString('en-US')}
-              </Text>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: Palette.secondaryContainer,
-                marginLeft: Spacing.small,
-                marginRight: Spacing.regular,
-                padding: Spacing.regular,
-                borderRadius: 16,
-                alignItems: 'center',
-              }}>
-              <Text style={{ color: Palette.onSecondaryContainer, marginBottom: Spacing.small }}>
-                Online
-              </Text>
-              <Text style={{ color: Palette.onBackgroundLowest, fontWeight: 'bold', fontSize: 20 }}>
-                {about.accounts_active.toLocaleString('en-US')}
-              </Text>
-            </View>
-          </View>
+          <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant, opacity: 0.8 }}>
+            {(about.subscribers ?? 0).toLocaleString('en-US')} karma •{' '}
+            {new Date(about.created_utc * 1000).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </Typography>
         </View>
-        <View style={{ paddingHorizontal: Spacing.small, marginBottom: 50 }}>
-          <Text style={{ color: Palette.onBackgroundLowest, fontSize: 26, fontWeight: 'bold' }}>
-            About
-          </Text>
-          <Text style={{ color: Palette.onBackgroundLowest, marginBottom: Spacing.large }}>
-            {about.public_description}
-          </Text>
-          <Text style={{ color: Palette.onBackgroundLowest, fontSize: 26, fontWeight: 'bold' }}>
-            {wiki?.content_md ? 'Wiki' : 'Description'}
-          </Text>
-          {wiki?.content_md ? (
-            <Markdown
-              markdownit={markdownIt}
-              style={markdownStyles}
-              rules={markdownRenderRules}
-              onLinkPress={onLinkPress}>
-              {decode(wiki?.content_md)}
-            </Markdown>
-          ) : (
-            <Markdown
-              markdownit={markdownIt}
-              style={markdownStyles}
-              rules={markdownRenderRules}
-              onLinkPress={onLinkPress}>
-              {decode(about?.description)}
-            </Markdown>
-          )}
+        <View
+          style={{
+            paddingHorizontal: Spacing.s12,
+            marginBottom: 50,
+            flexDirection: 'column',
+            rowGap: Spacing.s16,
+          }}>
+          <Typography variant="bodyMedium">{about.public_description}</Typography>
+          <ItemSeparator fullWidth />
+          <Markdown
+            markdownit={markdownIt}
+            style={mdStyle}
+            rules={markdownRenderRules}
+            onLinkPress={onLinkPress}>
+            {wiki?.content_md ? decode(wiki?.content_md) : decode(about?.description)}
+          </Markdown>
         </View>
       </ScrollView>
     </View>

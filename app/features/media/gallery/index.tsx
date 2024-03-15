@@ -5,8 +5,8 @@ import * as React from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { Post } from '../../../services/api';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import { PaletteDark } from '../../colors';
+import { Spacing } from '../../tokens';
 import ImageView from '../image/ImageView';
 
 const CarouselView = ({
@@ -50,7 +50,7 @@ const CarouselView = ({
               aspectRatio: 1,
               borderRadius: 10,
               borderWidth: 2,
-              borderColor: index === pageIndex ? 'yellow' : 'transparent',
+              borderColor: index === pageIndex ? PaletteDark.onSurface : 'transparent',
             }}
             source={item.gif ?? item.u.replaceAll('&amp;', '&')}
             contentFit="cover"
@@ -67,9 +67,7 @@ const CarouselView = ({
       <View
         style={[
           {
-            height: 70,
-            backgroundColor: Palette.surfaceVariant,
-            paddingHorizontal: Spacing.small,
+            paddingHorizontal: Spacing.s12,
           },
         ]}>
         <FlatList horizontal renderItem={renderThumbItem} data={pages} />
@@ -108,10 +106,13 @@ export default function Page() {
   }, [gallery_data]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: Palette.backgroundLowest }}>
+    <View style={{ flex: 1, backgroundColor: PaletteDark.scrim }}>
       <Stack.Screen
         options={{
           title: decode(title as string),
+          headerStyle: {
+            backgroundColor: PaletteDark.scrim,
+          },
         }}
       />
       <CarouselView pages={resolutions} />

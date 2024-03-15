@@ -26,20 +26,20 @@ export const onLinkPress = (post: Post): HrefObject => {
         title,
       },
     };
-  } else if (domain.startsWith('self.') || domain.startsWith('reddit.com')) {
+  }
+  if (domain.startsWith('self.') || domain.startsWith('reddit.com')) {
     return {
       pathname: `features/post/${originalPost.data.id}`,
       params: { postid: originalPost.data.id },
     };
-  } else if (domain.startsWith('i.redd.it')) {
+  }
+  if (domain.startsWith('i.redd.it')) {
     return {
       pathname: 'features/media/image',
       params: { uri: originalPost.data.url, title },
     };
-  } else if (
-    domain.startsWith('i.imgur.com') &&
-    originalPost.data.preview?.reddit_video_preview != null
-  ) {
+  }
+  if (domain.startsWith('i.imgur.com') && originalPost.data.preview?.reddit_video_preview != null) {
     return {
       pathname: 'features/media/video',
       params: {
@@ -47,7 +47,8 @@ export const onLinkPress = (post: Post): HrefObject => {
         reddit_video: base64.encode(JSON.stringify(originalPost.data.preview.reddit_video_preview)),
       },
     };
-  } else if (domain.startsWith('i.imgur.com')) {
+  }
+  if (domain.startsWith('i.imgur.com')) {
     if (originalPost.data.url_overridden_by_dest?.endsWith('.mp4')) {
       return {
         pathname: 'features/media/video',
@@ -70,7 +71,8 @@ export const onLinkPress = (post: Post): HrefObject => {
         uri: originalPost.data.url_overridden_by_dest,
       },
     };
-  } else if (domain.startsWith('v.redd.it') && typeof originalPost.data?.media !== 'string') {
+  }
+  if (domain.startsWith('v.redd.it') && typeof originalPost.data?.media !== 'string') {
     return {
       pathname: 'features/media/video',
       params: {
@@ -78,7 +80,9 @@ export const onLinkPress = (post: Post): HrefObject => {
         reddit_video: base64.encode(JSON.stringify(originalPost.data?.media?.reddit_video)),
       },
     };
-  } /*else if (
+  }
+
+  if (
     domain.startsWith('dubz.co') ||
     domain.startsWith('dubz.link') ||
     domain.startsWith('dubz.live')
@@ -87,16 +91,12 @@ export const onLinkPress = (post: Post): HrefObject => {
       pathname: 'features/media/video',
       params: {
         title,
-        reddit_video: base64.encode(
-          JSON.stringify({
-            hls_url: getVideoUrlFromDubz(originalPost.data.url),
-            height: '100%',
-            width: '100%',
-          })
-        ),
+        prefetchuri: originalPost.data.url,
       },
     };
-  }*/ else if (domain.startsWith('imgur.com')) {
+  }
+
+  if (domain.startsWith('imgur.com')) {
     // usually, that's a video?
     return {
       pathname: 'features/media/video',
@@ -105,7 +105,9 @@ export const onLinkPress = (post: Post): HrefObject => {
         prefetchuri: originalPost.data.url,
       },
     };
-  } else if (domain.startsWith('streamin.one') || domain.startsWith('streamable.com')) {
+  }
+
+  if (domain.startsWith('streamin.one') || domain.startsWith('streamable.com')) {
     return {
       pathname: 'features/media/video',
       params: {
@@ -113,7 +115,9 @@ export const onLinkPress = (post: Post): HrefObject => {
         prefetchuri: originalPost.data.url,
       },
     };
-  } else if (domain.startsWith('redgifs.com') || domain.startsWith('v3.redgifs.com')) {
+  }
+
+  if (domain.startsWith('redgifs.com') || domain.startsWith('v3.redgifs.com')) {
     if (originalPost.data.preview?.reddit_video_preview) {
       return {
         pathname: 'features/media/video',
@@ -137,7 +141,9 @@ export const onLinkPress = (post: Post): HrefObject => {
         },
       };
     }
-  } else if (domain.startsWith('i.redgifs.com')) {
+  }
+
+  if (domain.startsWith('i.redgifs.com')) {
     return {
       pathname: 'features/media/image',
       params: {
@@ -145,7 +151,9 @@ export const onLinkPress = (post: Post): HrefObject => {
         uri: originalPost.data.preview?.images[0].source.url,
       },
     };
-  } else {
+  }
+
+  {
     return {
       pathname: 'features/full',
       params: { uri: originalPost.data.url, title },

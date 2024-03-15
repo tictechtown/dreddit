@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
@@ -6,8 +5,9 @@ import * as React from 'react';
 import { DimensionValue, Text, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
-import { Palette } from '../../colors';
-import { Spacing } from '../../typography';
+import { PaletteDark } from '../../colors';
+import Icons from '../../components/Icons';
+import { Spacing } from '../../tokens';
 import VideoPlayer from './VideoPlayer';
 import { extractMetaTags } from './metadata';
 
@@ -29,6 +29,7 @@ export default function Page() {
       const html = await req.text();
       const result = extractMetaTags(html, { customMetaTags: [] });
       if (result && 'ogVideo' in result) {
+        console.log('loading', result);
         setRVideo({ hls_url: result.ogVideo.url, height: '100%', width: '100%' });
       } else {
         setErrorMessage(`cant load video from url ${uri}`);
@@ -51,15 +52,22 @@ export default function Page() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Palette.backgroundLowest,
+        backgroundColor: PaletteDark.scrim,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Stack.Screen options={{ title: decode(title as string) }} />
+      <Stack.Screen
+        options={{
+          title: decode(title as string),
+          headerStyle: {
+            backgroundColor: PaletteDark.scrim,
+          },
+        }}
+      />
       {errorMessage && (
         <View
           style={{
-            backgroundColor: Palette.backgroundLowest,
+            backgroundColor: PaletteDark.scrim,
             width: '100%',
             height: '100%',
           }}>
@@ -72,12 +80,12 @@ export default function Page() {
               right: 0,
               paddingHorizontal: 20,
               paddingVertical: 10,
-              backgroundColor: Palette.errorContainer,
+              backgroundColor: PaletteDark.errorContainer,
               borderRadius: 10,
               flexDirection: 'row',
             }}>
-            <MaterialIcons name="error" size={36} color={Palette.onErrorContainer} />
-            <Text style={{ color: Palette.onErrorContainer, marginLeft: Spacing.regular }}>
+            <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
+            <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
               {errorMessage}
             </Text>
           </View>

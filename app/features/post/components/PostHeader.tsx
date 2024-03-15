@@ -1,34 +1,49 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback, useMemo } from 'react';
 import { Pressable, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Post } from '../../../services/api';
-import { Palette } from '../../colors';
+import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
+import Icons from '../../components/Icons';
+import PostKarmaButton from '../../components/PostKarmaButton';
+import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import PostPreview from '../../subreddit/components/PostPreview';
-import { Spacing } from '../../typography';
+import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
-import { markdownIt, markdownRenderRules, markdownStyles } from '../utils';
+import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import PollOption from './PollOption';
+
+function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: string | null): string {
+  let sort = forcedSortOrder ?? suggestedSort ?? 'best';
+  // confidence is deprecated. Display "best" instead
+  if (sort === 'confidence') {
+    sort = 'best';
+  }
+
+  return sort[0].toLocaleUpperCase() + sort.slice(1);
+}
 
 const PostHeader = ({
   post,
   forcedSortOrder,
   onPress,
   onChangeSort,
+  theme,
 }: {
   post: null | Post;
   forcedSortOrder: string | null;
   onPress: () => void;
   onChangeSort: () => void;
+  theme: ColorPalette;
 }) => {
   if (!post) {
     return null;
   }
   const dimensions = useWindowDimensions();
+  const mdStyle = useMarkdownStyle(theme);
 
   const maxGaleryResolutions = useMemo(() => {
     if (!post.data.gallery_data || !post.data.media_metadata) return null;
@@ -65,23 +80,23 @@ const PostHeader = ({
     return true;
   }, []);
 
-  let displayedSortOrder = forcedSortOrder ?? post.data.suggested_sort ?? 'best';
-  // confidence is deprecated. Display "best" instead
-  if (displayedSortOrder === 'confidence') {
-    displayedSortOrder = 'best';
-  }
+  const displayedSortOrder = getDisplaySortOrder(forcedSortOrder, post.data.suggested_sort);
+
+  const authorColor = post.data.stickied ? '#aed285' : theme.primary;
 
   return (
     <View>
-      <View style={{ flexDirection: 'row', marginLeft: 8 }}>
-        <Text
-          style={{
-            color: Palette.primary,
-            fontSize: 16,
-            fontWeight: 'bold',
-          }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          marginHorizontal: 12,
+          columnGap: 8,
+          alignItems: 'center',
+        }}>
+        <Typography variant="overline" style={{ color: authorColor }}>
           {post.data.author}
-        </Text>
+        </Typography>
         <FlairTextView
           flair_richtext={post.data.author_flair_richtext}
           flair_text={post.data.author_flair_text}
@@ -89,82 +104,52 @@ const PostHeader = ({
           pinned={false}
           flair_type={post.data.author_flair_type}
           flair_background_color={post.data.author_flair_background_color}
-          containerStyle={{ marginHorizontal: 4 }}
+          theme={theme}
         />
-
-        <Text style={{ color: Palette.secondary, fontSize: 16, fontWeight: '300' }}>
+        <Typography variant="overline" style={{ color: theme.secondary }}>
           • {timeDifference(post.data.created_utc * 1000)}
-        </Text>
+        </Typography>
       </View>
-      <Pressable onPress={onPress}>
-        <Text
-          style={{
-            color: Palette.onBackgroundLowest,
-            fontSize: 18,
-            paddingHorizontal: Spacing.small,
-          }}>
-          {decode(post.data.title)} ({post.data.domain})
-        </Text>
-      </Pressable>
-      <View style={{ padding: Spacing.small, flexDirection: 'row' }}>
-        <View
-          style={{
-            flex: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: Palette.surfaceVariant,
-            borderRadius: 8,
-            paddingHorizontal: 6,
-            flexDirection: 'row',
-            marginRight: Spacing.small,
-          }}>
-          <MaterialCommunityIcons
-            name="arrow-up-down-bold"
-            color={Palette.onSurfaceVariant}
-            size={16}
-          />
-          <Text style={{ color: Palette.onSurfaceVariant, fontSize: 16, fontWeight: 'bold' }}>
-            {(post.data.ups - post.data.downs).toLocaleString('en-US')}
-          </Text>
-        </View>
+      <Typography
+        variant="titleMedium"
+        style={{
+          paddingTop: 4,
+          paddingHorizontal: Spacing.s12,
+          fontWeight: '400',
+        }}>
+        {decode(post.data.title)}
+      </Typography>
+      <View style={{ padding: Spacing.s12, paddingTop: Spacing.s8, flexDirection: 'row' }}>
         {post.data.link_flair_text && (
           <FlairTextView
             flair_text={post.data.link_flair_text}
             flair_type={post.data.link_flair_type}
             flair_richtext={post.data.link_flair_richtext}
             flair_background_color={post.data.link_flair_background_color}
-            textStyle={{
-              color: Palette.onSurfaceVariant,
-              fontSize: 14,
-              fontWeight: 'bold',
-            }}
             pinned={post.data.pinned}
             stickied={post.data.stickied}
-            containerStyle={{
-              flex: 0,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: Palette.surfaceVariant,
-              borderRadius: 8,
-              paddingHorizontal: Spacing.small,
-              flexDirection: 'row',
-            }}
+            outlined
+            theme={theme}
           />
         )}
       </View>
 
-      <PostPreview post={post} imageWidth={dimensions.width} />
-      {maxGaleryResolutions && (
-        <CarouselView resolutions={maxGaleryResolutions} width={dimensions.width} />
-      )}
+      <Pressable onPress={onPress}>
+        <View style={{ marginHorizontal: 12 }}>
+          <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
+          {maxGaleryResolutions && (
+            <CarouselView resolutions={maxGaleryResolutions} width={dimensions.width - 24} />
+          )}
+        </View>
+      </Pressable>
 
       {post.data.selftext.length > 0 && (
         <View
           style={{
-            borderColor: Palette.outline,
-            padding: Spacing.small,
-            margin: Spacing.small,
-            borderWidth: 1,
+            padding: Spacing.s12,
+            margin: Spacing.s12,
+
+            backgroundColor: theme.surfaceContainer,
             borderRadius: 8,
           }}>
           {post.data.poll_data && (
@@ -179,14 +164,14 @@ const PostHeader = ({
                 ))}
               </View>
 
-              <Text style={{ color: Palette.onBackgroundLowest, alignSelf: 'flex-end' }}>
+              <Text style={{ color: theme.onSurface, alignSelf: 'flex-end' }}>
                 {post.data.poll_data.total_vote_count} votes
               </Text>
 
               {post.data.poll_data.voting_end_timestamp - Date.now() > 0 ? (
-                <Text style={{ color: Palette.onBackgroundLowest }}>Voting still open</Text>
+                <Text style={{ color: theme.onSurface }}>Voting still open</Text>
               ) : (
-                <Text style={{ color: Palette.onBackgroundLowest }}>
+                <Text style={{ color: theme.onSurface }}>
                   Voting closed {timeDifference(post.data.poll_data.voting_end_timestamp)}
                 </Text>
               )}
@@ -194,7 +179,8 @@ const PostHeader = ({
           )}
           <Markdown
             markdownit={markdownIt}
-            style={markdownStyles}
+            // @ts-ignore
+            style={mdStyle}
             onLinkPress={_onLinkPress}
             rules={markdownRenderRules}>
             {decode(post.data.selftext)}
@@ -203,21 +189,36 @@ const PostHeader = ({
       )}
       <View
         style={{
-          backgroundColor: Palette.background,
-          padding: Spacing.small,
-          marginBottom: Spacing.small,
+          backgroundColor: theme.surface,
+          padding: Spacing.s12,
+          marginBottom: Spacing.s12,
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text style={{ color: Palette.onBackground }}>
-          {(post.data.num_comments ?? 0).toLocaleString('en-US')} comments
-        </Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={{ color: Palette.onBackground, fontWeight: '300' }}>sorted by </Text>
+        <PostKarmaButton karma={post.data.score} />
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 8 }}>
+          <Icons name="question-answer" size={14} color={theme.secondary} />
+          <Typography variant="labelMedium" style={{ color: theme.secondary }}>
+            {(post.data.num_comments ?? 0).toLocaleString('en-US')}
+          </Typography>
           <TouchableOpacity onPress={onChangeSort}>
-            <Text style={{ fontWeight: 'bold', color: Palette.secondary }}>
-              {displayedSortOrder}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                borderRadius: 8,
+                backgroundColor: theme.secondaryContainer,
+                paddingLeft: 16,
+                paddingVertical: 6,
+                paddingRight: 8,
+                columnGap: 8,
+                alignItems: 'center',
+              }}>
+              <Text style={{ fontWeight: 'bold', color: theme.onSurfaceVariant }}>
+                {displayedSortOrder}
+              </Text>
+              <Icons name="arrow-drop-down" color={theme.onSurfaceVariant} size={18} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>

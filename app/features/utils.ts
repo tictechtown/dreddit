@@ -48,14 +48,14 @@ export function getVideoUrlFromDubz(url: string): string {
 }
 
 // TODO - DISABLING FOR NOW
-// export function getPreviewImageFromDubz(url: string): string {
-//   // input: https://dubz.co/c/c4c1c3
-//   // output: https://dubz.co/thumbs/c4c1c3.jpg
+export function getPreviewImageFromDubz(url: string): string {
+  // input: https://dubz.co/c/c4c1c3
+  // output: https://dubz.co/thumbs/c4c1c3.jpg
 
-//   const parsed = url.split('/')[url.split('/').length - 1];
-//   const videoId = parsed;
-//   return `https://dubz.co/thumbs/${videoId}.jpg`;
-// }
+  const parsed = url.split('/')[url.split('/').length - 1];
+  const videoId = parsed;
+  return `https://dubz.co/thumbs/${videoId}.jpg`;
+}
 
 export function getPreviewImageFromStreaminMe(url: string): string {
   // input: https://streamin.one/v/314a40fa

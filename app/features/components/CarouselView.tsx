@@ -22,16 +22,23 @@ const CarouselView = ({
   const [pageIndex, setPageIndex] = React.useState(0);
   const renderItem = React.useCallback(({ index }: { index: number }) => {
     return (
-      <Image
+      <View
         style={{
+          flex: 1,
+          backgroundColor: PaletteDark.scrim,
           borderRadius: 12,
-          width: width,
-          height: (width * resolutions[0].y) / resolutions[0].x,
-        }}
-        source={resolutions[index].u.replaceAll('&amp;', '&')}
-        contentFit="contain"
-        priority={index > 0 ? 'low' : 'normal'}
-      />
+        }}>
+        <Image
+          style={{
+            borderRadius: 12,
+            width: width,
+            height: (width * resolutions[0].y) / resolutions[0].x,
+          }}
+          source={resolutions[index].u.replaceAll('&amp;', '&')}
+          contentFit="contain"
+          priority={index > 0 ? 'low' : 'normal'}
+        />
+      </View>
     );
   }, []);
 
@@ -40,7 +47,7 @@ const CarouselView = ({
   }
 
   return (
-    <View style={styles.container}>
+    <View>
       <Carousel
         width={width}
         height={(width * resolutions[0].y) / resolutions[0].x}
@@ -63,16 +70,14 @@ const CarouselView = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 8,
-  },
   pageIndexContainer: {
     position: 'absolute',
     bottom: 10,
     right: 10,
     backgroundColor: PaletteDark.surfaceContainerHigh,
-    borderRadius: 10,
+    borderRadius: Spacing.s8,
     paddingHorizontal: Spacing.s8,
+    paddingVertical: 2,
     flexDirection: 'row',
   },
   pageIndexTextColor: {

@@ -1,3 +1,5 @@
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import * as React from 'react';
@@ -12,6 +14,8 @@ export default function Page() {
   const { title, uri } = useLocalSearchParams();
   const progress = useSharedValue(0);
 
+  const filename = (uri as string).split('/').pop();
+
   console.log('showing', uri);
 
   return (
@@ -25,20 +29,31 @@ export default function Page() {
           headerRight: () => {
             return (
               <Icons
-                onPress={() => {
-                  // TODO - Download, using expo-file-system
-                  // const downloadResumable = FileSystem.createDownloadResumable(
-                  //   'http://techslides.com/demos/sample-videos/small.mp4',
-                  //   FileSystem.documentDirectory + 'small.mp4',
-                  //   {},
-                  //   () => {}
-                  // );
-                  // try {
-                  //   const { uri } = await downloadResumable.downloadAsync();
-                  //   console.log('Finished downloading to ', uri);
-                  // } catch (e) {
-                  //   console.error(e);
-                  // }
+                onPress={async () => {
+                  const result = await FileSystem.downloadAsync(
+                    uri as string,
+                    `${FileSystem.documentDirectory ?? ''}${filename}`
+                  );
+
+                  // Log the download result
+                  console.log(result);
+
+                  const { status } = await MediaLibrary.requestPermissionsAsync(true);
+                  if (status === 'granted') {
+                    try {
+                      const asset = await MediaLibrary.createAssetAsync(result.uri);
+                      const album = await MediaLibrary.getAlbumAsync('Dreddit');
+                      if (album == null) {
+                        await MediaLibrary.createAlbumAsync('Dreddit', asset, false);
+                      } else {
+                        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+                      }
+                    } catch (err) {
+                      console.log('Save err: ', err);
+                    }
+                  } else if (status === 'denied') {
+                    alert('please allow permissions to download');
+                  }
                 }}
                 name="download"
                 size={24}

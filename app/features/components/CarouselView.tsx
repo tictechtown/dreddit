@@ -60,6 +60,7 @@ const CarouselView = ({
         autoFillData={false}
       />
       <View style={styles.pageIndexContainer}>
+        <View style={styles.pageIndexBackground} />
         <Typography variant="labelMedium">{pageIndex + 1}</Typography>
         <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
           /{resolutions.length}
@@ -74,11 +75,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: PaletteDark.surfaceContainerHigh,
     borderRadius: Spacing.s8,
     paddingHorizontal: Spacing.s8,
     paddingVertical: 2,
     flexDirection: 'row',
+  },
+  pageIndexBackground: {
+    backgroundColor: PaletteDark.surfaceContainerHigh,
+    opacity: 0.6,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderRadius: Spacing.s8,
   },
   pageIndexTextColor: {
     color: PaletteDark.onSurfaceVariant,

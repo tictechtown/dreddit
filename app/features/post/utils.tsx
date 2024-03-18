@@ -230,6 +230,7 @@ export const markdownRenderRules: RenderRules = {
         ...styles.body,
         fontSize: 10,
         lineHeight: 16,
+        textAlignVertical: 'top',
       }}>
       {node.content}
     </Text>

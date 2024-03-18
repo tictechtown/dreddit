@@ -118,13 +118,24 @@ const createBlockUsersSlice: StateCreator<BlockedUserState> = (set) => ({
     })),
 });
 
+interface VideoStartSoundState {
+  videoStartSound: boolean;
+  updateVideoStartSound: (entry: boolean) => void;
+}
+
+const createVideoStartSoundSlice: StateCreator<VideoStartSoundState> = (set) => ({
+  videoStartSound: false,
+  updateVideoStartSound: (entry) => set(() => ({ videoStartSound: entry })),
+});
+
 export const useStore = create<
   FavoriteState &
     SettingsState &
     SavedPostState &
     ColorSchemeState &
     BlockedSubredditState &
-    BlockedUserState
+    BlockedUserState &
+    VideoStartSoundState
 >()(
   persist(
     (...a) => ({
@@ -134,6 +145,7 @@ export const useStore = create<
       ...createColorSchemeSlice(...a),
       ...createBlockSubredditSlice(...a),
       ...createBlockUsersSlice(...a),
+      ...createVideoStartSoundSlice(...a),
     }),
 
     {

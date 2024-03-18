@@ -90,6 +90,15 @@ const SettingsView = () => {
         />
 
         <Row
+          icon={'play-circle-outline'}
+          title={'Video Settings'}
+          theme={theme}
+          supporting={'Customize the in-app video player behavior'}
+          onPress={() => {
+            router.push('features/settings/videoPlayer');
+          }}
+        />
+        <Row
           icon={'person'}
           title={'App Info'}
           theme={theme}

@@ -42,7 +42,6 @@ const filterPosts = (
       !bannedSubreddits.includes(p.data.subreddit_name_prefixed)
     );
   });
-  console.log(posts, v, blockedUsers, bannedSubreddits);
   return v;
 };
 

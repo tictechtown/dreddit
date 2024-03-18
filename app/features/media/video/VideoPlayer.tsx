@@ -29,6 +29,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
+import { useStore } from '../../../services/store';
 import { PaletteDark } from '../../colors';
 import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
@@ -62,11 +63,13 @@ const VideoPlayer = (props: Props) => {
   const videoRef = useRef<Video>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const dimensions = useWindowDimensions();
+  const isMutedAtLaunch = useStore((state) => !state.videoStartSound);
+
   const [playbackInstanceInfo, setPlaybackInstanceInfo] = useState({
     position: 0,
     duration: 0,
     state: PlaybackStates.Loading,
-    isMuted: true,
+    isMuted: isMutedAtLaunch,
     readyToDisplay: false,
     videoOrientation: 'landscape',
   });
@@ -377,7 +380,7 @@ const VideoPlayer = (props: Props) => {
           onFullscreenUpdate={onFullscreenUpdate}
           resizeMode={ResizeMode.CONTAIN}
           isLooping={true}
-          isMuted={true}
+          isMuted={isMutedAtLaunch}
           shouldPlay
           onPlaybackStatusUpdate={updatePlaybackCallback}
           onReadyForDisplay={updateReadyForDisplay}

@@ -62,13 +62,9 @@ const PostToolbar = ({
             params: { postid: post.data.id },
           }}
           asChild>
-          <TouchableNativeFeedback
-            hitSlop={20}
-            background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true, 20)}>
-            <View>
-              <PostCommentButton comments={post.data.num_comments} theme={theme} />
-            </View>
-          </TouchableNativeFeedback>
+          <TouchableOpacity hitSlop={20}>
+            <PostCommentButton comments={post.data.num_comments} theme={theme} />
+          </TouchableOpacity>
         </Link>
       </View>
 

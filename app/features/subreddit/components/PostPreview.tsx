@@ -91,7 +91,7 @@ const PostPreviewStaticMedia = ({
   return (
     <View>
       <Image
-        style={{ width, height, borderRadius: 28 }}
+        style={{ width, height, borderRadius: 12 }}
         source={source.replaceAll('&amp;', '&')}
         contentFit="cover"
       />

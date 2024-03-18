@@ -31,6 +31,21 @@ type Props = {
 
 const keyExtractor = (item: Post, index: number) => `${item.data.id}.${index}`;
 
+const filterPosts = (
+  posts: Post[] | undefined,
+  blockedUsers: string[],
+  bannedSubreddits: string[]
+): Post[] => {
+  const v = (posts ?? []).filter((p: Post) => {
+    return (
+      !blockedUsers.includes(p.data.author) &&
+      !bannedSubreddits.includes(p.data.subreddit_name_prefixed)
+    );
+  });
+  console.log(posts, v, blockedUsers, bannedSubreddits);
+  return v;
+};
+
 type SortOrderProps = {
   sortOrder: string;
   onSortOrderChanged: (value: string) => void;
@@ -85,11 +100,14 @@ const SubRedditView = (props: Props) => {
     state.removeFromFavorite,
   ]);
 
-  const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
-    state.savedPosts,
-    state.addToSavedPosts,
-    state.removeFromSavedPosts,
-  ]);
+  const [savedPosts, blockedUsers, bannedSubreddits, addToSavedPosts, removeFromSavedPosts] =
+    useStore((state) => [
+      state.savedPosts,
+      state.blockedUsers,
+      state.blockedSubreddits,
+      state.addToSavedPosts,
+      state.removeFromSavedPosts,
+    ]);
 
   const savedPostIds: Record<string, boolean> = useMemo(() => {
     const result = savedPosts.reduce(function (map: Record<string, boolean>, obj) {
@@ -109,7 +127,7 @@ const SubRedditView = (props: Props) => {
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
   const flatListRef = React.useRef<FlatList>(null);
   // variables
-  const snapPoints = useMemo(() => ['25%', '42%'], []);
+  const snapPoints = useMemo(() => ['25%', '38%'], []);
 
   const isFavorite = favorites.map((f) => f.name).includes(props.subreddit);
 
@@ -129,11 +147,7 @@ const SubRedditView = (props: Props) => {
         t: topOrder,
       });
 
-      // if (props.subreddit !== 'all') {
-      //   const allFlairs = getAllUniqueFlairs(data?.posts, flairs);
-      //   setFlairs(allFlairs);
-      // }
-      setPosts(data?.posts ?? []);
+      setPosts(filterPosts(data?.posts, blockedUsers, bannedSubreddits));
       setAfter(data?.after);
       if (data === undefined) {
         console.log('data', data);
@@ -143,7 +157,7 @@ const SubRedditView = (props: Props) => {
     goFetch();
     // scroll to top
     flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
-  }, [props.subreddit, sortOrder, topOrder]);
+  }, [props.subreddit, sortOrder, topOrder, blockedUsers, bannedSubreddits]);
 
   const refreshData = async () => {
     setRefreshLoading(true);
@@ -151,11 +165,7 @@ const SubRedditView = (props: Props) => {
       v: `${Date.now()}`,
       t: topOrder,
     });
-    // if (props.subreddit !== 'all') {
-    //   const allFlairs = getAllUniqueFlairs(data?.posts, flairs);
-    //   setFlairs(allFlairs);
-    // }
-    setPosts(data?.posts ?? []);
+    setPosts(filterPosts(data?.posts, blockedUsers, bannedSubreddits));
     setAfter(data?.after);
     // scroll to top
     flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
@@ -167,7 +177,10 @@ const SubRedditView = (props: Props) => {
       setLoading(true);
       const options = after ? { after } : undefined;
       const data = await new RedditApi().getSubmissions(sortOrder, props.subreddit, options);
-      setPosts((oldValue) => [...oldValue, ...(data?.posts ?? [])]);
+      setPosts((oldValue) => [
+        ...oldValue,
+        ...filterPosts(data?.posts, blockedUsers, bannedSubreddits),
+      ]);
       setAfter(data?.after);
       // if (props.subreddit !== 'all') {
       //   const allFlairs = getAllUniqueFlairs(data?.posts, flairs);
@@ -261,8 +274,6 @@ const SubRedditView = (props: Props) => {
     }
     return posts;
   }, [selectedFlair, posts]);
-
-  console.log('error', error);
 
   return (
     <>
@@ -535,9 +546,9 @@ const SubRedditView = (props: Props) => {
             ref={bottomSheetModalRef}
             index={1}
             snapPoints={snapPoints}
-            backgroundStyle={{ backgroundColor: theme.surfaceContainerHigh }}
+            backgroundStyle={{ backgroundColor: theme.surfaceContainer }}
             handleStyle={{
-              backgroundColor: theme.surfaceContainerHigh,
+              backgroundColor: theme.surfaceContainer,
               borderTopLeftRadius: 14,
               borderTopRightRadius: 14,
             }}

@@ -71,6 +71,25 @@ const SettingsView = () => {
           }}
         />
         <Row
+          icon={'report'}
+          title={'Banned Subreddits'}
+          supporting={'Customize which subreddits are banned'}
+          theme={theme}
+          onPress={() => {
+            router.push('features/settings/bannedSubreddits');
+          }}
+        />
+        <Row
+          icon={'block'}
+          title={'Blocked Users'}
+          supporting={'Customize which users are banned'}
+          theme={theme}
+          onPress={() => {
+            router.push('features/settings/blockedUsers');
+          }}
+        />
+
+        <Row
           icon={'person'}
           title={'App Info'}
           theme={theme}

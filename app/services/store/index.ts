@@ -80,17 +80,64 @@ const createColorSchemeSlice: StateCreator<ColorSchemeState> = (set) => ({
   updateColorScheme: (entry) => set(() => ({ colorScheme: entry })),
 });
 
-export const useStore = create<FavoriteState & SettingsState & SavedPostState & ColorSchemeState>()(
+interface BlockedSubredditState {
+  blockedSubreddits: string[];
+  addToBlockedSubreddits: (entry: string) => void;
+  removeFromBlockedSubreddits: (entry: string) => void;
+}
+
+const createBlockSubredditSlice: StateCreator<BlockedSubredditState> = (set) => ({
+  blockedSubreddits: [],
+  addToBlockedSubreddits: (entry: string) =>
+    set((state) => ({
+      blockedSubreddits: [entry, ...state.blockedSubreddits],
+    })),
+
+  removeFromBlockedSubreddits: (entry: string) =>
+    set((state) => ({
+      blockedSubreddits: state.blockedSubreddits.filter((e) => e !== entry),
+    })),
+});
+
+interface BlockedUserState {
+  blockedUsers: string[];
+  addToBlockedUsers: (entry: string) => void;
+  removeFromBlockedUsers: (entry: string) => void;
+}
+
+const createBlockUsersSlice: StateCreator<BlockedUserState> = (set) => ({
+  blockedUsers: [],
+  addToBlockedUsers: (entry: string) =>
+    set((state) => ({
+      blockedUsers: [entry, ...state.blockedUsers],
+    })),
+
+  removeFromBlockedUsers: (entry: string) =>
+    set((state) => ({
+      blockedUsers: state.blockedUsers.filter((e) => e !== entry),
+    })),
+});
+
+export const useStore = create<
+  FavoriteState &
+    SettingsState &
+    SavedPostState &
+    ColorSchemeState &
+    BlockedSubredditState &
+    BlockedUserState
+>()(
   persist(
     (...a) => ({
       ...createSubredditSlice(...a),
       ...createSettingsSlice(...a),
       ...createSavedPostSlice(...a),
       ...createColorSchemeSlice(...a),
+      ...createBlockSubredditSlice(...a),
+      ...createBlockUsersSlice(...a),
     }),
 
     {
-      name: 'favorites',
+      name: 'storage',
       storage: createJSONStorage(() => AsyncStorage),
     }
   )

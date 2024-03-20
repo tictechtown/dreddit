@@ -327,14 +327,6 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                     />
                   </View>
                 </TouchableNativeFeedback>
-                <TouchableNativeFeedback
-                  disabled={true}
-                  hitSlop={5}
-                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
-                  <View>
-                    <Icons name={'search'} size={24} color={theme.onBackground} />
-                  </View>
-                </TouchableNativeFeedback>
               </View>
             );
           },

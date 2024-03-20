@@ -30,7 +30,13 @@ const Row = ({ icon, title, theme }: RowProps) => {
   );
 };
 
-const PostItemBottomSheet = ({ post }: { post: Post }) => {
+const PostItemBottomSheet = ({
+  post,
+  onClose,
+}: {
+  post: Post;
+  onClose: (reason: string | null) => void;
+}) => {
   const theme = useTheme();
   const { addToBannedList, addToBlockList } = useStore((state) => ({
     addToBannedList: state.addToBlockedSubreddits,
@@ -44,6 +50,7 @@ const PostItemBottomSheet = ({ post }: { post: Post }) => {
           router.push({
             pathname: `features/subreddit/${post.data.subreddit}`,
           });
+          onClose(null);
         }}>
         <Row
           icon={'arrow-outward'}
@@ -57,18 +64,21 @@ const PostItemBottomSheet = ({ post }: { post: Post }) => {
             pathname: `features/user`,
             params: { userid: post.data.author },
           });
+          onClose(null);
         }}>
         <Row icon={'person'} title={`View ${post.data.author} Profile`} theme={theme} />
       </Pressable>
       <Pressable
         onPress={() => {
           addToBlockList(post.data.author);
+          onClose('BLOCKED_USER');
         }}>
         <Row icon={'block'} title={`Block ${post.data.author}`} theme={theme} />
       </Pressable>
       <Pressable
         onPress={() => {
           addToBannedList(post.data.subreddit_name_prefixed);
+          onClose('BANNED_SUBREDDIT');
         }}>
         <Row icon={'report'} title={`Hide ${post.data.subreddit_name_prefixed}`} theme={theme} />
       </Pressable>
@@ -77,6 +87,7 @@ const PostItemBottomSheet = ({ post }: { post: Post }) => {
         <Pressable
           onPress={() => {
             router.push(onLinkPress(post));
+            onClose(null);
           }}>
           <Row icon={'verified'} title={'View Original Post'} theme={theme} />
         </Pressable>

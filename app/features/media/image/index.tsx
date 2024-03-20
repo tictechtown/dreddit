@@ -8,11 +8,13 @@ import { useSharedValue } from 'react-native-reanimated';
 import { PaletteDark } from '../../colors';
 import Icons from '../../components/Icons';
 import ProgressBarView from '../../components/ProgressBarView';
+import ToastView from '../../components/ToastView';
 import ImageView from './ImageView';
 
 export default function Page() {
   const { title, uri } = useLocalSearchParams();
   const progress = useSharedValue(0);
+  const [displayToast, setDisplayToast] = React.useState(false);
 
   const filename = (uri as string).split('/').pop();
 
@@ -48,6 +50,7 @@ export default function Page() {
                       } else {
                         await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
                       }
+                      setDisplayToast(true);
                     } catch (err) {
                       console.log('Save err: ', err);
                     }
@@ -64,6 +67,13 @@ export default function Page() {
       />
       <ProgressBarView progress={progress} />
       <ImageView uri={uri as string} progress={progress} />
+      <ToastView
+        show={displayToast}
+        label={'Image downloaded'}
+        onClose={() => {
+          setDisplayToast(false);
+        }}
+      />
     </View>
   );
 }

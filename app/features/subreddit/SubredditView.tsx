@@ -19,6 +19,7 @@ import Icons from '../components/Icons';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import ItemSeparator from '../components/ItemSeparator';
 import Tabs from '../components/Tabs';
+import ToastView from '../components/ToastView';
 import Typography from '../components/Typography';
 import ModalOptionRow from './components/ModalOptionRow';
 import PostItemBottomSheet from './components/PostItemBottomSheet';
@@ -76,6 +77,9 @@ const SubRedditView = (props: Props) => {
 
   const [subredditData, setSubredditData] = useState<SubReddit['data'] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // toasts
+  const [displayUserBlockedToast, setDisplayUserBlockedToast] = useState(false);
+  const [displaySubredditBannedToast, setDisplaySubredditBannedToast] = useState(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [after, setAfter] = useState<string | null>(null);
@@ -554,7 +558,20 @@ const SubRedditView = (props: Props) => {
             handleIndicatorStyle={{
               backgroundColor: theme.onSurface,
             }}>
-            {showingModal.post && <PostItemBottomSheet post={showingModal.post} />}
+            {showingModal.post && (
+              <PostItemBottomSheet
+                post={showingModal.post}
+                onClose={(reason) => {
+                  bottomSheetModalRef.current?.close();
+                  setShowingModal({ display: false, post: null, popup: false });
+                  if (reason === 'BLOCKED_USER') {
+                    setDisplayUserBlockedToast(true);
+                  } else if (reason === 'BANNED_SUBREDDIT') {
+                    setDisplaySubredditBannedToast(true);
+                  }
+                }}
+              />
+            )}
           </BottomSheetModal>
         </BottomSheetModalProvider>
       </View>
@@ -563,6 +580,20 @@ const SubRedditView = (props: Props) => {
           <IndeterminateProgressBarView />
         </View>
       )}
+      <ToastView
+        show={displayUserBlockedToast}
+        label={'User Blocked'}
+        onClose={() => {
+          setDisplayUserBlockedToast(false);
+        }}
+      />
+      <ToastView
+        show={displaySubredditBannedToast}
+        label={'Subreddit Banned'}
+        onClose={() => {
+          setDisplaySubredditBannedToast(false);
+        }}
+      />
     </>
   );
 };

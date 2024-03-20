@@ -82,7 +82,7 @@ const PostHeader = ({
 
   const displayedSortOrder = getDisplaySortOrder(forcedSortOrder, post.data.suggested_sort);
 
-  const authorColor = post.data.stickied ? '#aed285' : theme.primary;
+  const authorColor = post.data.stickied ? theme['custom-green'] : theme.primary;
 
   return (
     <View>

@@ -110,7 +110,7 @@ const CommentItem = ({
   let fontColor = comment.data.is_submitter ? theme.primary : theme.onSurfaceVariant;
   fontColor =
     comment.data.author === 'AutoModerator' || comment.data.distinguished !== null
-      ? '#aed285'
+      ? theme['custom-green']
       : fontColor;
   const opacity = fontColor === theme.onSurfaceVariant ? 0.6 : 1;
   const hasReplies = comment.data.replies !== undefined;

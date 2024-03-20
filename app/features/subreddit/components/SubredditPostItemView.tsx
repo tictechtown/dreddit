@@ -92,7 +92,7 @@ const SubredditPostItemView = ({
 
   const isCrosspost = Array.isArray(post.data.crosspost_parent_list);
   const imageWidth = width - 16 * 2;
-  const authorColor = post.data.stickied ? '#aed285' : theme.primary;
+  const authorColor = post.data.stickied ? theme['custom-green'] : theme.primary;
 
   return (
     <Pressable onPress={onPress}>

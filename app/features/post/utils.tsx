@@ -76,12 +76,12 @@ export function useMarkdownStyle(theme: ColorPalette) {
         marginVertical: Spacing.s8,
       },
       blockquote: {
-        backgroundColor: theme.surface,
         borderColor: theme.outlineVariant,
         borderLeftWidth: 2,
+        backgroundColor: 'transparent',
         marginLeft: 0,
         paddingLeft: 6,
-        marginBottom: Spacing.s8,
+        marginVertical: Spacing.s4,
       },
       fence: {
         backgroundColor: theme.surfaceVariant,

@@ -393,58 +393,78 @@ const VideoPlayer = (props: Props) => {
               ...StyleSheet.absoluteFillObject,
               position: 'absolute',
             }}>
-            <View
-              pointerEvents="none"
-              style={{
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
-                height: '55%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Animated.View style={fastRewindOpacityStyle}>
-                <View
-                  style={{
-                    marginLeft: 16,
-                    backgroundColor: PaletteDark.onSurface,
-                    padding: 16,
-                    paddingHorizontal: 24,
-                    borderRadius: 48,
-                    opacity: 0.9,
-                    alignItems: 'center',
-                  }}>
-                  <Icons name={'fast-rewind'} size={25} color={PaletteDark.surface} />
-                  <Text>10s</Text>
-                </View>
-              </Animated.View>
-            </View>
-            <View
-              style={{
-                position: 'absolute',
-                right: 0,
-                bottom: 0,
-                height: '55%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Animated.View style={fastForwardOpacityStyle}>
-                <View
-                  style={{
-                    marginRight: 16,
-                    backgroundColor: PaletteDark.onSurface,
-                    padding: 16,
-                    paddingHorizontal: 24,
-                    borderRadius: 48,
-                    opacity: 0.9,
-                    alignItems: 'center',
-                  }}>
-                  <Icons name={'fast-forward'} size={25} color={PaletteDark.surface} />
-                  <Text>10s</Text>
-                </View>
-              </Animated.View>
-            </View>
             <Animated.View style={controlsOpacityStyle}>
+              {/** Scrim */}
+              <View
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                  position: 'absolute',
+                  backgroundColor: PaletteDark.scrim,
+                  opacity: 0.6,
+                }}></View>
+
+              {/** Fast Rewind */}
+              <View
+                pointerEvents="none"
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  bottom: 0,
+                  height: '55%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Animated.View style={fastRewindOpacityStyle}>
+                  <View
+                    style={{
+                      marginLeft: 16,
+                      backgroundColor: PaletteDark.inverseSurface,
+                      padding: 16,
+                      paddingHorizontal: 24,
+                      borderRadius: 48,
+                      alignItems: 'center',
+                    }}>
+                    <Icons name={'fast-rewind'} size={25} color={PaletteDark.inverseOnSurface} />
+                    <Typography
+                      variant="labelLarge"
+                      style={{ color: PaletteDark.inverseOnSurface }}>
+                      10s
+                    </Typography>
+                  </View>
+                </Animated.View>
+              </View>
+              {/** Fast Forward */}
+              <View
+                pointerEvents="none"
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 0,
+                  height: '55%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Animated.View style={fastForwardOpacityStyle}>
+                  <View
+                    style={{
+                      marginRight: 16,
+                      backgroundColor: PaletteDark.inverseSurface,
+                      padding: 16,
+                      paddingHorizontal: 24,
+                      borderRadius: 48,
+                      alignItems: 'center',
+                    }}>
+                    <Icons name={'fast-forward'} size={25} color={PaletteDark.inverseOnSurface} />
+                    <Typography
+                      variant="labelLarge"
+                      style={{ color: PaletteDark.inverseOnSurface }}>
+                      10s
+                    </Typography>
+                  </View>
+                </Animated.View>
+              </View>
+
+              {/** Play Button */}
               <View
                 pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}
                 style={{
@@ -482,27 +502,47 @@ const VideoPlayer = (props: Props) => {
                   </View>
                 </TouchableNativeFeedback>
               </View>
+              {/** Volume control */}
+              <View
+                pointerEvents={controlsState === ControlStates.Visible ? 'box-none' : 'none'}
+                style={{
+                  position: 'absolute',
+                  top: 16,
+                  right: 8,
+                }}>
+                <MaterialIcons.Button
+                  name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
+                  size={18}
+                  hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                  iconStyle={{ marginRight: 0 }}
+                  borderRadius={24}
+                  style={{ borderColor: PaletteDark.outline, borderWidth: 1 }}
+                  backgroundColor={PaletteDark.surface}
+                  color={PaletteDark.onSurface}
+                  onPress={toggleMute}
+                />
+              </View>
 
+              {/* Bottom Bar */}
               <View
                 style={{
                   position: 'absolute',
                   bottom: 0,
-                  backgroundColor: PaletteDark.scrim,
-                  opacity: 0.8,
-                  paddingVertical: 16,
-                  paddingBottom: 40,
-                  paddingHorizontal: 12,
-                  width: '100%',
+                  left: 0,
+                  right: 0,
+                  paddingBottom: 80,
+                  paddingLeft: 4,
+                  paddingRight: 16,
                 }}>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'flex-end',
-                    paddingBottom: 10,
+                    paddingBottom: 12,
                     justifyContent: 'flex-end',
                     alignContent: 'flex-end',
                   }}>
-                  <View style={{ flex: 1 }}>
+                  <View style={{ flex: 1, paddingLeft: 12 }}>
                     <Typography variant="bodyMedium">
                       {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
                       <Typography
@@ -513,41 +553,25 @@ const VideoPlayer = (props: Props) => {
                     </Typography>
                   </View>
                   <Text style={{ color: PaletteDark.onBackground }}></Text>
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      rowGap: 8,
-                      flex: 0,
-                    }}>
-                    <MaterialIcons.Button
-                      name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
-                      size={15}
-                      hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                      iconStyle={{ marginRight: 0 }}
-                      borderRadius={24}
-                      style={{ borderColor: PaletteDark.outline, borderWidth: 1 }}
-                      backgroundColor={PaletteDark.surface}
-                      color={PaletteDark.onSurface}
-                      onPress={toggleMute}
-                    />
-                    <View style={{ marginLeft: 10, marginRight: 10 }} />
-                    <MaterialIcons.Button
-                      name={'fullscreen'}
-                      size={28}
-                      hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                      iconStyle={{ marginRight: 0 }}
-                      borderRadius={24}
-                      backgroundColor={PaletteDark.primaryContainer}
-                      color={PaletteDark.onPrimaryContainer}
-                      onPress={enterFullScreen}
-                    />
-                  </View>
+                  <MaterialIcons.Button
+                    name={'fullscreen'}
+                    size={28}
+                    hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                    iconStyle={{ marginRight: 0 }}
+                    borderRadius={24}
+                    backgroundColor={PaletteDark.primaryContainer}
+                    color={PaletteDark.onPrimaryContainer}
+                    onPress={enterFullScreen}
+                  />
                 </View>
                 <Slider
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                  style={{ flex: 1, borderColor: 'white', borderWidth: 1 }}
+                  hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
+                  style={{
+                    flex: 1,
+                    borderColor: PaletteDark.onSurface,
+                    borderWidth: 1,
+                    marginHorizontal: 0,
+                  }}
                   minimumTrackTintColor={PaletteDark.onSurface}
                   thumbTintColor={PaletteDark.onSurface}
                   value={

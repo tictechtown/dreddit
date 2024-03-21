@@ -1,0 +1,21 @@
+diff --git a/node_modules/markdown-it/lib/rules_block/table.js b/node_modules/markdown-it/lib/rules_block/table.js
+index 3cb416f..047a3a9 100644
+--- a/node_modules/markdown-it/lib/rules_block/table.js
++++ b/node_modules/markdown-it/lib/rules_block/table.js
+@@ -129,7 +129,15 @@ module.exports = function table(state, startLine, endLine, silent) {
+   // header row will define an amount of columns in the entire table,
+   // and align row should be exactly the same (the rest of the rows can differ)
+   columnCount = columns.length;
+-  if (columnCount === 0 || columnCount !== aligns.length) { return false; }
++
++  if (aligns.length - columnCount === 1) {
++    aligns.pop();
++  }
++
++  if (columnCount === 0 || columnCount !== aligns.length) { 
++    console.log('parsing line 3 false', lineText, columnCount, aligns.length);
++
++    return false; }
+ 
+   if (silent) { return true; }
+ 

@@ -2,7 +2,7 @@ import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback, useMemo } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
 import { ColorPalette } from '../../colors';
 import Typography from '../../components/Typography';
@@ -94,15 +94,15 @@ const CommentItem = ({
   if (comment.kind === 'more') {
     return (
       <TouchableOpacity onPress={fetchMore}>
-        <Text
+        <Typography
+          variant="labelSmall"
           style={{
             color: theme.secondary,
-            fontSize: 10,
             paddingLeft: comment.data.depth ? Spacing.s16 * comment.data.depth : Spacing.s8,
             marginBottom: Spacing.s12,
           }}>
           Load {comment.data.count} more {comment.data.count > 1 ? 'comments' : 'comment'}
-        </Text>
+        </Typography>
       </TouchableOpacity>
     );
   }

@@ -1,7 +1,7 @@
 import { Stack, router } from 'expo-router';
 import { decode } from 'html-entities';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { Comment, Post, RedditApi, Trophy, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../colors';
@@ -176,9 +176,11 @@ const UserView = (props: Props) => {
           <Typography variant="headlineMedium">{props.userId.trim()}</Typography>
           <View style={{ flexDirection: 'row', marginBottom: 20 }}>
             {userData.data.subreddit.over_18 && (
-              <Text style={{ marginRight: Spacing.s12, color: 'red', fontWeight: 'bold' }}>
+              <Typography
+                variant="bodyMedium"
+                style={{ marginRight: Spacing.s12, color: 'red', fontWeight: 'bold' }}>
                 NSFW
-              </Text>
+              </Typography>
             )}
 
             <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant }}>
@@ -239,7 +241,7 @@ const UserView = (props: Props) => {
                   borderWidth: 1,
                   borderRadius: 8,
                 }}>
-                <Text style={{ color: theme.onSurface }}>
+                <Typography variant="bodyMedium">
                   No{' '}
                   {sortOrder === 'posts'
                     ? 'post'
@@ -247,7 +249,7 @@ const UserView = (props: Props) => {
                       ? 'comment'
                       : 'trophies'}{' '}
                   sent
-                </Text>
+                </Typography>
               </View>
             );
           }

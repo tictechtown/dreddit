@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 import { Link, Stack } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Keyboard, Pressable, Text, TextInput, View } from 'react-native';
+import { FlatList, Keyboard, Pressable, TextInput, View } from 'react-native';
 import { Post, RedditApi, SubReddit, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../colors';
@@ -92,7 +92,11 @@ const SearchResultSub = (props: { result: SubReddit; theme: ColorPalette }) => {
                   {data.display_name_prefixed}
                 </Typography>
 
-                {data.over18 && <Text style={{ flex: 0, color: theme.error }}>NSFW</Text>}
+                {data.over18 && (
+                  <Typography variant="bodyMedium" style={{ flex: 0, color: theme.error }}>
+                    NSFW
+                  </Typography>
+                )}
               </View>
               <View style={{ flexDirection: 'row', columnGap: 4, alignItems: 'center' }}>
                 <Ionicons name="people" size={12} color={theme.onSurfaceVariant} />
@@ -171,9 +175,15 @@ const SearchResultUser = (props: { result: User; theme: ColorPalette }) => {
 
                 <View style={{ flexDirection: 'row', columnGap: 4 }}>
                   {data.subreddit?.over_18 && (
-                    <Text style={{ flex: 0, color: theme.error }}>NSFW</Text>
+                    <Typography variant="bodyMedium" style={{ flex: 0, color: theme.error }}>
+                      NSFW
+                    </Typography>
                   )}
-                  {data.is_mod && <Text style={{ flex: 0, color: theme.secondary }}>Mod</Text>}
+                  {data.is_mod && (
+                    <Typography variant="bodyMedium" style={{ flex: 0, color: theme.secondary }}>
+                      Mod
+                    </Typography>
+                  )}
                 </View>
               </View>
 
@@ -190,9 +200,12 @@ const SearchResultUser = (props: { result: User; theme: ColorPalette }) => {
               </Typography>
 
               {data.subreddit?.public_description && (
-                <Text style={{ color: theme.onBackground }} numberOfLines={2}>
+                <Typography
+                  variant="bodyMedium"
+                  style={{ color: theme.onBackground }}
+                  numberOfLines={2}>
                   {decode(data.subreddit.public_description)}
-                </Text>
+                </Typography>
               )}
             </View>
           </View>

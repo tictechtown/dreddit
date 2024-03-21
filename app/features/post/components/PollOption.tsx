@@ -1,5 +1,6 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
+import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 
 type Props = {
@@ -38,8 +39,8 @@ const PollOption = (props: Props) => {
           paddingVertical: Spacing.s12,
           paddingHorizontal: Spacing.s16,
         }}>
-        <Text style={{ color: theme.onBackground }}>{props.option.text}</Text>
-        {showVotes && <Text style={{ color: theme.onBackground }}>{props.option.vote_count}</Text>}
+        <Typography variant="bodyMedium">{props.option.text}</Typography>
+        {showVotes && <Typography variant="bodyMedium">{props.option.vote_count}</Typography>}
       </View>
     </View>
   );

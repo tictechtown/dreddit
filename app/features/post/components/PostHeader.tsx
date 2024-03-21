@@ -2,7 +2,7 @@ import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback, useMemo } from 'react';
-import { Pressable, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { Pressable, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Post } from '../../../services/api';
 import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
@@ -164,16 +164,16 @@ const PostHeader = ({
                 ))}
               </View>
 
-              <Text style={{ color: theme.onSurface, alignSelf: 'flex-end' }}>
+              <Typography variant="bodyMedium" style={{ alignSelf: 'flex-end' }}>
                 {post.data.poll_data.total_vote_count} votes
-              </Text>
+              </Typography>
 
               {post.data.poll_data.voting_end_timestamp - Date.now() > 0 ? (
-                <Text style={{ color: theme.onSurface }}>Voting still open</Text>
+                <Typography variant="bodyMedium">Voting still open</Typography>
               ) : (
-                <Text style={{ color: theme.onSurface }}>
+                <Typography variant="bodyMedium">
                   Voting closed {timeDifference(post.data.poll_data.voting_end_timestamp)}
-                </Text>
+                </Typography>
               )}
             </View>
           )}
@@ -214,9 +214,11 @@ const PostHeader = ({
                 columnGap: 8,
                 alignItems: 'center',
               }}>
-              <Text style={{ fontWeight: 'bold', color: theme.onSurfaceVariant }}>
+              <Typography
+                variant="bodyMedium"
+                style={{ fontWeight: 'bold', color: theme.onSurfaceVariant }}>
                 {displayedSortOrder}
-              </Text>
+              </Typography>
               <Icons name="arrow-drop-down" color={theme.onSurfaceVariant} size={18} />
             </View>
           </TouchableOpacity>

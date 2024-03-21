@@ -2,13 +2,9 @@
 
 An open-souce, Reddit client written in React-Native, using Material Design 3.
 
-## Description
+![Screenshots](website/screenshots.png)
 
-![View posts/comments](website/1265@3x.png)
-![Follow your favorite subreddits](website/1267@3x.png)
-![Material Design 3 support](website/1268@3x.png)
-![User View](website/1269@3x.png)
-![Light/Dark Mode Support](website/1270@3x.png)
+## Description
 
 ### Functionality
 

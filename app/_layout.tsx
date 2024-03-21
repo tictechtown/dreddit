@@ -89,6 +89,7 @@ export default function Layout() {
               headerStyle: {
                 backgroundColor: schemes[color ?? 'light'].surface,
               },
+              headerBackTitleVisible: false,
               headerShadowVisible: false,
               headerTintColor: schemes[color ?? 'light'].onSurface,
               navigationBarColor: 'transparent',

@@ -5,15 +5,15 @@ import { Spacing } from '../tokens';
 import Icons, { IconName } from './Icons';
 import Typography from './Typography';
 
-type TabProps<T extends string> = {
+type TabProps<T extends string | number> = {
   tabId: T;
   tabName: string | undefined | null;
   tabIconName: IconName | undefined | null;
-  tabSelectedId: string;
+  tabSelectedId: T;
   onPress: (newValue: T) => void;
 };
 
-const Tab = <T extends string>({
+const Tab = <T extends string | number>({
   tabId,
   tabName,
   tabIconName,
@@ -52,7 +52,7 @@ const Tab = <T extends string>({
           style={{
             color: tabSelectedId === tabId ? theme.primary : theme.onSurfaceVariant,
           }}>
-          {tabName ?? tabId.toUpperCase()}
+          {tabName ?? tabId.toString().toUpperCase()}
         </Typography>
         <View
           style={{
@@ -70,15 +70,21 @@ const Tab = <T extends string>({
   );
 };
 
-type Props = {
-  selectedTabId: string;
-  tabIds: string[];
+type Props<T extends string | number> = {
+  selectedTabId: T;
+  tabIds: T[];
   tabNames?: string[];
   tabIconNames?: IconName[] | null | undefined;
-  onPress: (value: string) => void;
+  onPress: (value: T) => void;
 };
 
-const Tabs = ({ selectedTabId, tabIds, tabNames, tabIconNames, onPress }: Props) => {
+const Tabs = <T extends string | number>({
+  selectedTabId,
+  tabIds,
+  tabNames,
+  tabIconNames,
+  onPress,
+}: Props<T>) => {
   const theme = useTheme();
   return (
     <View

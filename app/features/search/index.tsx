@@ -1,14 +1,13 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, useFocusEffect } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Keyboard, Pressable, TextInput, View } from 'react-native';
+import { FlatList, Keyboard, Platform, Pressable, TextInput, View } from 'react-native';
 import { Post, RedditApi, SubReddit, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../colors';
+import Icons from '../components/Icons';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
@@ -298,47 +297,83 @@ const HomeSearch = () => {
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <Stack.Screen
-        options={{
-          title: '',
-          presentation: 'modal',
-          headerRight: () => {
-            return (
-              <MaterialCommunityIcons
-                onPress={() => {
-                  inputRef.current?.clear();
-                  setSearchText('');
-                }}
-                name="close"
-                size={24}
-                color={
-                  searchText.length > 0 ? theme.onSurfaceVariant : theme.onSurface
-                }></MaterialCommunityIcons>
-            );
-          },
-          headerTitle: () => {
-            return (
-              <TextInput
-                ref={inputRef}
-                style={{
-                  fontSize: 20,
-                  color: theme.onBackground,
-                }}
-                onChangeText={(txt) => {
-                  setSearchText(txt);
-                }}
-                value={searchText}
-                placeholder="Search Reddit"
-                placeholderTextColor={theme.onSurfaceVariant}
-                autoFocus={true}
-                autoCapitalize="none"
-                cursorColor={theme.secondary}
-                returnKeyType="search"
-              />
-            );
-          },
-        }}
-      />
+        options={
+          Platform.OS == 'ios'
+            ? {
+                title: 'Search',
+              }
+            : {
+                title: '',
 
+                headerRight: () => {
+                  return (
+                    <Icons
+                      onPress={() => {
+                        inputRef.current?.clear();
+                        setSearchText('');
+                      }}
+                      name="close"
+                      size={24}
+                      color={searchText.length > 0 ? theme.onSurfaceVariant : theme.onSurface}
+                    />
+                  );
+                },
+                headerTitle: () => {
+                  return (
+                    <TextInput
+                      ref={inputRef}
+                      style={{
+                        fontSize: 20,
+                        color: theme.onBackground,
+                      }}
+                      onChangeText={(txt) => {
+                        setSearchText(txt);
+                      }}
+                      value={searchText}
+                      placeholder="Search Reddit"
+                      placeholderTextColor={theme.onSurfaceVariant}
+                      autoFocus={true}
+                      autoCapitalize="none"
+                      cursorColor={theme.secondary}
+                      returnKeyType="search"
+                    />
+                  );
+                },
+              }
+        }
+      />
+      {Platform.OS === 'ios' && (
+        <View style={{ flexDirection: 'row', marginHorizontal: Spacing.s16 }}>
+          <TextInput
+            ref={inputRef}
+            style={{
+              fontSize: 20,
+              color: theme.onBackground,
+              flex: 1,
+            }}
+            onChangeText={(txt) => {
+              setSearchText(txt);
+            }}
+            value={searchText}
+            placeholder="Search Reddit"
+            placeholderTextColor={theme.onSurfaceVariant}
+            autoFocus={true}
+            autoCapitalize="none"
+            cursorColor={theme.secondary}
+            returnKeyType="search"
+          />
+
+          <Icons
+            onPress={() => {
+              inputRef.current?.clear();
+              setSearchText('');
+            }}
+            name="close"
+            size={24}
+            color={searchText.length > 0 ? theme.onSurfaceVariant : theme.onSurface}
+          />
+        </View>
+      )}
       {searchText.length < 3 && (
         <View
           style={{

@@ -2,9 +2,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Text, TextInput, View } from 'react-native';
+import { FlatList, TextInput, View } from 'react-native';
 import { Post, RedditApi } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
+import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 import SubredditPostItemView from '../components/SubredditPostItemView';
 
@@ -44,9 +45,22 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
   const searchSubReddits = async (txt: string) => {
     if (txt && txt.length > 2) {
       const searchResults = await new RedditApi().searchSubmissions(
-        initialQuery ?? `${searchText} subreddit:${subreddit}`,
+        initialQuery ? `${initialQuery} ${txt}` : `${txt} subreddit:${subreddit}`,
         subreddit as string,
-        { sort: 'new', t: 'all' }
+        { sort: 'new', t: 'all', restrict_sr: 'on' }
+      );
+      console.log('search', searchResults);
+      if (searchResults) {
+        setResults(searchResults.items);
+      } else {
+        setResults([]);
+      }
+      flatListRef?.current?.scrollToOffset({ animated: true, offset: 0 });
+    } else if (initialQuery) {
+      const searchResults = await new RedditApi().searchSubmissions(
+        initialQuery,
+        subreddit as string,
+        { sort: 'new', t: 'all', restrict_sr: 'on' }
       );
       if (searchResults) {
         setResults(searchResults.items);
@@ -76,7 +90,7 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
                 name="close"
                 size={24}
                 color={
-                  searchText.length > 0 ? theme.onSurfaceVariant : 'black'
+                  searchText.length > 0 ? theme.onSurface : theme.onSurfaceVariant
                 }></MaterialCommunityIcons>
             );
           },
@@ -89,6 +103,7 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
                   color: theme.onBackground,
                 }}
                 onChangeText={(txt) => {
+                  console.log('onChangeText', txt);
                   setSearchText(txt);
                   searchSubReddits(txt);
                 }}
@@ -105,28 +120,27 @@ const PostSearch = ({ subreddit, initialQuery }: Props) => {
         }}
       />
       {initialQuery && (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', marginLeft: Spacing.s8 }}>
           <View
             style={{
-              backgroundColor: theme.background,
-              paddingHorizontal: Spacing.s12,
-              paddingVertical: Spacing.s8,
-              borderRadius: 10,
+              borderColor: theme.outlineVariant,
+              borderWidth: 1,
+              borderRadius: Spacing.s8,
+              paddingHorizontal: Spacing.s8,
+              paddingVertical: Spacing.s4,
             }}>
-            <Text style={{ color: theme.onBackground }}>{initialQuery}</Text>
+            <Typography variant="labelMedium">{initialQuery}</Typography>
           </View>
         </View>
       )}
-      <Text
+      <Typography
+        variant="bodyMedium"
         style={{
-          color: theme.onBackground,
-          fontSize: 16,
           marginHorizontal: Spacing.s12,
-          marginTop: Spacing.s16,
-          marginBottom: Spacing.s12,
+          marginVertical: Spacing.s8,
         }}>
-        {'Results'}
-      </Text>
+        Results
+      </Typography>
       <FlatList
         ref={flatListRef}
         data={results}

@@ -1,8 +1,9 @@
 import { Image } from 'expo-image';
 import { decode } from 'html-entities';
-import { Text, View } from 'react-native';
+import { Pressable, TextStyle, View, ViewStyle } from 'react-native';
 import { FlairRichText, Post } from '../../../services/api';
 import { ColorPalette } from '../../colors';
+import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
   over_18?: boolean | undefined;
   outlined?: boolean | undefined;
   theme: ColorPalette;
+  onPress?: ((text: string) => void) | undefined;
 };
 
 const FlairTextView = (props: Props) => {
@@ -29,7 +31,7 @@ const FlairTextView = (props: Props) => {
   }
 
   if (props.over_18) {
-    elementsToDisplay = [...[{ e: 'text', t: 'NSFW ' } as FlairRichText], ...elementsToDisplay];
+    elementsToDisplay = [...[{ e: 'text', t: 'NSFW' } as FlairRichText], ...elementsToDisplay];
   }
 
   if (displayPin) {
@@ -43,7 +45,7 @@ const FlairTextView = (props: Props) => {
     return null;
   }
 
-  const containerStyle = props.outlined
+  const containerStyle: ViewStyle = props.outlined
     ? {
         flex: 0,
         alignItems: 'center',
@@ -57,7 +59,7 @@ const FlairTextView = (props: Props) => {
       }
     : {};
 
-  const textStyle = props.outlined
+  const textStyle: TextStyle = props.outlined
     ? {
         color: props.theme.onSurfaceVariant,
         fontSize: 12,
@@ -70,40 +72,52 @@ const FlairTextView = (props: Props) => {
       };
 
   return (
-    <View
-      style={{
-        ...containerStyle,
-        flexDirection: 'row',
-        alignItems: 'center',
-        columnGap: 2,
-      }}>
-      {elementsToDisplay.map((it, index) => {
-        if (it.e === 'text') {
-          let displayedItem = decode(it.t);
-          if (displayedItem.length > 22) {
-            displayedItem = displayedItem.slice(0, 22) + '...';
-          }
-
-          return (
-            <Text numberOfLines={1} key={`${it.t}.${index}`} style={textStyle}>
-              {displayedItem}
-            </Text>
-          );
+    <Pressable
+      disabled={!props.onPress}
+      onPress={() => {
+        if (props.onPress && props.flair_text) {
+          props.onPress(props.flair_text);
         }
-        return (
-          <Image
-            style={{
-              width: 12,
-              height: 12,
-              borderRadius: 6,
-              backgroundColor: props.flair_background_color ?? undefined,
-            }}
-            key={`${it.a}.${index}`}
-            source={it.u}
-          />
-        );
-      })}
-    </View>
+      }}>
+      <View
+        style={{
+          ...containerStyle,
+          flexDirection: 'row',
+          alignItems: 'center',
+          columnGap: 2,
+        }}>
+        {elementsToDisplay.map((it, index) => {
+          if (it.e === 'text') {
+            let displayedItem = decode(it.t);
+            if (displayedItem.length > 22) {
+              displayedItem = displayedItem.slice(0, 22) + '...';
+            }
+
+            return (
+              <Typography
+                variant="labelMedium"
+                numberOfLines={1}
+                key={`${it.t}.${index}`}
+                style={textStyle}>
+                {displayedItem}
+              </Typography>
+            );
+          }
+          return (
+            <Image
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: 6,
+                backgroundColor: props.flair_background_color ?? undefined,
+              }}
+              key={`${it.a}.${index}`}
+              source={it.u}
+            />
+          );
+        })}
+      </View>
+    </Pressable>
   );
 };
 

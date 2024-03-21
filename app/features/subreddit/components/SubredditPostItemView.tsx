@@ -129,6 +129,15 @@ const SubredditPostItemView = ({
                 stickied={post.data.stickied}
                 outlined
                 theme={theme}
+                onPress={() => {
+                  router.push({
+                    pathname: 'features/subreddit/search',
+                    params: {
+                      subreddit: post.data.subreddit,
+                      initialQuery: `flair:"${post.data.link_flair_text}"`,
+                    },
+                  });
+                }}
               />
             )}
           </View>

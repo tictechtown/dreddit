@@ -21,6 +21,8 @@ import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
 import Icons from '../components/Icons';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
+import Typography from '../components/Typography';
+import { Spacing } from '../tokens';
 import CommentItem from './components/CommentItem';
 import PostHeader from './components/PostHeader';
 import SortOptions from './components/SortOptions';
@@ -338,6 +340,16 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ListHeaderComponent={Header}
+        ListEmptyComponent={() => {
+          if (queryData.loading) {
+            return null;
+          }
+          return (
+            <View style={{ marginHorizontal: Spacing.s12 }}>
+              <Typography variant="bodyMedium">No comments yet</Typography>
+            </View>
+          );
+        }}
         refreshControl={refreshControl}
         contentContainerStyle={{ paddingBottom: 20 }}
       />

@@ -1,6 +1,5 @@
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-import { Image } from 'expo-image';
 import { Link, Stack, router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -18,6 +17,7 @@ import useTheme from '../../services/theme/useTheme';
 import Icons from '../components/Icons';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import ItemSeparator from '../components/ItemSeparator';
+import SubredditIcon from '../components/SubredditIcon';
 import Tabs from '../components/Tabs';
 import ToastView from '../components/ToastView';
 import Typography from '../components/Typography';
@@ -293,15 +293,9 @@ const SubRedditView = (props: Props) => {
                     justifyContent: 'flex-start',
                     marginRight: 280,
                     flexShrink: 1,
+                    columnGap: 12,
                   }}>
-                  <Image
-                    style={{ width: 32, height: 32, borderRadius: 16, marginRight: 12 }}
-                    source={
-                      props.icon?.startsWith('http')
-                        ? props.icon
-                        : require('../../../assets/images/subbit.png')
-                    }
-                  />
+                  <SubredditIcon size={32} icon={props.icon} />
                   <View style={{ flexShrink: 1 }}>
                     <Text
                       style={{
@@ -435,14 +429,7 @@ const SubRedditView = (props: Props) => {
               alignItems: 'center',
               paddingHorizontal: 20,
             }}>
-            <Image
-              style={{ width: 128, height: 128, borderRadius: 64 }}
-              source={
-                props.icon?.startsWith('http')
-                  ? props.icon
-                  : require('../../../assets/images/subbit.png')
-              }
-            />
+            <SubredditIcon size={128} icon={props.icon} />
             <Typography
               variant="headlineLarge"
               style={{

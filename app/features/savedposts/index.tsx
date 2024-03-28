@@ -6,6 +6,7 @@ import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
 import ItemSeparator from '../components/ItemSeparator';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
+import { Spacing } from '../tokens';
 
 export default function Page() {
   const theme = useTheme();
@@ -49,6 +50,7 @@ export default function Page() {
               theme={theme}
             />
           )}
+          contentContainerStyle={{ paddingBottom: Spacing.s24 }}
           ItemSeparatorComponent={ItemSeparator}
           keyExtractor={(item, index) => `${item.data.id}.${index}`}
         />

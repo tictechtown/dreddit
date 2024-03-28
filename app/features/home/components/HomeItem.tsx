@@ -1,7 +1,7 @@
-import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { TouchableNativeFeedback, View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
+import SubredditIcon from '../../components/SubredditIcon';
 import Typography from '../../components/Typography';
 
 const HomeItem = ({
@@ -21,7 +21,7 @@ const HomeItem = ({
         href={{
           pathname: `features/subreddit/${subreddit}`,
           params: {
-            icon: icon?.replaceAll('&amp;', '&') ?? require('../../../../assets/images/subbit.png'),
+            icon: icon?.replaceAll('&amp;', '&') ?? require('../../../../assets/images/subbit.svg'),
           },
         }}
         asChild>
@@ -36,17 +36,7 @@ const HomeItem = ({
               alignItems: 'center',
               columnGap: 16,
             }}>
-            <Image
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                flex: 0,
-              }}
-              source={
-                icon?.replaceAll('&amp;', '&') ?? require('../../../../assets/images/subbit.png')
-              }
-            />
+            <SubredditIcon size={50} icon={icon} />
             <View
               style={{
                 flex: 1,

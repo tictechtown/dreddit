@@ -8,13 +8,11 @@ import { Post, RedditApi, SubReddit, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../colors';
 import Icons from '../components/Icons';
+import SubredditIcon, { defaultSubredditIcon } from '../components/SubredditIcon';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
 import { Spacing } from '../tokens';
-
-// @ts-ignore
-import defaultSubredditIcon = require('../../../assets/images/subbit.png');
 
 function getSubredditIcon(icon: string | undefined): string {
   if (!icon || icon?.length === 0) {
@@ -69,17 +67,8 @@ const SearchResultSub = (props: { result: SubReddit; theme: ColorPalette }) => {
             paddingHorizontal: 12,
             paddingVertical: 10,
           }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image
-              style={{
-                width: 68,
-                height: 68,
-                borderRadius: 34,
-                marginRight: Spacing.s16,
-                flex: 0,
-              }}
-              source={icon}
-            />
+          <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: Spacing.s16 }}>
+            <SubredditIcon icon={icon} size={68} />
             <View style={{ flex: 1 }}>
               <View
                 style={{

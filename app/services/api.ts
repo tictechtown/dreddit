@@ -714,6 +714,16 @@ type Post = {
             source: { url: string; width: number; height: number };
             resolutions: { url: string; width: number; height: number }[];
             id: string;
+            variants?: {
+              gif: {
+                source: { url: string; width: number; height: number };
+                resolutions: { url: string; width: number; height: number }[];
+              };
+              mp4: {
+                source: { url: string; width: number; height: number };
+                resolutions: { url: string; width: number; height: number }[];
+              };
+            };
           }[];
           reddit_video_preview?: RedditVideo;
           enabled: false;

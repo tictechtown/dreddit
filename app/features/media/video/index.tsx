@@ -78,16 +78,15 @@ export default function Page() {
               bottom: 20,
               left: 0,
               right: 0,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
+              paddingHorizontal: Spacing.s16,
+              paddingVertical: Spacing.s12,
               backgroundColor: PaletteDark.errorContainer,
               borderRadius: 10,
               flexDirection: 'row',
+              columnGap: Spacing.s16,
             }}>
             <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
-            <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
-              {errorMessage}
-            </Text>
+            <Text style={{ color: PaletteDark.onErrorContainer }}>{errorMessage}</Text>
           </View>
         </View>
       )}

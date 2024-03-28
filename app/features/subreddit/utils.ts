@@ -37,6 +37,27 @@ export const onLinkPress = (post: Post): HrefObject => {
     };
   }
   if (domain.startsWith('i.redd.it')) {
+    // if GIF, we try to use the mp4 version instead (better performance)
+    if (originalPost.data.url.includes('.gif')) {
+      if (originalPost.data.preview?.images[0]?.variants?.mp4?.source) {
+        const source = originalPost.data.preview?.images[0].variants['mp4'].source;
+
+        const reddit_video = {
+          hls_url: source.url.replaceAll('&amp;', '&'),
+          height: source.height,
+          width: source.width,
+        };
+
+        return {
+          pathname: 'features/media/video',
+          params: {
+            title,
+            reddit_video: base64.encode(JSON.stringify(reddit_video)),
+          },
+        };
+      }
+    }
+
     return {
       pathname: 'features/media/image',
       params: { uri: originalPost.data.url, title },

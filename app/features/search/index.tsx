@@ -400,6 +400,7 @@ const HomeSearch = () => {
         style={{ flex: 1 }}
         keyboardShouldPersistTaps={'handled'}
         onScrollBeginDrag={Keyboard.dismiss}
+        contentContainerStyle={{ paddingBottom: Spacing.s24 }}
       />
     </View>
   );

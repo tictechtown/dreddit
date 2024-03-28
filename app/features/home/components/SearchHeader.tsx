@@ -9,29 +9,34 @@ const SearchHeader = () => {
   const theme = useTheme();
 
   return (
-    <TouchableNativeFeedback
-      style={{ flex: 1 }}
-      background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, false)}
-      onPress={() => {
-        router.push('features/search');
+    <View
+      style={{
+        marginBottom: Spacing.s16,
+        marginHorizontal: Spacing.s12,
+        borderRadius: 32,
+        overflow: 'hidden',
       }}>
-      <View
-        style={{
-          height: 48,
-          marginHorizontal: Spacing.s12,
-          paddingHorizontal: Spacing.s16,
-          borderRadius: 32,
-          backgroundColor: theme.surfaceContainerHigh,
-          alignItems: 'center',
-          marginBottom: Spacing.s16,
-          flexDirection: 'row',
-          columnGap: 16,
+      <TouchableNativeFeedback
+        background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, false)}
+        onPress={() => {
+          router.push('features/search');
         }}>
-        <Icons name="search" size={24} color={theme.onBackground} />
+        <View
+          style={{
+            height: 48,
+            paddingHorizontal: Spacing.s16,
+            borderRadius: 32,
+            backgroundColor: theme.surfaceContainerHigh,
+            alignItems: 'center',
+            flexDirection: 'row',
+            columnGap: 16,
+          }}>
+          <Icons name="search" size={24} color={theme.onBackground} />
 
-        <Typography variant="bodyLarge">Search Reddit</Typography>
-      </View>
-    </TouchableNativeFeedback>
+          <Typography variant="bodyLarge">Search Reddit</Typography>
+        </View>
+      </TouchableNativeFeedback>
+    </View>
   );
 };
 

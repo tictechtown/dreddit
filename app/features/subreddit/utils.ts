@@ -7,7 +7,10 @@ export const onLinkPress = (post: Post): HrefObject => {
 
   console.log('onLinkPRess', post);
 
-  if (Array.isArray(post.data.crosspost_parent_list)) {
+  if (
+    Array.isArray(post.data.crosspost_parent_list) &&
+    post.data.crosspost_parent_list.length > 0
+  ) {
     originalPost = { kind: 't3', data: post.data.crosspost_parent_list[0] };
   }
   const domain = originalPost.data.domain;

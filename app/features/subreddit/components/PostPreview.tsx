@@ -389,7 +389,11 @@ const PostPreview = ({
 }) => {
   const isCrosspost = Array.isArray(post.data.crosspost_parent_list);
 
-  if (isCrosspost && post.data.crosspost_parent_list !== undefined) {
+  if (
+    isCrosspost &&
+    post.data.crosspost_parent_list !== undefined &&
+    post.data.crosspost_parent_list.length > 0
+  ) {
     const xpost = post.data.crosspost_parent_list[0];
     return (
       <PostPreviewImage

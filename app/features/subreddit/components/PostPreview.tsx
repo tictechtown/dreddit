@@ -28,6 +28,8 @@ function getVideoDuration(duration: number): string {
   return `${`${mins}`.padStart(2, '0')}:${`${seconds}`.padStart(2, '0')}`;
 }
 
+const YOUTUBE_PLACEHOLDER = require('../../../../assets/images/youtube_placeholder.jpg');
+
 const PostPreviewVideo = ({
   source,
   domain,
@@ -43,12 +45,16 @@ const PostPreviewVideo = ({
     <View>
       <View>
         <Image
+          autoplay={false}
           style={{
             width: imageWidth,
             height: 210,
             borderTopLeftRadius: 12,
             borderTopRightRadius: 12,
           }}
+          placeholder={
+            domain === 'youtube.com' || domain === 'youtu.be' ? YOUTUBE_PLACEHOLDER : undefined
+          }
           source={source}
           contentFit="cover"
         />

@@ -154,6 +154,8 @@ const PostPreviewImage = ({
     displayedUrl = `@${twitterName}`;
   }
 
+  const icon = domain === 'streamable.com' || domain === 'v.redd.it' ? 'play-circle' : 'link';
+
   const videoDuration =
     media != undefined && typeof media != 'string' && !!media?.reddit_video
       ? media.reddit_video.duration
@@ -187,7 +189,7 @@ const PostPreviewImage = ({
 
   // Self Post with Image
   if (domain.startsWith('self.')) {
-    if (maxPreviewResolutions) {
+    if (maxPreviewResolutions && maxPreviewResolutions.width > 120) {
       return (
         <PostPreviewStaticMedia
           width={imageWidth}
@@ -225,7 +227,8 @@ const PostPreviewImage = ({
     );
   }
 
-  if (domain === 'dubz.live' && !preview) {
+  // Video Preview
+  if (dataUsage !== DataUsage.None && domain === 'dubz.live' && !preview) {
     return (
       <PostPreviewVideo
         source={getPreviewImageFromDubz(url)}
@@ -301,7 +304,7 @@ const PostPreviewImage = ({
             borderBottomRightRadius: 12,
             padding: 10,
           }}>
-          <Icons name="link" size={14} color={theme.onSurface} />
+          <Icons name={icon} size={14} color={theme.onSurface} />
           <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
             {domain}
           </Typography>
@@ -328,6 +331,8 @@ const PostPreviewImage = ({
   if (dataUsage !== DataUsage.None && (domain === 'x.com' || domain === 'twitter.com')) {
     const twitterName = url
       .replace('https://x.com/', '')
+      .replace('https://www.x.com/', '')
+      .replace('https://www.twitter.com/', '')
       .replace('https://twitter.com/', '')
       .split('/')[0];
     const avatarUrl = `https://unavatar.io/twitter/${twitterName}`;
@@ -376,7 +381,7 @@ const PostPreviewImage = ({
         borderRadius: 12,
         padding: 10,
       }}>
-      <Icons name="link" size={14} color={theme.onSurface} />
+      <Icons name={icon} size={14} color={theme.onSurface} />
       <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
         {domain}
       </Typography>

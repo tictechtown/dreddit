@@ -193,7 +193,7 @@ const SubRedditView = (props: Props) => {
     }
   };
 
-  const toggleSubreddit = async () => {
+  const toggleSubreddit = useCallback(async () => {
     if (!subredditData) {
       return;
     }
@@ -212,11 +212,11 @@ const SubRedditView = (props: Props) => {
       // add it
       addToFavorites(entry);
     }
-  };
+  }, [!!subredditData, isFavorite]);
 
-  const searchPosts = async () => {
+  const searchPosts = useCallback(async () => {
     router.push({ pathname: 'features/subreddit/search', params: { subreddit: props.subreddit } });
-  };
+  }, [router]);
 
   const scrollToTop = useCallback(() => {
     flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
@@ -278,91 +278,100 @@ const SubRedditView = (props: Props) => {
     return posts;
   }, [selectedFlair, posts]);
 
+  const HeaderTitle = useCallback(
+    (_p: any) => {
+      return (
+        <Pressable onPress={scrollToTop}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginRight: 280,
+              flexShrink: 1,
+              columnGap: 12,
+            }}>
+            <SubredditIcon size={32} icon={props.icon} />
+            <View style={{ flexShrink: 1 }}>
+              <Text
+                style={{
+                  color: _p.tintColor,
+                  fontWeight: '600',
+                  fontSize: 20,
+                }}
+                numberOfLines={1}
+                ellipsizeMode={'tail'}>
+                {props.subreddit}
+              </Text>
+            </View>
+          </View>
+        </Pressable>
+      );
+    },
+    [scrollToTop]
+  );
+
+  const HeaderRight = useCallback(() => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          columnGap: 8,
+        }}>
+        <Link
+          href={{
+            pathname: 'features/subreddit/about',
+            params: { subreddit: props.subreddit },
+          }}
+          asChild>
+          <TouchableNativeFeedback
+            hitSlop={5}
+            background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
+            <View>
+              <Icons name="info-outline" size={26} color={theme.onBackground} />
+            </View>
+          </TouchableNativeFeedback>
+        </Link>
+        <TouchableNativeFeedback
+          disabled={!subredditData}
+          hitSlop={5}
+          onPress={toggleSubreddit}
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
+          <View>
+            <Icons
+              name={isFavorite ? 'bookmark' : 'bookmark-outline'}
+              size={24}
+              color={theme.onBackground}
+            />
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          disabled={!subredditData}
+          hitSlop={5}
+          onPress={searchPosts}
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
+          <View>
+            <Icons name={'search'} size={24} color={theme.onBackground} />
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    );
+  }, [!!subredditData, toggleSubreddit, searchPosts, theme]);
+
+  const screenOptions = useMemo(() => {
+    console.log('re-render screen options');
+    return {
+      title: props.subreddit,
+      headerTitle: HeaderTitle,
+      headerRight: HeaderRight,
+    };
+  }, [HeaderTitle, HeaderRight, props.subreddit]);
+
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: props.subreddit,
-          headerTitle: (_p) => {
-            return (
-              <Pressable onPress={scrollToTop}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-start',
-                    marginRight: 280,
-                    flexShrink: 1,
-                    columnGap: 12,
-                  }}>
-                  <SubredditIcon size={32} icon={props.icon} />
-                  <View style={{ flexShrink: 1 }}>
-                    <Text
-                      style={{
-                        color: _p.tintColor,
-                        fontWeight: '600',
-                        fontSize: 20,
-                      }}
-                      numberOfLines={1}
-                      ellipsizeMode={'tail'}>
-                      {props.subreddit}
-                    </Text>
-                  </View>
-                </View>
-              </Pressable>
-            );
-          },
-
-          headerRight: () => {
-            return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  columnGap: 8,
-                }}>
-                <Link
-                  href={{
-                    pathname: 'features/subreddit/about',
-                    params: { subreddit: props.subreddit },
-                  }}
-                  asChild>
-                  <TouchableNativeFeedback
-                    hitSlop={5}
-                    background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
-                    <View>
-                      <Icons name="info-outline" size={26} color={theme.onBackground} />
-                    </View>
-                  </TouchableNativeFeedback>
-                </Link>
-                <TouchableNativeFeedback
-                  disabled={!subredditData}
-                  hitSlop={5}
-                  onPress={toggleSubreddit}
-                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
-                  <View>
-                    <Icons
-                      name={isFavorite ? 'bookmark' : 'bookmark-outline'}
-                      size={24}
-                      color={theme.onBackground}
-                    />
-                  </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback
-                  disabled={!subredditData}
-                  hitSlop={5}
-                  onPress={searchPosts}
-                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
-                  <View>
-                    <Icons name={'search'} size={24} color={theme.onBackground} />
-                  </View>
-                </TouchableNativeFeedback>
-              </View>
-            );
-          },
-        }}
-      />
+      <Stack.Screen options={screenOptions} />
 
       <View
         style={{

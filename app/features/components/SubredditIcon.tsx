@@ -5,7 +5,7 @@ type Props = {
   icon: string | undefined | null;
 };
 
-export const defaultSubredditIcon = require('../../../assets/images/subbit.svg');
+export const defaultSubredditIcon = require('../../../assets/images/reddit_default_sub_alpha.png');
 
 const SubredditIcon = (props: Props) => {
   const shouldUsePlaceholder =
@@ -21,7 +21,6 @@ const SubredditIcon = (props: Props) => {
         height: props.size,
         borderRadius: props.size / 2,
         flex: 0,
-        backgroundColor: shouldUsePlaceholder ? 'white' : undefined,
       }}
       source={shouldUsePlaceholder ? defaultSubredditIcon : props.icon?.replaceAll('&amp;', '&')}
     />

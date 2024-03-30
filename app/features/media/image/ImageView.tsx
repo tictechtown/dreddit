@@ -1,10 +1,9 @@
 import Constants from 'expo-constants';
 import React from 'react';
 import { Text, View } from 'react-native';
-import PhotoZoom from 'react-native-photo-zoom';
+import { WebView } from 'react-native-webview';
 import { PaletteDark } from '../../colors';
 import Icons from '../../components/Icons';
-import ImageZoom from '../../components/react-native-image-zoom';
 import { Spacing } from '../../tokens';
 
 export default function ImageView({ uri, progress }: { uri: string; progress: any }) {
@@ -17,16 +16,17 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
     }
   }, [progress]);
 
-  // const onLoadEnd = React.useCallback(() => {
-  //   if (progress) {
-  //     progress.value = 1;
-  //   }
-  // }, [progress]);
+  const onLoadEnd = React.useCallback(() => {
+    if (progress) {
+      progress.value = 1;
+    }
+  }, [progress]);
 
   const onProgress = React.useCallback(
-    ({ nativeEvent: { loaded, total } }: { nativeEvent: { loaded: number; total: number } }) => {
+    ({ nativeEvent: { progress: nativeProgress } }: { nativeEvent: { progress: number } }) => {
       if (progress) {
-        progress.value = 0.2 + (loaded / total) * 0.8;
+        progress.value = 0.2 + nativeProgress * 0.8;
+        console.log('value', progress.value);
       }
     },
     [progress]
@@ -69,27 +69,17 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
           </View>
         </View>
       )}
-      {Constants.appOwnership === 'expo' ? (
-        <ImageZoom
-          uri={_uri}
-          maxScale={10}
-          resizeMethod="resize"
-          onLoadStart={onLoadStart}
-          onProgress={onProgress}
-          onError={onError}
-        />
-      ) : (
-        <PhotoZoom
-          source={{ uri: _uri }}
-          style={{ width: '100%', height: '100%' }}
-          maximumZoomScale={10}
-          androidScaleType="fitCenter"
-          // onError={onError}
-          // onLoadStart={onLoadStart}
-          // onLoadEnd={onLoadEnd}
-          // onProgress={onProgress}
-        />
-      )}
+
+      <WebView
+        onLoadStart={onLoadStart}
+        onLoadProgress={onProgress}
+        onLoadEnd={onLoadEnd}
+        onError={onError}
+        style={{ flex: 1, backgroundColor: PaletteDark.scrim }}
+        source={{ html: `<img width="100%" src="${_uri}"/>` }}
+        javaScriptEnabled={false}
+        androidLayerType="hardware"
+      />
     </View>
   );
 }

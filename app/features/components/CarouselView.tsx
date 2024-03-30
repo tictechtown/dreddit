@@ -10,6 +10,7 @@ const panGestureHandlerProps = { activeOffsetX: [-10, 10] };
 
 const CarouselView = ({
   resolutions,
+  captions,
   width,
 }: {
   resolutions: {
@@ -17,6 +18,7 @@ const CarouselView = ({
     x: number;
     u: string;
   }[];
+  captions: null | (string | null)[];
   width: number;
 }) => {
   const [pageIndex, setPageIndex] = React.useState(0);
@@ -38,6 +40,20 @@ const CarouselView = ({
           contentFit="contain"
           priority={index > 0 ? 'low' : 'normal'}
         />
+        {!!captions && !!captions[index] && (
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: PaletteDark.surfaceContainer,
+              paddingHorizontal: Spacing.s8,
+              paddingVertical: Spacing.s4,
+            }}>
+            <Typography variant="labelMedium">{captions[index]}</Typography>
+          </View>
+        )}
       </View>
     );
   }, []);

@@ -655,7 +655,7 @@ type Post = {
     hide_score: boolean;
     media_metadata?: Record<string, RedditMediaMedata>;
     gallery_data?: {
-      items: { media_id: string; id: string }[];
+      items: { media_id: string; id: string; caption?: string }[];
     };
     name: string;
     quarantine: boolean;

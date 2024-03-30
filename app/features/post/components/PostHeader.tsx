@@ -1,7 +1,7 @@
 import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Post } from '../../../services/api';
 import { ColorPalette } from '../../colors';
@@ -12,7 +12,7 @@ import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import PostPreview from '../../subreddit/components/PostPreview';
 import { Spacing } from '../../tokens';
-import { timeDifference } from '../../utils';
+import { timeDifference, useGalleryData } from '../../utils';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import PollOption from './PollOption';
 
@@ -45,15 +45,10 @@ const PostHeader = ({
   const dimensions = useWindowDimensions();
   const mdStyle = useMarkdownStyle(theme);
 
-  const maxGaleryResolutions = useMemo(() => {
-    if (!post.data.gallery_data || !post.data.media_metadata) return null;
-    const metadata = post.data.media_metadata;
-    const mediaIds = post.data.gallery_data.items.map((it) => it.media_id);
-    const galeryWithAllResolutions = mediaIds.map((mediaId) => metadata[mediaId].p);
-    return galeryWithAllResolutions.map(
-      (allResolutions) => allResolutions[allResolutions.length - 1]
-    );
-  }, [post.data.gallery_data]);
+  const [maxGaleryResolutions, galleryCaptions] = useGalleryData(
+    post.data.gallery_data,
+    post.data.media_metadata
+  );
 
   const _onLinkPress = useCallback((url: string) => {
     if (url && url.startsWith('https://www.reddit.com/r/') && url.includes('/comments/')) {
@@ -138,7 +133,11 @@ const PostHeader = ({
         <View style={{ marginHorizontal: 12 }}>
           <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
           {maxGaleryResolutions && (
-            <CarouselView resolutions={maxGaleryResolutions} width={dimensions.width - 24} />
+            <CarouselView
+              captions={galleryCaptions}
+              resolutions={maxGaleryResolutions}
+              width={dimensions.width - 24}
+            />
           )}
         </View>
       </Pressable>

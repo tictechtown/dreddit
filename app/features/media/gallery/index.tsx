@@ -6,12 +6,15 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { Post } from '../../../services/api';
 import { PaletteDark } from '../../colors';
+import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 import ImageView from '../image/ImageView';
 
 const CarouselView = ({
   pages,
+  captions,
 }: {
+  captions: (string | null)[] | null;
   pages:
     | {
         y: number;
@@ -75,6 +78,24 @@ const CarouselView = ({
       <View style={{ flex: 1 }}>
         <ImageView uri={uri} progress={null} />
       </View>
+      {!!captions && !!captions[pageIndex] && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 65,
+            left: 0,
+            right: 0,
+            borderColor: PaletteDark.outlineVariant,
+            borderWidth: 1,
+            borderRadius: Spacing.s8,
+            backgroundColor: PaletteDark.scrim,
+            paddingHorizontal: Spacing.s16,
+            paddingVertical: Spacing.s16,
+            marginHorizontal: Spacing.s8,
+          }}>
+          <Typography variant="labelMedium">{captions[pageIndex]}</Typography>
+        </View>
+      )}
     </>
   );
 };
@@ -91,8 +112,8 @@ const CarouselView = ({
  */
 export default function Page() {
   const { title, gallery_data, media_metadata } = useLocalSearchParams();
-  const resolutions = React.useMemo(() => {
-    if (!gallery_data || !media_metadata) return null;
+  const { resolutions, captions } = React.useMemo(() => {
+    if (!gallery_data || !media_metadata) return { resolutions: null, captions: null };
     const metadata: Post['data']['media_metadata'] = JSON.parse(
       base64.decode(media_metadata as string)
     );
@@ -102,7 +123,10 @@ export default function Page() {
     const mediaIds = galleryData?.items.map((it) => it.media_id);
     // @ts-ignore
     const galeryWithAllResolutions = (mediaIds ?? []).map((mediaId) => metadata[mediaId].s);
-    return galeryWithAllResolutions;
+    return {
+      resolutions: galeryWithAllResolutions,
+      captions: (galleryData?.items ?? []).map((dt) => dt.caption ?? null),
+    };
   }, [gallery_data]);
 
   return (
@@ -115,7 +139,7 @@ export default function Page() {
           },
         }}
       />
-      <CarouselView pages={resolutions} />
+      <CarouselView pages={resolutions} captions={captions} />
     </View>
   );
 }

@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Post } from '../../../services/api';
 import postCache from '../../../services/postCache';
@@ -9,7 +9,7 @@ import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
-import { timeDifference } from '../../utils';
+import { timeDifference, useGalleryData } from '../../utils';
 import { onLinkPress } from '../utils';
 import FlairTextView from './FlairTextView';
 import PostPreview from './PostPreview';
@@ -39,15 +39,10 @@ const SubredditPostItemView = ({
 
   const { width } = useWindowDimensions();
 
-  const maxGaleryResolutions = useMemo(() => {
-    if (!post.data.gallery_data || !post.data.media_metadata) return null;
-    const metadata = post.data.media_metadata;
-    const mediaIds = post.data.gallery_data.items.map((it) => it.media_id);
-    const galeryWithAllResolutions = mediaIds.map((mediaId) => metadata[mediaId].p).filter(Boolean);
-    return galeryWithAllResolutions.map(
-      (allResolutions) => allResolutions[allResolutions.length - 1]
-    );
-  }, [post.data.gallery_data]);
+  const [maxGaleryResolutions, galleryCaptions] = useGalleryData(
+    post.data.gallery_data,
+    post.data.media_metadata
+  );
 
   postCache.setCache(post.data.id, post);
 
@@ -146,7 +141,11 @@ const SubredditPostItemView = ({
         <View style={{ paddingVertical: Spacing.s16, paddingTop: Spacing.s12 }}>
           <PostPreview post={post} imageWidth={imageWidth} theme={theme} />
           {!isCrosspost && maxGaleryResolutions && (
-            <CarouselView resolutions={maxGaleryResolutions} width={imageWidth} />
+            <CarouselView
+              captions={galleryCaptions}
+              resolutions={maxGaleryResolutions}
+              width={imageWidth}
+            />
           )}
         </View>
 

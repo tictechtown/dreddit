@@ -361,7 +361,6 @@ const SubRedditView = (props: Props) => {
   }, [!!subredditData, toggleSubreddit, searchPosts, theme]);
 
   const screenOptions = useMemo(() => {
-    console.log('re-render screen options');
     return {
       title: props.subreddit,
       headerTitle: HeaderTitle,

@@ -36,7 +36,7 @@ const HomeItem = ({
               alignItems: 'center',
               columnGap: 16,
             }}>
-            <SubredditIcon size={50} icon={icon} />
+            <SubredditIcon size={50} icon={icon} nsfw={false} />
             <View
               style={{
                 flex: 1,

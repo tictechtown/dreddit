@@ -291,7 +291,7 @@ const SubRedditView = (props: Props) => {
               flexShrink: 1,
               columnGap: 12,
             }}>
-            <SubredditIcon size={32} icon={props.icon} />
+            <SubredditIcon size={32} icon={props.icon} nsfw={false} />
             <View style={{ flexShrink: 1 }}>
               <Text
                 style={{
@@ -437,7 +437,7 @@ const SubRedditView = (props: Props) => {
               alignItems: 'center',
               paddingHorizontal: 20,
             }}>
-            <SubredditIcon size={128} icon={props.icon} />
+            <SubredditIcon size={128} icon={props.icon} nsfw={false} />
             <Typography
               variant="headlineLarge"
               style={{

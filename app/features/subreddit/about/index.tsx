@@ -1,6 +1,5 @@
 import Markdown from '@ronradtke/react-native-markdown-display';
-import { Image } from 'expo-image';
-import { Link, Stack, router, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import queryString from 'query-string';
 import { useEffect, useMemo, useState } from 'react';
@@ -8,6 +7,7 @@ import { ScrollView, View } from 'react-native';
 import { RedditApi, SubReddit, User } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
 import ItemSeparator from '../../components/ItemSeparator';
+import SubredditIcon from '../../components/SubredditIcon';
 import Typography from '../../components/Typography';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../post/utils';
 import { Spacing } from '../../tokens';
@@ -96,12 +96,6 @@ const Page = () => {
       });
       return false;
     }
-    // if (url.includes(`/r/${subreddit}`)) {
-    //   return false;
-    // }
-
-    // return true to open with `Linking.openURL
-    // return false to handle it yourself
     return true;
   };
 
@@ -110,16 +104,10 @@ const Page = () => {
       <Stack.Screen options={{ title: about.display_name_prefixed }} />
       <ScrollView style={{ width: '100%' }}>
         <View style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 16 }}>
-          <Image
-            style={{ width: 140, height: 140, borderRadius: 70, marginBottom: 10 }}
-            source={subredditIcon}></Image>
-          <Link
-            href={{
-              pathname: `features/subreddit/${about.display_name}`,
-              params: { icon: subredditIcon },
-            }}>
-            <Typography variant="headlineMedium">{about.display_name_prefixed}</Typography>
-          </Link>
+          <SubredditIcon icon={subredditIcon} size={140} nsfw={false} />
+          <Typography variant="headlineMedium" style={{ marginTop: 10 }}>
+            {about.display_name_prefixed}
+          </Typography>
           <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant, opacity: 0.8 }}>
             {(about.subscribers ?? 0).toLocaleString('en-US')} karma •{' '}
             {new Date(about.created_utc * 1000).toLocaleDateString('en-US', {
@@ -136,8 +124,12 @@ const Page = () => {
             flexDirection: 'column',
             rowGap: Spacing.s16,
           }}>
-          <Typography variant="bodyMedium">{about.public_description}</Typography>
-          <ItemSeparator fullWidth />
+          {about.public_description && (
+            <>
+              <Typography variant="bodyMedium">{about.public_description}</Typography>
+              <ItemSeparator fullWidth />
+            </>
+          )}
           <Markdown
             markdownit={markdownIt}
             style={mdStyle}

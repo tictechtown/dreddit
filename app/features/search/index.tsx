@@ -68,7 +68,7 @@ const SearchResultSub = (props: { result: SubReddit; theme: ColorPalette }) => {
             paddingVertical: 10,
           }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: Spacing.s16 }}>
-            <SubredditIcon icon={icon} size={68} />
+            <SubredditIcon icon={icon} size={68} nsfw={data.over18} />
             <View style={{ flex: 1 }}>
               <View
                 style={{

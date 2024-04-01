@@ -207,10 +207,10 @@ const PostHeader = ({
                 flexDirection: 'row',
                 borderRadius: 8,
                 backgroundColor: theme.secondaryContainer,
-                paddingLeft: 16,
+                paddingLeft: 12,
                 paddingVertical: 6,
-                paddingRight: 8,
-                columnGap: 8,
+                paddingRight: 4,
+                columnGap: 2,
                 alignItems: 'center',
               }}>
               <Typography

@@ -108,17 +108,17 @@ export function useCommentMarkdownStyle(theme: ColorPalette) {
       heading1: {
         fontSize: 18,
         borderColor: theme.surfaceVariant,
-        marginTop: Spacing.s12,
-        paddingBottom: Spacing.s12,
-        marginBottom: Spacing.s12,
+        marginTop: Spacing.s4,
+        paddingBottom: Spacing.s4,
+        marginBottom: Spacing.s4,
         fontWeight: 'bold',
       },
       heading2: {
         fontSize: 18,
         borderColor: theme.surfaceVariant,
-        marginTop: Spacing.s12,
-        paddingBottom: Spacing.s12,
-        marginBottom: Spacing.s12,
+        marginTop: Spacing.s4,
+        paddingBottom: Spacing.s4,
+        marginBottom: Spacing.s4,
         fontWeight: 'bold',
       },
     };

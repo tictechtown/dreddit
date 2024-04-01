@@ -46,12 +46,20 @@ class RedditApi {
         new URLSearchParams(Object.assign(params, options))
     )
       .then((res) => res.json())
-      .then((json) => json.data)
-      .then((data) => ({
-        after: data.after,
-        posts: data.children,
-      }))
-      .catch(() => null);
+      .then((json) => {
+        // TODO - can return {data: xxx} or {error: 429, "message": "Too Many Requests"}
+        return json.data;
+      })
+
+      .then((data) => {
+        return {
+          after: data.after,
+          posts: data.children,
+        };
+      })
+      .catch((e) => {
+        console.log('error', e);
+      });
   }
 
   async getDomainHot(domain: string, options: Record<string, string> = this.parameters) {

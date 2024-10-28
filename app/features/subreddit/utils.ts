@@ -141,6 +141,41 @@ export const onLinkPress = (post: Post): HrefObject => {
     };
   }
 
+  if (domain.startsWith('streamff.co')) {
+    const videoComponents = originalPost.data.url.split('/');
+    const videoId = videoComponents[videoComponents.length - 1];
+    const newUrl = `https://ffedge.streamff.com/uploads/${videoId}.mp4`;
+    return {
+      pathname: 'features/media/video',
+      params: {
+        title,
+        reddit_video: base64.encode(
+          JSON.stringify({
+            hls_url: newUrl,
+            height: '100%',
+            width: '100%',
+          })
+        ),
+      },
+    };
+  }
+
+  if (domain.startsWith('caulse.com')) {
+    return {
+      pathname: 'features/media/video',
+      params: {
+        title,
+        reddit_video: base64.encode(
+          JSON.stringify({
+            hls_url: originalPost.data.url.replace('/v/', '/videos/') + '.mp4',
+            height: '100%',
+            width: '100%',
+          })
+        ),
+      },
+    };
+  }
+
   if (domain.startsWith('redgifs.com') || domain.startsWith('v3.redgifs.com')) {
     if (originalPost.data.preview?.reddit_video_preview) {
       return {

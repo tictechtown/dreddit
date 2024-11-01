@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { PaletteDark } from '../colors';
@@ -22,6 +22,23 @@ const CarouselView = ({
   width: number;
 }) => {
   const [pageIndex, setPageIndex] = React.useState(0);
+
+  const tallestResolution = useMemo(() => {
+    if (resolutions.length == 0) return null;
+
+    let index = 0;
+    let maxIndex = 0;
+    let max = resolutions[0].y;
+    for (const res of resolutions) {
+      if (res.y > max) {
+        max = res.y;
+        maxIndex = index;
+      }
+      index += 1;
+    }
+    return resolutions[maxIndex];
+  }, [resolutions]);
+
   const renderItem = React.useCallback(({ index }: { index: number }) => {
     return (
       <View
@@ -34,10 +51,10 @@ const CarouselView = ({
           style={{
             borderRadius: 12,
             width: width,
-            height: (width * resolutions[0].y) / resolutions[0].x,
+            height: (width * tallestResolution!.y) / tallestResolution!.x,
           }}
           source={resolutions[index].u.replaceAll('&amp;', '&')}
-          contentFit="contain"
+          contentFit="cover"
           priority={index > 0 ? 'low' : 'normal'}
         />
         {!!captions && !!captions[index] && (
@@ -66,7 +83,7 @@ const CarouselView = ({
     <View>
       <Carousel
         width={width}
-        height={(width * resolutions[0].y) / resolutions[0].x}
+        height={(width * tallestResolution!.y) / tallestResolution!.x}
         autoPlay={false}
         data={resolutions}
         onSnapToItem={setPageIndex}
@@ -77,7 +94,9 @@ const CarouselView = ({
       />
       <View style={styles.pageIndexContainer}>
         <View style={styles.pageIndexBackground} />
-        <Typography variant="labelMedium">{pageIndex + 1}</Typography>
+        <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
+          {pageIndex + 1}
+        </Typography>
         <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
           /{resolutions.length}
         </Typography>

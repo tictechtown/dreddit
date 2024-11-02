@@ -45,11 +45,9 @@ const CarouselView = ({
         style={{
           flex: 1,
           backgroundColor: PaletteDark.scrim,
-          borderRadius: 12,
         }}>
         <Image
           style={{
-            borderRadius: 12,
             width: width,
             height: (width * tallestResolution!.y) / tallestResolution!.x,
           }}
@@ -82,6 +80,7 @@ const CarouselView = ({
   return (
     <View>
       <Carousel
+        style={{ borderRadius: 12 }}
         width={width}
         height={(width * tallestResolution!.y) / tallestResolution!.x}
         autoPlay={false}

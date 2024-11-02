@@ -1,7 +1,7 @@
 import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
 import { ColorPalette } from '../../colors';
@@ -25,6 +25,8 @@ const CommentItem = ({
 }) => {
   const mdStyle = useCommentMarkdownStyle(theme);
 
+  const [showModeration, setShowModeration] = useState(false);
+
   const fetchMore = useCallback(() => {
     if ('children' in comment.data) {
       fetchMoreComments(comment.data.id, comment.data.children);
@@ -42,11 +44,16 @@ const CommentItem = ({
 
   const goToUserPage = useCallback(() => {
     if ('author' in comment.data) {
-      router.push({
-        pathname: 'features/user',
-        params: { userid: comment.data.author },
-      });
+      if (comment.data.author === 'AutoModerator') {
+        setShowModeration((prev) => !prev);
+      } else {
+        router.push({
+          pathname: 'features/user',
+          params: { userid: comment.data.author },
+        });
+      }
     }
+
     // @ts-ignore
   }, [comment.data.author]);
 
@@ -107,11 +114,11 @@ const CommentItem = ({
     );
   }
 
+  const isAutomoderator = comment.data.author === 'AutoModerator';
+
   let fontColor = comment.data.is_submitter ? theme.primary : theme.onSurfaceVariant;
   fontColor =
-    comment.data.author === 'AutoModerator' || comment.data.distinguished !== null
-      ? theme['custom-green']
-      : fontColor;
+    isAutomoderator || comment.data.distinguished !== null ? theme['custom-green'] : fontColor;
   const opacity = fontColor === theme.onSurfaceVariant ? 0.6 : 1;
   const hasReplies = comment.data.replies !== undefined;
 
@@ -151,7 +158,7 @@ const CommentItem = ({
         </Typography>
       </View>
       <View style={{ marginBottom: Spacing.s4, flex: 0 }}>
-        {isGifReply ? (
+        {isAutomoderator && !showModeration ? null : isGifReply ? (
           <CommentMediaView item={isGifReply} showGif={showGif} body={comment.data.body} />
         ) : (
           <Markdown

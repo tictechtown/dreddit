@@ -111,7 +111,7 @@ const SubredditPostItemView = ({
             </Typography>
           </TouchableOpacity>
           <Typography variant="titleMedium" style={{ fontWeight: '400' }}>
-            {decode(post.data.title)}
+            {decode(post.data.title).trim()}
           </Typography>
           <View style={{ flexDirection: 'row', paddingTop: 4 }}>
             {post.data.link_flair_text && (

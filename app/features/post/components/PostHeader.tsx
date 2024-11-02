@@ -112,7 +112,7 @@ const PostHeader = ({
           paddingHorizontal: Spacing.s12,
           fontWeight: '400',
         }}>
-        {decode(post.data.title)}
+        {decode(post.data.title).trim()}
       </Typography>
       <View style={{ padding: Spacing.s12, paddingTop: Spacing.s8, flexDirection: 'row' }}>
         {post.data.link_flair_text && (

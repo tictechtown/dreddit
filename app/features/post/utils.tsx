@@ -28,7 +28,7 @@ export function useMarkdownStyle(theme: ColorPalette) {
     return {
       body: { color: theme.onSurface },
       heading1: {
-        fontSize: 26,
+        fontSize: 22,
         borderBottomWidth: 1,
         borderColor: theme.surfaceVariant,
         marginTop: Spacing.s12,
@@ -169,12 +169,18 @@ export const markdownRenderRules: RenderRules = {
     }
     if (shouldUseScrollView) {
       return (
-        <ScrollView key={node.key} horizontal style={{ flex: 1 }}>
-          <View style={styles._VIEW_SAFE_table}>{children}</View>
-        </ScrollView>
+        <View key={node.key} style={{ flex: 1 }}>
+          <ScrollView horizontal style={{ flex: 1 }}>
+            <View style={styles._VIEW_SAFE_table}>{children}</View>
+          </ScrollView>
+        </View>
       );
     } else {
-      return <View style={styles._VIEW_SAFE_table}>{children}</View>;
+      return (
+        <View style={styles._VIEW_SAFE_table} key={node.key}>
+          {children}
+        </View>
+      );
     }
   },
   link: (node, children, parent, styles, onLinkPress) => (

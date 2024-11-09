@@ -9,6 +9,7 @@ import {
   VideoProps,
   VideoReadyForDisplayEvent,
 } from 'expo-av';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -61,7 +62,6 @@ enum ControlStates {
 
 const VideoPlayer = (props: Props) => {
   const videoRef = useRef<Video>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const dimensions = useWindowDimensions();
   const isMutedAtLaunch = useStore((state) => !state.videoStartSound);
 
@@ -203,9 +203,6 @@ const VideoPlayer = (props: Props) => {
         state: newState,
       });
       playbackStateRef.current = newState;
-      if (shouldPlay) {
-        animationToggle();
-      }
     }
   };
 
@@ -247,25 +244,6 @@ const VideoPlayer = (props: Props) => {
           runOnJS(_setControlsState)(ControlStates.Visible);
         }
       });
-
-      if (!timerRef.current) {
-        timerRef.current = setTimeout(() => {
-          if (
-            playbackStateRef.current === PlaybackStates.Playing &&
-            controlsStateRef.current === ControlStates.Visible
-          ) {
-            controlsOpacityValue.value = withTiming(0, undefined, (finished) => {
-              if (finished) {
-                runOnJS(_setControlsState)(ControlStates.Hidden);
-              }
-            });
-          }
-          if (timerRef.current) {
-            clearTimeout(timerRef.current);
-            timerRef.current = null;
-          }
-        }, 1500);
-      }
     } else if (controlsState === ControlStates.Visible) {
       controlsOpacityValue.value = withTiming(0, undefined, (finished) => {
         if (finished) {
@@ -393,156 +371,98 @@ const VideoPlayer = (props: Props) => {
               ...StyleSheet.absoluteFillObject,
               position: 'absolute',
             }}>
+            {/** Fast Rewind */}
+            <View
+              pointerEvents="none"
+              style={{
+                position: 'absolute',
+                left: 0,
+                bottom: 0,
+                height: '55%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Animated.View style={fastRewindOpacityStyle}>
+                <View
+                  style={{
+                    marginLeft: 16,
+                    backgroundColor: PaletteDark.inverseSurface,
+                    padding: 16,
+                    paddingHorizontal: 24,
+                    borderRadius: 48,
+                    alignItems: 'center',
+                  }}>
+                  <Icons name={'fast-rewind'} size={25} color={PaletteDark.inverseOnSurface} />
+                  <Typography variant="labelLarge" style={{ color: PaletteDark.inverseOnSurface }}>
+                    10s
+                  </Typography>
+                </View>
+              </Animated.View>
+            </View>
+            {/** Fast Forward */}
+            <View
+              pointerEvents="none"
+              style={{
+                position: 'absolute',
+                right: 0,
+                bottom: 0,
+                height: '55%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Animated.View style={fastForwardOpacityStyle}>
+                <View
+                  style={{
+                    marginRight: 16,
+                    backgroundColor: PaletteDark.inverseSurface,
+                    padding: 16,
+                    paddingHorizontal: 24,
+                    borderRadius: 48,
+                    alignItems: 'center',
+                  }}>
+                  <Icons name={'fast-forward'} size={25} color={PaletteDark.inverseOnSurface} />
+                  <Typography variant="labelLarge" style={{ color: PaletteDark.inverseOnSurface }}>
+                    10s
+                  </Typography>
+                </View>
+              </Animated.View>
+            </View>
+
+            {/* Bottom Bar */}
             <Animated.View style={controlsOpacityStyle}>
               {/** Scrim */}
-              <View
-                style={{
-                  ...StyleSheet.absoluteFillObject,
-                  position: 'absolute',
-                  backgroundColor: PaletteDark.scrim,
-                  opacity: 0.6,
-                }}></View>
-
-              {/** Fast Rewind */}
-              <View
-                pointerEvents="none"
+              <LinearGradient
+                // Background Linear Gradient
+                colors={['transparent', PaletteDark.scrim]}
+                locations={[0, 0.7]}
                 style={{
                   position: 'absolute',
+                  bottom: 0,
                   left: 0,
-                  bottom: 0,
-                  height: '55%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Animated.View style={fastRewindOpacityStyle}>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      backgroundColor: PaletteDark.inverseSurface,
-                      padding: 16,
-                      paddingHorizontal: 24,
-                      borderRadius: 48,
-                      alignItems: 'center',
-                    }}>
-                    <Icons name={'fast-rewind'} size={25} color={PaletteDark.inverseOnSurface} />
-                    <Typography
-                      variant="labelLarge"
-                      style={{ color: PaletteDark.inverseOnSurface }}>
-                      10s
-                    </Typography>
-                  </View>
-                </Animated.View>
-              </View>
-              {/** Fast Forward */}
-              <View
-                pointerEvents="none"
-                style={{
-                  position: 'absolute',
                   right: 0,
-                  bottom: 0,
-                  height: '55%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Animated.View style={fastForwardOpacityStyle}>
-                  <View
-                    style={{
-                      marginRight: 16,
-                      backgroundColor: PaletteDark.inverseSurface,
-                      padding: 16,
-                      paddingHorizontal: 24,
-                      borderRadius: 48,
-                      alignItems: 'center',
-                    }}>
-                    <Icons name={'fast-forward'} size={25} color={PaletteDark.inverseOnSurface} />
-                    <Typography
-                      variant="labelLarge"
-                      style={{ color: PaletteDark.inverseOnSurface }}>
-                      10s
-                    </Typography>
-                  </View>
-                </Animated.View>
-              </View>
+                  height: '50%',
+                }}
+              />
 
-              {/** Play Button */}
-              <View
-                pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}
-                style={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <TouchableNativeFeedback
-                  background={TouchableNativeFeedback.Ripple(PaletteDark.surfaceVariant, true)}
-                  onPress={togglePlay}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View
-                      style={{
-                        backgroundColor: PaletteDark.onSurface,
-                        padding: 16,
-                        borderRadius: 48,
-                        opacity: 0.9,
-                      }}>
-                      <Icons
-                        name={
-                          playbackInstanceInfo.state === PlaybackStates.Playing
-                            ? 'pause'
-                            : playbackInstanceInfo.state === PlaybackStates.Paused
-                              ? 'play-arrow'
-                              : playbackInstanceInfo.state === PlaybackStates.Ended
-                                ? 'replay'
-                                : 'cloud-download'
-                        }
-                        size={34}
-                        color={PaletteDark.surface}
-                      />
-                    </View>
-                  </View>
-                </TouchableNativeFeedback>
-              </View>
-              {/** Volume control */}
-              <View
-                pointerEvents={controlsState === ControlStates.Visible ? 'box-none' : 'none'}
-                style={{
-                  position: 'absolute',
-                  top: 16,
-                  right: 8,
-                }}>
-                <MaterialIcons.Button
-                  name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
-                  size={18}
-                  hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                  iconStyle={{ marginRight: 0 }}
-                  borderRadius={24}
-                  style={{ borderColor: PaletteDark.outline, borderWidth: 1 }}
-                  backgroundColor={PaletteDark.surface}
-                  color={PaletteDark.onSurface}
-                  onPress={toggleMute}
-                />
-              </View>
-
-              {/* Bottom Bar */}
               <View
                 style={{
                   position: 'absolute',
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  paddingBottom: 80,
-                  paddingLeft: 4,
-                  paddingRight: 16,
+                  paddingBottom: 40,
+                  paddingHorizontal: 16,
                 }}>
+                {/* Timing */}
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'flex-end',
-                    paddingBottom: 12,
+                    paddingBottom: 8,
                     justifyContent: 'flex-end',
                     alignContent: 'flex-end',
                   }}>
-                  <View style={{ flex: 1, paddingLeft: 12 }}>
+                  <View style={{ flex: 1, paddingLeft: 14 }}>
                     <Typography variant="bodyMedium">
                       {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
                       <Typography
@@ -564,45 +484,93 @@ const VideoPlayer = (props: Props) => {
                     onPress={enterFullScreen}
                   />
                 </View>
-                <Slider
-                  hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
+                {/* Controls */}
+                <View
                   style={{
-                    flex: 1,
-                    borderColor: PaletteDark.onSurface,
-                    borderWidth: 1,
-                    marginHorizontal: 0,
-                  }}
-                  minimumTrackTintColor={PaletteDark.onSurface}
-                  thumbTintColor={PaletteDark.onSurface}
-                  value={
-                    playbackInstanceInfo.duration
-                      ? playbackInstanceInfo.position / playbackInstanceInfo.duration
-                      : 0
-                  }
-                  onSlidingStart={() => {
-                    if (playbackInstanceInfo.state === PlaybackStates.Playing) {
-                      togglePlay();
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 4,
+                    paddingHorizontal: 4,
+                  }}>
+                  {/** Play Button */}
+                  <View
+                    pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableNativeFeedback
+                      background={TouchableNativeFeedback.Ripple(PaletteDark.surfaceVariant, true)}
+                      onPress={togglePlay}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Icons
+                          name={
+                            playbackInstanceInfo.state === PlaybackStates.Playing
+                              ? 'pause'
+                              : playbackInstanceInfo.state === PlaybackStates.Paused
+                                ? 'play-arrow'
+                                : playbackInstanceInfo.state === PlaybackStates.Ended
+                                  ? 'replay'
+                                  : 'cloud-download'
+                          }
+                          size={34}
+                          color={PaletteDark.onSurface}
+                        />
+                      </View>
+                    </TouchableNativeFeedback>
+                  </View>
+                  <Slider
+                    hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
+                    style={{
+                      flex: 1,
+                      marginHorizontal: 0,
+                    }}
+                    tapToSeek={true}
+                    minimumTrackTintColor={PaletteDark.onSurface}
+                    thumbTintColor={PaletteDark.onSurface}
+                    value={
+                      playbackInstanceInfo.duration
+                        ? playbackInstanceInfo.position / playbackInstanceInfo.duration
+                        : 0
+                    }
+                    onSlidingStart={() => {
+                      if (playbackInstanceInfo.state === PlaybackStates.Playing) {
+                        togglePlay();
+                        setPlaybackInstanceInfo({
+                          ...playbackInstanceInfo,
+                          state: PlaybackStates.Paused,
+                        });
+                        playbackStateRef.current = PlaybackStates.Paused;
+                      }
+                    }}
+                    onSlidingComplete={async (e) => {
+                      const position = e * playbackInstanceInfo.duration;
+                      if (videoRef.current) {
+                        await videoRef.current.setStatusAsync({
+                          positionMillis: position,
+                          shouldPlay: true,
+                        });
+                      }
                       setPlaybackInstanceInfo({
                         ...playbackInstanceInfo,
-                        state: PlaybackStates.Paused,
+                        position,
                       });
-                      playbackStateRef.current = PlaybackStates.Paused;
-                    }
-                  }}
-                  onSlidingComplete={async (e) => {
-                    const position = e * playbackInstanceInfo.duration;
-                    if (videoRef.current) {
-                      await videoRef.current.setStatusAsync({
-                        positionMillis: position,
-                        shouldPlay: true,
-                      });
-                    }
-                    setPlaybackInstanceInfo({
-                      ...playbackInstanceInfo,
-                      position,
-                    });
-                  }}
-                />
+                    }}
+                  />
+                  <View
+                    pointerEvents={controlsState === ControlStates.Visible ? 'box-none' : 'none'}>
+                    <MaterialIcons.Button
+                      name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
+                      size={18}
+                      hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                      iconStyle={{ marginRight: 0 }}
+                      borderRadius={24}
+                      backgroundColor={PaletteDark.surface}
+                      color={PaletteDark.onSurface}
+                      onPress={toggleMute}
+                    />
+                  </View>
+                </View>
               </View>
             </Animated.View>
           </View>

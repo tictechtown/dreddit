@@ -22,9 +22,9 @@ const Row = ({ icon, title, theme }: RowProps) => {
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 20,
-        columnGap: 16,
+        columnGap: 8,
       }}>
-      <Icons name={icon} size={16} color={theme.onSurface} />
+      <Icons name={icon} size={24} color={theme.onSurface} />
       <Typography variant="bodyMedium">{title}</Typography>
     </View>
   );

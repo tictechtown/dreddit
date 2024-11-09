@@ -224,7 +224,7 @@ enum SearchType {
 const HomeSearch = () => {
   const theme = useTheme();
   const [searchText, setSearchText] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [results, setResults] = useState<{ [k: string]: SearchResult[] }>({});
   const [defaultResults, setDefaultResults] = useState<SubReddit[]>([]);
   const [searchType, setSearchType] = useState<SearchType>(SearchType.Subreddits);
   const flatListRef = React.useRef<FlatList>(null);
@@ -253,35 +253,37 @@ const HomeSearch = () => {
         if (searchType === SearchType.Subreddits) {
           const searchResults = await new RedditApi().searchSubreddits(txt, { sort: 'top' });
           if (searchResults) {
-            setResults(sortResults(searchResults.items, txt));
+            setResults((prev) => ({ ...prev, [txt]: sortResults(searchResults.items, txt) }));
           } else {
-            setResults([]);
+            setResults((prev) => ({ ...prev, [txt]: [] }));
           }
         } else if (searchType === SearchType.Users) {
           const searchResults = await new RedditApi().searchUsers(txt, { sort: 'top' });
           if (searchResults) {
-            setResults(sortUserResults(searchResults.items));
+            setResults((prev) => ({ ...prev, [txt]: sortUserResults(searchResults.items) }));
           } else {
-            setResults([]);
+            setResults((prev) => ({ ...prev, [txt]: [] }));
           }
         } else if (searchType === SearchType.Posts) {
           const searchResults = await new RedditApi().searchSubmissions(txt, undefined, {
             sort: 'top',
           });
           if (searchResults) {
-            setResults(searchResults.items);
+            setResults((prev) => ({ ...prev, [txt]: searchResults.items }));
           } else {
-            setResults([]);
+            setResults((prev) => ({ ...prev, [txt]: [] }));
           }
         }
         flatListRef?.current?.scrollToOffset({ animated: true, offset: 0 });
       } else {
-        setResults([]);
+        setResults({});
       }
     };
 
     searchSubReddits(searchText, searchType);
   }, [searchText, searchType]);
+
+  const displayedResults = results[searchText] ?? [];
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -383,7 +385,7 @@ const HomeSearch = () => {
       )}
       <FlatList
         ref={flatListRef}
-        data={searchText.length < 3 ? defaultResults : results}
+        data={searchText.length < 3 ? defaultResults : displayedResults}
         renderItem={({ item }) => <SearchResultItem result={item} theme={theme} />}
         keyExtractor={(item) => item.data.id}
         style={{ flex: 1 }}

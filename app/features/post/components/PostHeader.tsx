@@ -114,8 +114,8 @@ const PostHeader = ({
         }}>
         {decode(post.data.title).trim()}
       </Typography>
-      <View style={{ padding: Spacing.s12, paddingTop: Spacing.s8, flexDirection: 'row' }}>
-        {post.data.link_flair_text && (
+      {post.data.link_flair_text && (
+        <View style={{ padding: Spacing.s12, paddingTop: Spacing.s8, flexDirection: 'row' }}>
           <FlairTextView
             flair_text={post.data.link_flair_text}
             flair_type={post.data.link_flair_type}
@@ -126,8 +126,8 @@ const PostHeader = ({
             outlined
             theme={theme}
           />
-        )}
-      </View>
+        </View>
+      )}
 
       <Pressable onPress={onPress}>
         <View style={{ marginHorizontal: 12 }}>

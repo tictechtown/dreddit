@@ -101,15 +101,23 @@ const CommentItem = ({
   if (comment.kind === 'more') {
     return (
       <TouchableOpacity onPress={fetchMore}>
-        <Typography
-          variant="labelSmall"
+        <View
           style={{
-            color: theme.secondary,
-            paddingLeft: comment.data.depth ? Spacing.s16 * comment.data.depth : Spacing.s8,
-            marginBottom: Spacing.s12,
+            flexDirection: 'row',
+            marginLeft: comment.data.depth
+              ? Spacing.s12 + Spacing.s16 * comment.data.depth
+              : Spacing.s12,
+            marginRight: Spacing.s16,
+            marginBottom: Spacing.s8,
           }}>
-          Load {comment.data.count} more {comment.data.count > 1 ? 'comments' : 'comment'}
-        </Typography>
+          <Typography
+            variant="labelSmall"
+            style={{
+              color: theme.primary,
+            }}>
+            {comment.data.count} more {comment.data.count > 1 ? 'replies' : 'reply'}
+          </Typography>
+        </View>
       </TouchableOpacity>
     );
   }

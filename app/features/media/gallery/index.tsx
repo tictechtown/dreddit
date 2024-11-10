@@ -1,16 +1,52 @@
-import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
 import base64 from 'react-native-base64';
+import { Gallery, GalleryType, getAspectRatioSize } from 'react-native-zoom-toolkit';
 import { Post } from '../../../services/api';
 import { PaletteDark } from '../../colors';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
-import ImageView from '../image/ImageView';
 
-const CarouselView = ({
+interface GalleryImageProps {
+  uri: string;
+  index: number;
+}
+
+const GalleryImage: React.FC<GalleryImageProps> = ({ uri }) => {
+  const { width, height } = useWindowDimensions();
+  const [resolution, setResolution] = React.useState<{
+    width: number;
+    height: number;
+  }>({
+    width: 1,
+    height: 1,
+  });
+
+  const size = getAspectRatioSize({
+    aspectRatio: resolution.width / resolution.height,
+    width: height > width ? width : undefined,
+    height: height > width ? undefined : height,
+  });
+
+  return (
+    <Image
+      source={{ uri }}
+      style={size}
+      resizeMethod={'scale'}
+      resizeMode={'cover'}
+      onLoad={(e) => {
+        setResolution({
+          width: e.nativeEvent.source.width,
+          height: e.nativeEvent.source.height,
+        });
+      }}
+    />
+  );
+};
+
+const CarouselTab = ({
   pages,
   captions,
 }: {
@@ -24,92 +60,46 @@ const CarouselView = ({
       }[]
     | null;
 }) => {
+  const ref = React.useRef<GalleryType>(null);
+
   const [pageIndex, setPageIndex] = React.useState(0);
 
-  if (!pages) {
-    return <></>;
-  }
-  const uri = (pages[pageIndex].gif ?? pages[pageIndex].u).replaceAll('&amp;', '&');
+  const keyExtractor = React.useCallback((item: string, index: number) => {
+    return `${item}-${index}`;
+  }, []);
+  const renderItem = React.useCallback((item: string, index: number) => {
+    return <GalleryImage uri={item} index={index} />;
+  }, []);
 
-  const renderThumbItem = React.useCallback(
-    ({
-      index,
-      item,
-    }: {
-      index: number;
-      item: { y: number; x: number; u: string; gif?: string };
-    }) => {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            setPageIndex(index);
-          }}>
-          <Image
-            style={{
-              height: 60,
-              width: 60,
-              marginTop: 5,
-              marginHorizontal: 5,
-              aspectRatio: 1,
-              borderRadius: 10,
-              borderWidth: 2,
-              borderColor: index === pageIndex ? PaletteDark.onSurface : 'transparent',
-            }}
-            source={item.gif ?? item.u.replaceAll('&amp;', '&')}
-            contentFit="cover"
-            priority={index > 0 ? 'low' : 'normal'}
-          />
-        </TouchableOpacity>
-      );
-    },
-    [pageIndex, setPageIndex]
-  );
+  const data = pages?.map((p) => p.gif ?? p.u.replaceAll('&amp;', '&')) ?? [];
+  const onTap = React.useCallback((_, index: number) => {
+    console.log(`Tapped on index ${index}`);
+  }, []);
 
   return (
     <>
-      <View
-        style={[
-          {
-            paddingHorizontal: Spacing.s12,
-          },
-        ]}>
-        <FlatList horizontal renderItem={renderThumbItem} data={pages} />
+      <Gallery
+        ref={ref}
+        data={data}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        onTap={onTap}
+        onIndexChange={(index) => setPageIndex(index)}
+      />
+
+      <View style={styles.pageIndexContainer}>
+        <View style={styles.pageIndexBackground} />
+        <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
+          {pageIndex + 1}
+        </Typography>
+        <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
+          /{(pages ?? []).length}
+        </Typography>
       </View>
-      <View style={{ flex: 1 }}>
-        <ImageView uri={uri} progress={null} />
-      </View>
-      {!!captions && !!captions[pageIndex] && (
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 65,
-            left: 0,
-            right: 0,
-            borderColor: PaletteDark.outlineVariant,
-            borderWidth: 1,
-            borderRadius: Spacing.s8,
-            backgroundColor: PaletteDark.scrim,
-            paddingHorizontal: Spacing.s16,
-            paddingVertical: Spacing.s16,
-            marginHorizontal: Spacing.s8,
-          }}>
-          <Typography variant="labelMedium">{captions[pageIndex]}</Typography>
-        </View>
-      )}
     </>
   );
 };
 
-/**
- * TODO
- * We replace the CarouselView with just a static image and a small horizontal list at the bottom,
- * because CarouselView was intercepting gestures from the ImageView.
- * It should have worked as follow:
- *  - if user is zooming/double tapping -> don't intercept events
- *  - if user has zoomed -> don't intercept events
- *  - only intercept swipe events if the scale = 1
- * Waiting for a fix, so we change the layout instead
- */
 export default function Page() {
   const { title, gallery_data, media_metadata } = useLocalSearchParams();
   const { resolutions, captions } = React.useMemo(() => {
@@ -139,7 +129,32 @@ export default function Page() {
           },
         }}
       />
-      <CarouselView pages={resolutions} captions={captions} />
+      <CarouselTab pages={resolutions} captions={captions} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  pageIndexContainer: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    borderRadius: Spacing.s8,
+    paddingHorizontal: Spacing.s8,
+    paddingVertical: 2,
+    flexDirection: 'row',
+  },
+  pageIndexBackground: {
+    backgroundColor: PaletteDark.surfaceContainerHigh,
+    opacity: 0.6,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderRadius: Spacing.s8,
+  },
+  pageIndexTextColor: {
+    color: PaletteDark.onSurfaceVariant,
+  },
+});

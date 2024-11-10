@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Markdown from '@ronradtke/react-native-markdown-display';
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
@@ -5,6 +6,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
 import { ColorPalette } from '../../colors';
+import ItemSeparator from '../../components/ItemSeparator';
 import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import { Spacing } from '../../tokens';
@@ -139,7 +141,16 @@ const CommentItem = ({
           : Spacing.s12,
         marginBottom: hasReplies ? 0 : Spacing.s8,
       }}>
-      <View style={{ flexDirection: 'row', columnGap: 4 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          columnGap: 4,
+          alignItems: 'center',
+          marginBottom: isAutomoderator ? Spacing.s12 : Spacing.s4,
+        }}>
+        {isAutomoderator && (
+          <MaterialCommunityIcons name="pin" color={theme['custom-green']} size={20} />
+        )}
         <TouchableOpacity onPress={goToUserPage}>
           <Typography
             variant="labelMedium"
@@ -166,7 +177,9 @@ const CommentItem = ({
         </Typography>
       </View>
       <View style={{ marginBottom: Spacing.s4, flex: 0 }}>
-        {isAutomoderator && !showModeration ? null : isGifReply ? (
+        {isAutomoderator && !showModeration ? (
+          <ItemSeparator fullWidth />
+        ) : isGifReply ? (
           <CommentMediaView item={isGifReply} showGif={showGif} body={comment.data.body} />
         ) : (
           <Markdown

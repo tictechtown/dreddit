@@ -80,55 +80,63 @@ const PostHeader = ({
   const authorColor = post.data.stickied ? theme['custom-green'] : theme.primary;
 
   return (
-    <View>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 10,
-          marginHorizontal: 12,
-          columnGap: 8,
-          alignItems: 'center',
-        }}>
-        <Typography variant="overline" style={{ color: authorColor }}>
-          {post.data.author}
-        </Typography>
-        <FlairTextView
-          flair_richtext={post.data.author_flair_richtext}
-          flair_text={post.data.author_flair_text}
-          stickied={false}
-          pinned={false}
-          flair_type={post.data.author_flair_type}
-          flair_background_color={post.data.author_flair_background_color}
-          theme={theme}
-        />
-        <Typography variant="overline" style={{ color: theme.secondary }}>
-          • {timeDifference(post.data.created_utc * 1000)}
-        </Typography>
-      </View>
-      <Typography
-        variant="titleMedium"
-        style={{
-          paddingTop: 4,
-          paddingHorizontal: Spacing.s12,
-          fontWeight: '400',
-        }}>
-        {decode(post.data.title).trim()}
-      </Typography>
-      {post.data.link_flair_text && (
-        <View style={{ padding: Spacing.s12, paddingTop: Spacing.s8, flexDirection: 'row' }}>
+    <View style={{ rowGap: Spacing.s12 }}>
+      <View style={{ rowGap: Spacing.s4 }}>
+        {/* subHeader */}
+        <View
+          style={{
+            flexDirection: 'row',
+            marginHorizontal: 12,
+            columnGap: 8,
+            alignItems: 'center',
+          }}>
+          <Typography variant="overline" style={{ color: authorColor }}>
+            {post.data.author}
+          </Typography>
           <FlairTextView
-            flair_text={post.data.link_flair_text}
-            flair_type={post.data.link_flair_type}
-            flair_richtext={post.data.link_flair_richtext}
-            flair_background_color={post.data.link_flair_background_color}
-            pinned={post.data.pinned}
-            stickied={post.data.stickied}
-            outlined
+            flair_richtext={post.data.author_flair_richtext}
+            flair_text={post.data.author_flair_text}
+            stickied={false}
+            pinned={false}
+            flair_type={post.data.author_flair_type}
+            flair_background_color={post.data.author_flair_background_color}
             theme={theme}
           />
+          <Typography variant="overline" style={{ color: theme.secondary }}>
+            • {timeDifference(post.data.created_utc * 1000)}
+          </Typography>
         </View>
-      )}
-
+        {/* Header */}
+        <Typography
+          variant="titleMedium"
+          style={{
+            paddingHorizontal: Spacing.s12,
+            fontWeight: '400',
+          }}>
+          {decode(post.data.title).trim()}
+        </Typography>
+        {/* Flair */}
+        {post.data.link_flair_text && (
+          <View
+            style={{
+              paddingHorizontal: Spacing.s12,
+              paddingTop: Spacing.s4,
+              flexDirection: 'row',
+            }}>
+            <FlairTextView
+              flair_text={post.data.link_flair_text}
+              flair_type={post.data.link_flair_type}
+              flair_richtext={post.data.link_flair_richtext}
+              flair_background_color={post.data.link_flair_background_color}
+              pinned={post.data.pinned}
+              stickied={post.data.stickied}
+              outlined
+              theme={theme}
+            />
+          </View>
+        )}
+      </View>
+      {/* Image */}
       <Pressable onPress={onPress}>
         <View style={{ marginHorizontal: 12 }}>
           <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
@@ -141,12 +149,12 @@ const PostHeader = ({
           )}
         </View>
       </Pressable>
-
+      {/* Description */}
       {post.data.selftext.length > 0 && (
         <View
           style={{
             padding: Spacing.s12,
-            margin: Spacing.s12,
+            marginHorizontal: Spacing.s12,
 
             backgroundColor: theme.surfaceContainer,
             borderRadius: 8,
@@ -186,10 +194,11 @@ const PostHeader = ({
           </Markdown>
         </View>
       )}
+      {/* Bottom Bar */}
       <View
         style={{
           backgroundColor: theme.surface,
-          padding: Spacing.s12,
+          paddingHorizontal: Spacing.s12,
           marginBottom: Spacing.s12,
           flexDirection: 'row',
           justifyContent: 'space-between',

@@ -440,7 +440,7 @@ const VideoPlayer = (props: Props) => {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: '50%',
+                  height: '30%',
                 }}
               />
 

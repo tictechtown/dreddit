@@ -141,12 +141,13 @@ const CommentItem = ({
           : Spacing.s12,
         marginBottom: hasReplies ? 0 : Spacing.s8,
       }}>
+      {/* SubHeader */}
       <View
         style={{
           flexDirection: 'row',
           columnGap: 4,
           alignItems: 'center',
-          marginBottom: isAutomoderator ? Spacing.s12 : Spacing.s4,
+          marginBottom: isAutomoderator ? Spacing.s8 : 0,
         }}>
         {isAutomoderator && (
           <MaterialCommunityIcons name="pin" color={theme['custom-green']} size={20} />
@@ -176,9 +177,12 @@ const CommentItem = ({
           {timeDifference(comment.data.created_utc * 1000)}
         </Typography>
       </View>
+      {/* Comment content */}
       <View style={{ marginBottom: Spacing.s4, flex: 0 }}>
         {isAutomoderator && !showModeration ? (
-          <ItemSeparator fullWidth />
+          comment.data.depth > 0 ? null : (
+            <ItemSeparator fullWidth />
+          )
         ) : isGifReply ? (
           <CommentMediaView item={isGifReply} showGif={showGif} body={comment.data.body} />
         ) : (

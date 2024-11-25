@@ -80,7 +80,9 @@ export function useGalleryData(
       const galeryWithAllResolutions = mediaIds.map((mediaId) => metadata[mediaId].p);
       const galleryCaptions = galleryData.items.map((it) => it.caption ?? null);
       return [
-        galeryWithAllResolutions.map((allResolutions) => allResolutions[allResolutions.length - 1]),
+        galeryWithAllResolutions
+          .map((allResolutions) => allResolutions[allResolutions.length - 1])
+          .filter((res) => res),
         galleryCaptions,
       ];
     }, [galleryData]);

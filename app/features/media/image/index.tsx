@@ -31,7 +31,7 @@ export default function Page() {
           headerRight: () => {
             return (
               <Icons
-                onPress={async () => {
+                onPressIn={async () => {
                   const result = await FileSystem.downloadAsync(
                     uri as string,
                     `${FileSystem.documentDirectory ?? ''}${filename}`

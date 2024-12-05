@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Link, Stack, useFocusEffect } from 'expo-router';
+import { Link, Stack, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Pressable, TouchableHighlight, View } from 'react-native';
 import postCache from '../../services/postCache';
 import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
@@ -12,7 +12,7 @@ import { SUBREDDITS } from './fixtures';
 
 const Home = () => {
   const theme = useTheme();
-
+  const router = useRouter();
   const [favorites] = useStore((state) => [state.favorites]);
 
   useFocusEffect(
@@ -36,13 +36,12 @@ const Home = () => {
           title: 'Home',
           headerRight: () => {
             return (
-              <Link
-                href={{
-                  pathname: 'features/settings',
-                  params: {},
+              <Pressable
+                onPressIn={() => {
+                  router.push('features/settings');
                 }}>
                 <Ionicons name="settings-sharp" size={24} color={theme.onBackground} />
-              </Link>
+              </Pressable>
             );
           },
         }}

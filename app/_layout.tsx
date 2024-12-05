@@ -83,21 +83,24 @@ export default function Layout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* @ts-ignore */}
       <ThemeContext.Provider value={schemes[color ?? 'light']}>
-        <ThemeProvider value={rnScheme}>
-          <Stack
-            screenOptions={{
-              headerStyle: {
-                backgroundColor: schemes[color ?? 'light'].surface,
-              },
-              headerBackTitleVisible: false,
-              headerShadowVisible: false,
-              headerTintColor: schemes[color ?? 'light'].onSurface,
-              navigationBarColor: 'transparent',
-            }}>
-            <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
-            <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" />
-          </Stack>
-        </ThemeProvider>
+        {/* <ThemeProvider> */}
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: schemes[color ?? 'light'].surface,
+            },
+            // headerBackTitleVisible: false,
+            headerShadowVisible: false,
+            headerTitleStyle: {
+              color: schemes[color ?? 'light'].onSurface,
+            },
+            headerTintColor: schemes[color ?? 'light'].onSurface,
+            navigationBarColor: 'transparent',
+          }}>
+          <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
+          <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" />
+        </Stack>
+        {/* </ThemeProvider> */}
       </ThemeContext.Provider>
     </GestureHandlerRootView>
   );

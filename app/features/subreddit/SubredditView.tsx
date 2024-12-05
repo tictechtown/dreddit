@@ -287,12 +287,11 @@ const SubRedditView = (props: Props) => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'flex-start',
-              marginRight: 280,
               flexShrink: 1,
               columnGap: 12,
             }}>
             <SubredditIcon size={32} icon={props.icon} nsfw={false} />
-            <View style={{ flexShrink: 1 }}>
+            <View style={{ flex: 1 }}>
               <Text
                 style={{
                   color: _p.tintColor,
@@ -308,7 +307,7 @@ const SubRedditView = (props: Props) => {
         </Pressable>
       );
     },
-    [scrollToTop]
+    [scrollToTop, props.subreddit]
   );
 
   const HeaderRight = useCallback(() => {
@@ -337,7 +336,7 @@ const SubRedditView = (props: Props) => {
         <TouchableNativeFeedback
           disabled={!subredditData}
           hitSlop={5}
-          onPress={toggleSubreddit}
+          onPressIn={toggleSubreddit}
           background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
           <View>
             <Icons
@@ -350,7 +349,7 @@ const SubRedditView = (props: Props) => {
         <TouchableNativeFeedback
           disabled={!subredditData}
           hitSlop={5}
-          onPress={searchPosts}
+          onPressIn={searchPosts}
           background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
           <View>
             <Icons name={'search'} size={24} color={theme.onBackground} />

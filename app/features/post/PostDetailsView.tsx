@@ -310,7 +310,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                   columnGap: 8,
                 }}>
                 <TouchableOpacity
-                  onPress={async () => {
+                  onPressIn={async () => {
                     await Share.share({ message: queryData?.post?.data.url ?? '' });
                   }}
                   hitSlop={20}>
@@ -319,7 +319,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                 <TouchableNativeFeedback
                   disabled={!queryData}
                   hitSlop={5}
-                  onPress={toggleSavedPost}
+                  onPressIn={toggleSavedPost}
                   background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
                     <Icons

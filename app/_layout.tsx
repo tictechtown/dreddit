@@ -1,5 +1,5 @@
 import { Material3Theme, useMaterial3Theme } from '@pchmn/expo-material3-theme';
-import { ThemeProvider } from '@react-navigation/native';
+import { ThemeProvider, DefaultTheme } from '@react-navigation/native';
 import { Stack } from 'expo-router/stack';
 import { useMemo } from 'react';
 import { ColorSchemeName } from 'react-native';
@@ -9,6 +9,7 @@ import useColorScheme from './services/theme/useColorScheme';
 
 type RNScheme = {
   dark: boolean;
+  fonts: any; // TODO
   colors: {
     primary: string;
     background: string;
@@ -25,6 +26,7 @@ function convertMD3ToReactNavigation(
 ): RNScheme {
   const scheme = schemes[colorScheme ?? 'light'];
   return {
+    ...DefaultTheme,
     dark: colorScheme === 'dark',
     colors: {
       primary: scheme.primary,
@@ -83,24 +85,24 @@ export default function Layout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* @ts-ignore */}
       <ThemeContext.Provider value={schemes[color ?? 'light']}>
-        {/* <ThemeProvider> */}
-        <Stack
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: schemes[color ?? 'light'].surface,
-            },
-            // headerBackTitleVisible: false,
-            headerShadowVisible: false,
-            headerTitleStyle: {
-              color: schemes[color ?? 'light'].onSurface,
-            },
-            headerTintColor: schemes[color ?? 'light'].onSurface,
-            navigationBarColor: 'transparent',
-          }}>
-          <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
-          <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" />
-        </Stack>
-        {/* </ThemeProvider> */}
+        <ThemeProvider value={rnScheme}>
+          <Stack
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: schemes[color ?? 'light'].surface,
+              },
+              // headerBackTitleVisible: false,
+              headerShadowVisible: false,
+              headerTitleStyle: {
+                color: schemes[color ?? 'light'].onSurface,
+              },
+              headerTintColor: schemes[color ?? 'light'].onSurface,
+              navigationBarColor: 'transparent',
+            }}>
+            <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
+            <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" />
+          </Stack>
+        </ThemeProvider>
       </ThemeContext.Provider>
     </GestureHandlerRootView>
   );

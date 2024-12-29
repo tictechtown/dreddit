@@ -407,24 +407,11 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
             ]}
           />
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            {Constants.appOwnership === 'expo' ? (
-              <Image
-                source={(showMediaItem.s.gif ?? showMediaItem.s.u).replaceAll('&amp;', '&')}
-                contentFit="contain"
-                style={{ width: showMediaItem.s.x, height: showMediaItem.s.y, maxWidth: '100%' }}
-              />
-            ) : (
-              <PhotoZoom
-                source={{
-                  uri: (showMediaItem.s.gif ?? showMediaItem.s.u).replaceAll('&amp;', '&'),
-                }}
-                style={{ width: '100%', height: '100%' }}
-                maximumZoomScale={10}
-                androidScaleType="fitCenter"
-                // onLoadStart={onLoadStart}
-                // onProgress={onProgress}
-              />
-            )}
+            <Image
+              source={(showMediaItem.s.gif ?? showMediaItem.s.u).replaceAll('&amp;', '&')}
+              contentFit="contain"
+              style={{ width: showMediaItem.s.x, height: showMediaItem.s.y, maxWidth: '100%' }}
+            />
           </View>
         </Pressable>
       )}

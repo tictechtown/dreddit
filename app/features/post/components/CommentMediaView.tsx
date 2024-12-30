@@ -49,7 +49,7 @@ const CommentMediaView = ({
   return (
     <Pressable onPress={onPress}>
       <Markdown markdownit={markdownIt} style={mdStyle} rules={markdownRenderRules}>
-        {decode(body.replace(item.s.u, ''))}
+        {decode(body.replace(item.s.u, '').replace(`![gif](${item.id})`, ''))}
       </Markdown>
       <Image
         style={{

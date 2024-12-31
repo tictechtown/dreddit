@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StateCreator, create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { SUBREDDITS } from '../../features/home/fixtures';
 
 export type SubredditFavorite = {
   id?: string;
@@ -14,10 +15,11 @@ interface FavoriteState {
   favorites: SubredditFavorite[];
   addToFavorites: (entry: SubredditFavorite) => void;
   removeFromFavorite: (entry: SubredditFavorite) => void;
+  updateFavorite: (entry: SubredditFavorite) => void;
 }
 
 const createSubredditSlice: StateCreator<FavoriteState> = (set) => ({
-  favorites: [],
+  favorites: SUBREDDITS,
   addToFavorites: (entry) =>
     set((state) => ({
       favorites: [...state.favorites, entry],
@@ -26,6 +28,15 @@ const createSubredditSlice: StateCreator<FavoriteState> = (set) => ({
     set((state) => ({
       favorites: state.favorites.filter((e) => e.name !== entry.name),
     })),
+  updateFavorite: (entry) =>
+    set((state) => {
+      const index = state.favorites.findIndex((e) => e.name === entry.name);
+      const favorites = [...state.favorites];
+      favorites[index] = entry;
+      return {
+        favorites: favorites,
+      };
+    }),
 });
 
 export enum DataUsage {
@@ -128,15 +139,15 @@ const createVideoStartSoundSlice: StateCreator<VideoStartSoundState> = (set) => 
   updateVideoStartSound: (entry) => set(() => ({ videoStartSound: entry })),
 });
 
-export const useStore = create<
-  FavoriteState &
-    SettingsState &
-    SavedPostState &
-    ColorSchemeState &
-    BlockedSubredditState &
-    BlockedUserState &
-    VideoStartSoundState
->()(
+type State = FavoriteState &
+  SettingsState &
+  SavedPostState &
+  ColorSchemeState &
+  BlockedSubredditState &
+  BlockedUserState &
+  VideoStartSoundState;
+
+export const useStore = create<State>()(
   persist(
     (...a) => ({
       ...createSubredditSlice(...a),
@@ -151,6 +162,15 @@ export const useStore = create<
     {
       name: 'storage',
       storage: createJSONStorage(() => AsyncStorage),
+      version: 1,
+      migrate: (persistedState, version) => {
+        if (version === 0) {
+          (persistedState as State).favorites = [
+            ...new Set([...SUBREDDITS, ...(persistedState as State).favorites]),
+          ];
+        }
+        return persistedState as State;
+      },
     }
   )
 );

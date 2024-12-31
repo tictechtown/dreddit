@@ -2,8 +2,16 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { Link, Stack, useFocusEffect } from 'expo-router';
 import { decode } from 'html-entities';
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Keyboard, Platform, Pressable, TextInput, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Keyboard,
+  Platform,
+  Pressable,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Post, RedditApi, SubReddit, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../colors';
@@ -221,16 +229,12 @@ enum SearchType {
   Posts,
 }
 
-const HomeSearch = () => {
+const HomeSearchContent = ({ searchText }: { searchText: string }) => {
   const theme = useTheme();
-  const [searchText, setSearchText] = useState('');
   const [results, setResults] = useState<{ [k: string]: SearchResult[] }>({});
   const [defaultResults, setDefaultResults] = useState<SubReddit[]>([]);
   const [searchType, setSearchType] = useState<SearchType>(SearchType.Subreddits);
   const flatListRef = React.useRef<FlatList>(null);
-  const inputRef = useRef<TextInput>(null);
-
-  useFocusEffect(() => inputRef.current?.focus());
 
   useEffect(() => {
     const fn = async () => {
@@ -286,6 +290,87 @@ const HomeSearch = () => {
   const displayedResults = results[searchText] ?? [];
 
   return (
+    <>
+      {searchText.length < 3 && (
+        <View
+          style={{
+            paddingHorizontal: Spacing.s12,
+            marginTop: Spacing.s16,
+            marginBottom: Spacing.s12,
+          }}>
+          <Typography variant="titleMedium">Trending</Typography>
+        </View>
+      )}
+      {searchText.length >= 3 && (
+        <Tabs
+          selectedTabId={searchType}
+          tabIds={[SearchType.Subreddits, SearchType.Users, SearchType.Posts]}
+          tabNames={['Subreddits', 'Users', 'Posts']}
+          onPress={setSearchType}
+        />
+      )}
+      <FlatList
+        ref={flatListRef}
+        data={searchText.length < 3 ? defaultResults : displayedResults}
+        renderItem={({ item }) => <SearchResultItem result={item} theme={theme} />}
+        keyExtractor={(item) => item.data.id}
+        style={{ flex: 1 }}
+        keyboardShouldPersistTaps={'handled'}
+        onScrollBeginDrag={Keyboard.dismiss}
+        contentContainerStyle={{ paddingBottom: Spacing.s24 }}
+      />
+    </>
+  );
+};
+
+const HomeSearch = () => {
+  const theme = useTheme();
+  const [searchText, setSearchText] = useState('');
+  const inputRef = useRef<TextInput>(null);
+
+  useFocusEffect(() => {
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 200);
+  });
+
+  const headerTitle = useCallback(() => {
+    return (
+      <TextInput
+        ref={inputRef}
+        editable
+        style={{
+          fontSize: 20,
+          color: theme.onBackground,
+        }}
+        onChangeText={setSearchText}
+        placeholder="Search Reddit"
+        placeholderTextColor={theme.onSurfaceVariant}
+        autoCapitalize="none"
+        cursorColor={theme.secondary}
+        returnKeyType="search"
+      />
+    );
+  }, [inputRef, theme, setSearchText]);
+
+  const headerRight = useCallback(() => {
+    return (
+      <TouchableOpacity
+        onPressIn={() => {
+          inputRef.current?.clear();
+          setSearchText('');
+          inputRef.current?.focus();
+        }}>
+        <Icons
+          name="close"
+          size={24}
+          color={searchText.length > 0 ? theme.onSurfaceVariant : theme.onSurface}
+        />
+      </TouchableOpacity>
+    );
+  }, [searchText.length > 0, inputRef, theme, setSearchText]);
+
+  return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <Stack.Screen
         options={
@@ -296,40 +381,8 @@ const HomeSearch = () => {
             : {
                 title: '',
 
-                headerRight: () => {
-                  return (
-                    <Icons
-                      onPress={() => {
-                        inputRef.current?.clear();
-                        setSearchText('');
-                      }}
-                      name="close"
-                      size={24}
-                      color={searchText.length > 0 ? theme.onSurfaceVariant : theme.onSurface}
-                    />
-                  );
-                },
-                headerTitle: () => {
-                  return (
-                    <TextInput
-                      ref={inputRef}
-                      style={{
-                        fontSize: 20,
-                        color: theme.onBackground,
-                      }}
-                      onChangeText={(txt) => {
-                        setSearchText(txt);
-                      }}
-                      value={searchText}
-                      placeholder="Search Reddit"
-                      placeholderTextColor={theme.onSurfaceVariant}
-                      autoFocus={true}
-                      autoCapitalize="none"
-                      cursorColor={theme.secondary}
-                      returnKeyType="search"
-                    />
-                  );
-                },
+                headerRight: headerRight,
+                headerTitle: headerTitle,
               }
         }
       />
@@ -365,34 +418,7 @@ const HomeSearch = () => {
           />
         </View>
       )}
-      {searchText.length < 3 && (
-        <View
-          style={{
-            paddingHorizontal: Spacing.s12,
-            marginTop: Spacing.s16,
-            marginBottom: Spacing.s12,
-          }}>
-          <Typography variant="titleMedium">Trending</Typography>
-        </View>
-      )}
-      {searchText.length >= 3 && (
-        <Tabs
-          selectedTabId={searchType}
-          tabIds={[SearchType.Subreddits, SearchType.Users, SearchType.Posts]}
-          tabNames={['Subreddits', 'Users', 'Posts']}
-          onPress={setSearchType}
-        />
-      )}
-      <FlatList
-        ref={flatListRef}
-        data={searchText.length < 3 ? defaultResults : displayedResults}
-        renderItem={({ item }) => <SearchResultItem result={item} theme={theme} />}
-        keyExtractor={(item) => item.data.id}
-        style={{ flex: 1 }}
-        keyboardShouldPersistTaps={'handled'}
-        onScrollBeginDrag={Keyboard.dismiss}
-        contentContainerStyle={{ paddingBottom: Spacing.s24 }}
-      />
+      <HomeSearchContent searchText={searchText} />
     </View>
   );
 };

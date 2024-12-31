@@ -29,13 +29,13 @@ function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: stri
 const PostHeader = ({
   post,
   forcedSortOrder,
-  onPress,
+  onMediaPress,
   onChangeSort,
   theme,
 }: {
   post: null | Post;
   forcedSortOrder: string | null;
-  onPress: () => void;
+  onMediaPress: () => void;
   onChangeSort: () => void;
   theme: ColorPalette;
 }) => {
@@ -137,7 +137,7 @@ const PostHeader = ({
         )}
       </View>
       {/* Image */}
-      <Pressable onPress={onPress}>
+      <Pressable onPress={onMediaPress}>
         <View style={{ marginHorizontal: 12 }}>
           <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
           {maxGaleryResolutions && (

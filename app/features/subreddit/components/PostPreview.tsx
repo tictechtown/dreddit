@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
 import { Post } from '../../../services/api';
 import { DataUsage, useStore } from '../../../services/store';
@@ -30,54 +30,58 @@ function getVideoDuration(duration: number): string {
 
 const YOUTUBE_PLACEHOLDER = require('../../../../assets/images/youtube_placeholder.jpg');
 
-const PostPreviewVideo = ({
-  source,
-  domain,
-  imageWidth,
-  theme,
-}: {
-  source: string;
-  domain: string;
-  imageWidth: number;
-  theme: ColorPalette;
-}) => {
-  return (
-    <View>
+const PostPreviewVideo = memo(
+  ({
+    source,
+    domain,
+    imageWidth,
+    theme,
+  }: {
+    source: string;
+    domain: string;
+    imageWidth: number;
+    theme: ColorPalette;
+  }) => {
+    return (
       <View>
-        <Image
-          autoplay={false}
-          style={{
-            width: imageWidth,
-            height: 210,
-            borderTopLeftRadius: 12,
-            borderTopRightRadius: 12,
-          }}
-          placeholder={
-            domain === 'youtube.com' || domain === 'youtu.be' ? YOUTUBE_PLACEHOLDER : undefined
-          }
-          source={source}
-          contentFit="cover"
-        />
-      </View>
+        <View>
+          <Image
+            autoplay={false}
+            style={{
+              width: imageWidth,
+              height: 210,
+              borderTopLeftRadius: 12,
+              borderTopRightRadius: 12,
+            }}
+            placeholder={
+              domain === 'youtube.com' || domain === 'youtu.be' ? YOUTUBE_PLACEHOLDER : undefined
+            }
+            source={source}
+            transition={0}
+            cachePolicy={'memory-disk'}
+            contentFit="cover"
+          />
+        </View>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          columnGap: 8,
-          alignItems: 'center',
-          backgroundColor: theme.surfaceContainerHigh,
-          borderBottomLeftRadius: 12,
-          borderBottomRightRadius: 12,
-          padding: 10,
-        }}>
-        <Icons name="play-circle" size={14} color={theme.onSurface} />
-        <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
-          {domain}
-        </Typography>
+        <View
+          style={{
+            flexDirection: 'row',
+            columnGap: 8,
+            alignItems: 'center',
+            backgroundColor: theme.surfaceContainerHigh,
+            borderBottomLeftRadius: 12,
+            borderBottomRightRadius: 12,
+            padding: 10,
+          }}>
+          <Icons name="play-circle" size={14} color={theme.onSurface} />
+          <Typography variant="labelSmall" style={{ color: theme.onSurfaceVariant }}>
+            {domain}
+          </Typography>
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const PostPreviewStaticMedia = ({
   width,

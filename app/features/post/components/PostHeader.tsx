@@ -12,9 +12,10 @@ import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import PostPreview from '../../subreddit/components/PostPreview';
 import { Spacing } from '../../tokens';
-import { timeDifference, useGalleryData } from '../../utils';
+import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import PollOption from './PollOption';
+import useGalleryData from '../../../hooks/useGalleryData';
 
 function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: string | null): string {
   let sort = forcedSortOrder ?? suggestedSort ?? 'best';

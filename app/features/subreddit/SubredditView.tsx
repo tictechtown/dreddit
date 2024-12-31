@@ -1,6 +1,6 @@
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-import { Link, Stack, router } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
@@ -319,20 +319,19 @@ const SubRedditView = (props: Props) => {
           justifyContent: 'flex-end',
           columnGap: 8,
         }}>
-        <Link
-          href={{
-            pathname: 'features/subreddit/about',
-            params: { subreddit: props.subreddit },
+        <TouchableNativeFeedback
+          onPressIn={() => {
+            router.navigate({
+              pathname: 'features/subreddit/about',
+              params: { subreddit: props.subreddit },
+            });
           }}
-          asChild>
-          <TouchableNativeFeedback
-            hitSlop={5}
-            background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
-            <View>
-              <Icons name="info-outline" size={26} color={theme.onBackground} />
-            </View>
-          </TouchableNativeFeedback>
-        </Link>
+          hitSlop={5}
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
+          <View>
+            <Icons name="info-outline" size={24} color={theme.onSurfaceVariant} />
+          </View>
+        </TouchableNativeFeedback>
         <TouchableNativeFeedback
           disabled={!subredditData}
           hitSlop={5}
@@ -352,7 +351,7 @@ const SubRedditView = (props: Props) => {
           onPressIn={searchPosts}
           background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
           <View>
-            <Icons name={'search'} size={24} color={theme.onBackground} />
+            <Icons name={'search'} size={24} color={theme.onSurfaceVariant} />
           </View>
         </TouchableNativeFeedback>
       </View>

@@ -8,11 +8,12 @@ import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
-import { timeDifference, useGalleryData } from '../../utils';
+import { timeDifference } from '../../utils';
 import FlairTextView from './FlairTextView';
 import PostPreview from './PostPreview';
 import PostToolbar from './PostToolbar';
 import useMediaPressCallback from '../../../hooks/useMediaPressCallback';
+import useGalleryData from '../../../hooks/useGalleryData';
 
 type Props = {
   post: Post;

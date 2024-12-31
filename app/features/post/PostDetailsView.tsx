@@ -312,7 +312,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                   columnGap: 8,
                 }}>
                 <TouchableOpacity onPressIn={_onHeaderPressed} hitSlop={20}>
-                  <Icons name="output" size={24} color={theme.onSurfaceVariant} />
+                  <Icons name="info-outline" size={24} color={theme.onSurfaceVariant} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPressIn={async () => {

@@ -2,11 +2,12 @@ import Markdown from '@ronradtke/react-native-markdown-display';
 import { Image } from 'expo-image';
 import { decode } from 'html-entities';
 import { useCallback } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { RedditMediaMedata } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
 import { Spacing } from '../../tokens';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
+import Icons from '../../components/Icons';
 
 const CommentMediaView = ({
   item,
@@ -38,28 +39,36 @@ const CommentMediaView = ({
       />
     );
   }
-
-  const preview: undefined | { x: number; y: number; u: string } = item.p[0] ?? item.s;
+  const preview: undefined | { x: number; y: number; u: string } =
+    (item.p.length > 1 ? item.p[1] : item.p[0]) ?? item.s;
+  console.log('item', { preview, item, previews: item.p });
 
   if (!preview) {
     console.log(item);
     return null;
   }
 
+  const magnification = item.e === 'AnimatedImage' ? 2 : 1;
+
   return (
     <Pressable onPress={onPress}>
       <Markdown markdownit={markdownIt} style={mdStyle} rules={markdownRenderRules}>
         {decode(body.replace(item.s.u, '').replace(`![gif](${item.id})`, ''))}
       </Markdown>
-      <Image
-        style={{
-          borderRadius: 8,
-          marginTop: Spacing.s12,
-          width: preview.x,
-          height: preview.y,
-        }}
-        source={preview.u.replaceAll('&amp;', '&')}
-      />
+      <View style={{ justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start' }}>
+        <Image
+          style={{
+            borderRadius: 8,
+            marginTop: Spacing.s12,
+            width: preview.x * magnification,
+            height: preview.y * magnification,
+          }}
+          source={preview.u.replaceAll('&amp;', '&')}
+        />
+        {item.e === 'AnimatedImage' && (
+          <Icons style={{ position: 'absolute' }} name="play-circle" size={48} color={'white'} />
+        )}
+      </View>
     </Pressable>
   );
 };

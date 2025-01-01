@@ -44,7 +44,6 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ uri }) => {
 
 const CarouselTab = ({
   pages,
-  captions,
 }: {
   captions: (string | null)[] | null;
   pages:

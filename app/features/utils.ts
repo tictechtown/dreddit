@@ -1,6 +1,4 @@
 import queryString from 'query-string';
-import { useMemo } from 'react';
-import { Post } from '../services/api';
 
 export function timeDifference(timestampInMs: number, locale: string = 'en-US') {
   const msPerMinute = 60 * 1000;

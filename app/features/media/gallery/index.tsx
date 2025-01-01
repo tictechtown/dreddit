@@ -3,7 +3,7 @@ import { decode } from 'html-entities';
 import * as React from 'react';
 import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
 import base64 from 'react-native-base64';
-import { Gallery, GalleryType, getAspectRatioSize } from 'react-native-zoom-toolkit';
+import { fitContainer, Gallery, GalleryType } from 'react-native-zoom-toolkit';
 import { Post } from '../../../services/api';
 import { PaletteDark } from '../../colors';
 import Typography from '../../components/Typography';
@@ -24,11 +24,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ uri }) => {
     height: 1,
   });
 
-  const size = getAspectRatioSize({
-    aspectRatio: resolution.width / resolution.height,
-    width: height > width ? width : undefined,
-    height: height > width ? undefined : height,
-  });
+  const size = fitContainer(resolution.width / resolution.height, { width, height });
 
   return (
     <Image

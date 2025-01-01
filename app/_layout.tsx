@@ -97,7 +97,7 @@ export default function Layout() {
                 color: schemes[color ?? 'light'].onSurface,
               },
               headerTintColor: schemes[color ?? 'light'].onSurface,
-              navigationBarColor: 'transparent',
+              navigationBarColor: schemes[color ?? 'light'].background,
             }}>
             <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
             <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" />

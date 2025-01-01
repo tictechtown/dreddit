@@ -14,6 +14,7 @@ export default function useGalleryData(
       const galleryCaptions = galleryData.items.map((it) => it.caption ?? null);
       return [
         galeryWithAllResolutions
+          .filter((res) => res)
           .map((allResolutions) => allResolutions[allResolutions.length - 1])
           .filter((res) => res),
         galleryCaptions,

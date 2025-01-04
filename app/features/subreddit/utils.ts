@@ -24,7 +24,9 @@ export const onLinkPress = (post: Post): HrefObject => {
     return {
       pathname: 'features/media/gallery',
       params: {
-        gallery_data: base64.encode(JSON.stringify(originalPost.data.gallery_data)),
+        gallery_data: base64.encode(
+          encodeURIComponent(JSON.stringify(originalPost.data.gallery_data))
+        ),
         media_metadata: base64.encode(JSON.stringify(originalPost.data.media_metadata)),
         title,
       },

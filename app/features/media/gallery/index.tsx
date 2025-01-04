@@ -42,8 +42,20 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ uri }) => {
   );
 };
 
+function CaptionFooter({ caption }: { caption: string | null }) {
+  if (!caption) {
+    return;
+  }
+  return (
+    <View style={styles.footer}>
+      <Typography>{caption}</Typography>
+    </View>
+  );
+}
+
 const CarouselTab = ({
   pages,
+  captions,
 }: {
   captions: (string | null)[] | null;
   pages:
@@ -58,7 +70,7 @@ const CarouselTab = ({
   const ref = React.useRef<GalleryType>(null);
 
   const [pageIndex, setPageIndex] = React.useState(0);
-
+  const [showCaption, setShowCaption] = React.useState(true);
   const keyExtractor = React.useCallback((item: string, index: number) => {
     return `${item}-${index}`;
   }, []);
@@ -67,9 +79,9 @@ const CarouselTab = ({
   }, []);
 
   const data = pages?.map((p) => p.gif ?? p.u.replaceAll('&amp;', '&')) ?? [];
-  const onTap = React.useCallback((_, index: number) => {
-    console.log(`Tapped on index ${index}`);
-  }, []);
+  const onTap = React.useCallback(() => {
+    setShowCaption((prevValue) => !prevValue);
+  }, [setShowCaption]);
 
   return (
     <>
@@ -82,15 +94,21 @@ const CarouselTab = ({
         onIndexChange={(index) => setPageIndex(index)}
       />
 
-      <View style={styles.pageIndexContainer}>
-        <View style={styles.pageIndexBackground} />
-        <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
-          {pageIndex + 1}
-        </Typography>
-        <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
-          /{(pages ?? []).length}
-        </Typography>
-      </View>
+      {showCaption && (
+        <>
+          <CaptionFooter caption={captions ? captions[pageIndex] : null} />
+
+          <View style={styles.pageIndexContainer}>
+            <View style={styles.pageIndexBackground} />
+            <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
+              {pageIndex + 1}
+            </Typography>
+            <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
+              /{(pages ?? []).length}
+            </Typography>
+          </View>
+        </>
+      )}
     </>
   );
 };
@@ -99,12 +117,15 @@ export default function Page() {
   const { title, gallery_data, media_metadata } = useLocalSearchParams();
   const { resolutions, captions } = React.useMemo(() => {
     if (!gallery_data || !media_metadata) return { resolutions: null, captions: null };
-    const metadata: Post['data']['media_metadata'] = JSON.parse(
-      base64.decode(media_metadata as string)
-    );
-    const galleryData: Post['data']['gallery_data'] = JSON.parse(
-      base64.decode(gallery_data as string)
-    );
+    let metadata: Post['data']['media_metadata'];
+    let galleryData: Post['data']['gallery_data'];
+    try {
+      metadata = JSON.parse(base64.decode(media_metadata as string));
+      galleryData = JSON.parse(decodeURIComponent(base64.decode(gallery_data as string)));
+    } catch (e) {
+      console.log('error loading data', { e, media_metadata, gallery_data });
+      return { resolutions: null, captions: null };
+    }
     const mediaIds = galleryData?.items.map((it) => it.media_id);
     // @ts-ignore
     const galeryWithAllResolutions = (mediaIds ?? []).map((mediaId) => metadata[mediaId].s);
@@ -131,6 +152,15 @@ export default function Page() {
 }
 
 const styles = StyleSheet.create({
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 20,
+    borderRadius: Spacing.s8,
+    backgroundColor: PaletteDark.surfaceContainerLow,
+  },
   pageIndexContainer: {
     position: 'absolute',
     bottom: 10,

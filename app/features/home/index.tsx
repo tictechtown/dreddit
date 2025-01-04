@@ -1,19 +1,19 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Link, Stack, useFocusEffect } from 'expo-router';
+import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
 import postCache from '../../services/postCache';
-import { useStore } from '../../services/store';
+import { SubredditFavorite, useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
 import HomeItem from './components/HomeItem';
 import SavedPostsFooter from './components/SavedPostsFooter';
 import SearchHeader from './components/SearchHeader';
-import { SUBREDDITS } from './fixtures';
+import { RedditApi } from '../../services/api';
 
 const Home = () => {
   const theme = useTheme();
-
-  const [favorites] = useStore((state) => [state.favorites]);
+  const router = useRouter();
+  const [favorites, updateFavorite] = useStore((state) => [state.favorites, state.updateFavorite]);
 
   useFocusEffect(
     useCallback(() => {
@@ -22,8 +22,24 @@ const Home = () => {
   );
 
   const flatData = useMemo(() => {
-    return [...SUBREDDITS, ...favorites].sort((a, b) => a.name.localeCompare(b.name));
+    return favorites.sort((a, b) => a.name.localeCompare(b.name));
   }, [favorites]);
+
+  const refreshIcon = useCallback(
+    async (favorite: SubredditFavorite) => {
+      const subredditData = await new RedditApi().getSubreddit(favorite.name);
+      const currentIcon = favorite.icon;
+      const potentialNewIcon =
+        subredditData.icon_img !== '' ? subredditData.icon_img : subredditData.community_icon;
+      if (currentIcon !== potentialNewIcon && potentialNewIcon !== '') {
+        console.log('updating icon', { favorite, potentialNewIcon });
+        updateFavorite({ ...favorite, icon: potentialNewIcon });
+      } else {
+        console.log('test', { favorite, potentialNewIcon });
+      }
+    },
+    [updateFavorite]
+  );
 
   return (
     <View
@@ -36,13 +52,12 @@ const Home = () => {
           title: 'Home',
           headerRight: () => {
             return (
-              <Link
-                href={{
-                  pathname: 'features/settings',
-                  params: {},
+              <Pressable
+                onPressIn={() => {
+                  router.push('features/settings');
                 }}>
                 <Ionicons name="settings-sharp" size={24} color={theme.onBackground} />
-              </Link>
+              </Pressable>
             );
           },
         }}
@@ -52,7 +67,14 @@ const Home = () => {
         ListHeaderComponent={() => <SearchHeader />}
         ListFooterComponent={() => <SavedPostsFooter />}
         renderItem={({ item }) => (
-          <HomeItem subreddit={item.name} description={item.description} icon={item.icon} />
+          <HomeItem
+            subreddit={item.name}
+            description={item.description}
+            icon={item.icon}
+            onIconNotFoundError={() => {
+              refreshIcon(item);
+            }}
+          />
         )}
         keyExtractor={(item) => item.name}
         style={{ flex: 1 }}

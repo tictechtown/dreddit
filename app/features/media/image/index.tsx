@@ -28,10 +28,11 @@ export default function Page() {
           headerStyle: {
             backgroundColor: PaletteDark.scrim,
           },
+          navigationBarColor: PaletteDark.scrim,
           headerRight: () => {
             return (
               <Icons
-                onPress={async () => {
+                onPressIn={async () => {
                   const result = await FileSystem.downloadAsync(
                     uri as string,
                     `${FileSystem.documentDirectory ?? ''}${filename}`

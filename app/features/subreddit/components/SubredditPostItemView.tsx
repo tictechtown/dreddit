@@ -1,5 +1,4 @@
 import { router } from 'expo-router';
-import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
 import React, { useCallback } from 'react';
 import { Pressable, TouchableOpacity, View, useWindowDimensions } from 'react-native';
@@ -9,11 +8,12 @@ import { ColorPalette } from '../../colors';
 import CarouselView from '../../components/CarouselView';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
-import { timeDifference, useGalleryData } from '../../utils';
-import { onLinkPress } from '../utils';
+import { timeDifference } from '../../utils';
 import FlairTextView from './FlairTextView';
 import PostPreview from './PostPreview';
 import PostToolbar from './PostToolbar';
+import useMediaPressCallback from '../../../hooks/useMediaPressCallback';
+import useGalleryData from '../../../hooks/useGalleryData';
 
 type Props = {
   post: Post;
@@ -46,35 +46,7 @@ const SubredditPostItemView = ({
 
   postCache.setCache(post.data.id, post);
 
-  const onPress = useCallback(() => {
-    if (
-      post.data.domain !== 'reddit.com' ||
-      post.data.is_gallery ||
-      Array.isArray(post.data.crosspost_parent_list)
-    ) {
-      const href = onLinkPress(post);
-      if (href.pathname === 'features/full' && href.params) {
-        WebBrowser.openBrowserAsync(href.params.uri as string, { createTask: false });
-      } else {
-        router.push(href);
-      }
-    } else {
-      // a bit dirty, reddit.com is usually from a previously shared post
-      // so we fetch the post (async) to get the redirected url
-      // then parse the url to get the final postId
-      fetch(post.data.url).then((data) => {
-        const postId = data.url.split('comments/')[1].split('/')[0];
-        if (postId !== undefined) {
-          router.push({
-            pathname: `features/post/${postId}`,
-            params: { postid: postId },
-          });
-        } else {
-          console.warn('couldnt get postId from url:', data.url);
-        }
-      });
-    }
-  }, [post.data.id]);
+  const onPress = useMediaPressCallback(post, router);
 
   const goToUserPage = useCallback(() => {
     if ('author' in post.data) {

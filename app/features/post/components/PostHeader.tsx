@@ -12,9 +12,10 @@ import Typography from '../../components/Typography';
 import FlairTextView from '../../subreddit/components/FlairTextView';
 import PostPreview from '../../subreddit/components/PostPreview';
 import { Spacing } from '../../tokens';
-import { timeDifference, useGalleryData } from '../../utils';
+import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import PollOption from './PollOption';
+import useGalleryData from '../../../hooks/useGalleryData';
 
 function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: string | null): string {
   let sort = forcedSortOrder ?? suggestedSort ?? 'best';
@@ -29,13 +30,13 @@ function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: stri
 const PostHeader = ({
   post,
   forcedSortOrder,
-  onPress,
+  onMediaPress,
   onChangeSort,
   theme,
 }: {
   post: null | Post;
   forcedSortOrder: string | null;
-  onPress: () => void;
+  onMediaPress: () => void;
   onChangeSort: () => void;
   theme: ColorPalette;
 }) => {
@@ -137,7 +138,7 @@ const PostHeader = ({
         )}
       </View>
       {/* Image */}
-      <Pressable onPress={onPress}>
+      <Pressable onPress={onMediaPress}>
         <View style={{ marginHorizontal: 12 }}>
           <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
           {maxGaleryResolutions && (

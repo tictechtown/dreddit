@@ -4,6 +4,7 @@ type Props = {
   size: number;
   nsfw: boolean;
   icon: string | undefined | null;
+  onIconNotFoundError?: () => void;
 };
 
 export const defaultSubredditIcon = require('../../../assets/images/reddit_default_sub_alpha.svg');
@@ -24,6 +25,7 @@ const SubredditIcon = (props: Props) => {
         borderRadius: props.size / 2,
         flex: 0,
       }}
+      cachePolicy={'disk'}
       source={
         shouldUsePlaceholder
           ? props.nsfw
@@ -31,6 +33,11 @@ const SubredditIcon = (props: Props) => {
             : defaultSubredditIcon
           : props.icon?.replaceAll('&amp;', '&')
       }
+      onError={(e) => {
+        if (e.error.includes('status code: 404')) {
+          props.onIconNotFoundError?.();
+        }
+      }}
     />
   );
 };

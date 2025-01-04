@@ -48,8 +48,6 @@ const CommentMediaView = ({
     return null;
   }
 
-  const magnification = item.e === 'AnimatedImage' ? 2 : 1;
-
   return (
     <Pressable onPress={onPress}>
       <Markdown markdownit={markdownIt} style={mdStyle} rules={markdownRenderRules}>
@@ -60,8 +58,8 @@ const CommentMediaView = ({
           style={{
             borderRadius: 8,
             marginTop: Spacing.s12,
-            width: preview.x * magnification,
-            height: preview.y * magnification,
+            width: preview.x,
+            height: preview.y,
           }}
           source={preview.u.replaceAll('&amp;', '&')}
         />

@@ -48,7 +48,7 @@ function CaptionFooter({ caption }: { caption: string | null }) {
   }
   return (
     <View style={styles.footer}>
-      <Typography>{caption}</Typography>
+      <Typography variant="bodyMedium">{caption}</Typography>
     </View>
   );
 }

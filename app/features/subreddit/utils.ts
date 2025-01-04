@@ -143,7 +143,7 @@ export const onLinkPress = (post: Post): HrefObject => {
     };
   }
 
-  if (domain.startsWith('streamff.co')) {
+  if (domain.startsWith('streamff')) {
     const videoComponents = originalPost.data.url.split('/');
     const videoId = videoComponents[videoComponents.length - 1];
     const newUrl = `https://ffedge.streamff.com/uploads/${videoId}.mp4`;

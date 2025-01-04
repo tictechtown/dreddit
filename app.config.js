@@ -15,6 +15,7 @@ export default {
     },
     backgroundColor: '#000000',
     assetBundlePatterns: ['**/*'],
+    newArchEnabled: true,
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.tictechtown.app.dreddit',

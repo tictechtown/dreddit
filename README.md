@@ -52,7 +52,7 @@ to launch the project
 
 ### Dependencies
 
-This project is build using Expo SDK, and has been tested with Expo 51.
+This project is build using Expo SDK, and has been tested with Expo 52.
 
 - JAVA version for Android build: 17 (required by @pchmn/expo-material3-theme package)
 

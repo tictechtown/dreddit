@@ -1,6 +1,6 @@
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-import { Link, Stack, router } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
@@ -287,12 +287,11 @@ const SubRedditView = (props: Props) => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'flex-start',
-              marginRight: 280,
               flexShrink: 1,
               columnGap: 12,
             }}>
             <SubredditIcon size={32} icon={props.icon} nsfw={false} />
-            <View style={{ flexShrink: 1 }}>
+            <View style={{ flex: 1 }}>
               <Text
                 style={{
                   color: _p.tintColor,
@@ -308,7 +307,7 @@ const SubRedditView = (props: Props) => {
         </Pressable>
       );
     },
-    [scrollToTop]
+    [scrollToTop, props.subreddit]
   );
 
   const HeaderRight = useCallback(() => {
@@ -320,24 +319,23 @@ const SubRedditView = (props: Props) => {
           justifyContent: 'flex-end',
           columnGap: 8,
         }}>
-        <Link
-          href={{
-            pathname: 'features/subreddit/about',
-            params: { subreddit: props.subreddit },
+        <TouchableNativeFeedback
+          onPressIn={() => {
+            router.navigate({
+              pathname: 'features/subreddit/about',
+              params: { subreddit: props.subreddit },
+            });
           }}
-          asChild>
-          <TouchableNativeFeedback
-            hitSlop={5}
-            background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
-            <View>
-              <Icons name="info-outline" size={26} color={theme.onBackground} />
-            </View>
-          </TouchableNativeFeedback>
-        </Link>
+          hitSlop={5}
+          background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
+          <View>
+            <Icons name="info-outline" size={24} color={theme.onSurfaceVariant} />
+          </View>
+        </TouchableNativeFeedback>
         <TouchableNativeFeedback
           disabled={!subredditData}
           hitSlop={5}
-          onPress={toggleSubreddit}
+          onPressIn={toggleSubreddit}
           background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
           <View>
             <Icons
@@ -350,10 +348,10 @@ const SubRedditView = (props: Props) => {
         <TouchableNativeFeedback
           disabled={!subredditData}
           hitSlop={5}
-          onPress={searchPosts}
+          onPressIn={searchPosts}
           background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
           <View>
-            <Icons name={'search'} size={24} color={theme.onBackground} />
+            <Icons name={'search'} size={24} color={theme.onSurfaceVariant} />
           </View>
         </TouchableNativeFeedback>
       </View>

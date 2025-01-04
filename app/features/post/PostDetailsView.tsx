@@ -1,7 +1,6 @@
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import Constants from 'expo-constants';
 import { Image } from 'expo-image';
-import { Stack, useFocusEffect } from 'expo-router';
+import { router, Stack, useFocusEffect } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -14,7 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import PhotoZoom from 'react-native-photo-zoom';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Comment, Post, RedditApi, RedditMediaMedata } from '../../services/api';
 import { useStore } from '../../services/store';
@@ -27,6 +25,7 @@ import CommentItem from './components/CommentItem';
 import PostHeader from './components/PostHeader';
 import SortOptions from './components/SortOptions';
 import { flattenComments, getMaxPreview, mergeComments } from './utils';
+import useMediaPressCallback from '../../hooks/useMediaPressCallback';
 
 type Props = {
   postId: string;
@@ -130,6 +129,9 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       WebBrowser.openBrowserAsync(queryData.post.data.url);
     }
   }, [queryData.post?.data.id]);
+
+  const _onMediaHeaderPressed = useMediaPressCallback(queryData.post, router);
+
   const _onChangeSort = useCallback(() => {
     setShowingModal(true);
     opacityValue.value = withTiming(0.6);
@@ -141,7 +143,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       <PostHeader
         post={queryData.post ?? null}
         forcedSortOrder={sortOrder}
-        onPress={_onHeaderPressed}
+        onMediaPress={_onMediaHeaderPressed}
         onChangeSort={_onChangeSort}
         theme={theme}
       />
@@ -309,8 +311,11 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                   justifyContent: 'flex-end',
                   columnGap: 8,
                 }}>
+                <TouchableOpacity onPressIn={_onHeaderPressed} hitSlop={20}>
+                  <Icons name="info-outline" size={24} color={theme.onSurfaceVariant} />
+                </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={async () => {
+                  onPressIn={async () => {
                     await Share.share({ message: queryData?.post?.data.url ?? '' });
                   }}
                   hitSlop={20}>
@@ -319,7 +324,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                 <TouchableNativeFeedback
                   disabled={!queryData}
                   hitSlop={5}
-                  onPress={toggleSavedPost}
+                  onPressIn={toggleSavedPost}
                   background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
                   <View>
                     <Icons
@@ -389,7 +394,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
             left: 0,
           }}
           onPress={() => {
-            opacityValue.value = 0;
+            opacityValue.value = withTiming(0);
             setShowMediaItem(null);
           }}>
           <Animated.View
@@ -407,24 +412,12 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
             ]}
           />
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            {Constants.appOwnership === 'expo' ? (
-              <Image
-                source={(showMediaItem.s.gif ?? showMediaItem.s.u).replaceAll('&amp;', '&')}
-                contentFit="contain"
-                style={{ width: showMediaItem.s.x, height: showMediaItem.s.y, maxWidth: '100%' }}
-              />
-            ) : (
-              <PhotoZoom
-                source={{
-                  uri: (showMediaItem.s.gif ?? showMediaItem.s.u).replaceAll('&amp;', '&'),
-                }}
-                style={{ width: '100%', height: '100%' }}
-                maximumZoomScale={10}
-                androidScaleType="fitCenter"
-                // onLoadStart={onLoadStart}
-                // onProgress={onProgress}
-              />
-            )}
+            <Image
+              source={(showMediaItem.s.gif ?? showMediaItem.s.u).replaceAll('&amp;', '&')}
+              contentFit="contain"
+              transition={500}
+              style={{ width: showMediaItem.s.x, height: showMediaItem.s.y, maxWidth: '100%' }}
+            />
           </View>
         </Pressable>
       )}

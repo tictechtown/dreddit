@@ -261,35 +261,37 @@ const VideoPlayer = (props: Props) => {
 
   const doubleTapGesture = Gesture.Tap().numberOfTaps(2);
 
-  doubleTapGesture.onStart(async (event) => {
-    if (event.absoluteX < (1 * dimensions.width) / 3) {
-      const position = playbackInstanceInfo.position - 10 * 1000; // - 10 sec
-      if (videoRef.current) {
-        await videoRef.current.setStatusAsync({
-          positionMillis: position,
-          shouldPlay: true,
+  doubleTapGesture
+    .onEnd(async (event) => {
+      if (event.absoluteX < (1 * dimensions.width) / 3) {
+        const position = playbackInstanceInfo.position - 10 * 1000; // - 10 sec
+        if (videoRef.current) {
+          await videoRef.current.setStatusAsync({
+            positionMillis: position,
+            shouldPlay: true,
+          });
+        }
+        setPlaybackInstanceInfo({
+          ...playbackInstanceInfo,
+          position,
         });
-      }
-      setPlaybackInstanceInfo({
-        ...playbackInstanceInfo,
-        position,
-      });
-      fastRewindOpacityValue.value = withSequence(withTiming(1), withDelay(500, withTiming(0)));
-    } else if (event.absoluteX > (2 * dimensions.width) / 3) {
-      const position = playbackInstanceInfo.position + 10 * 1000; // + 10 sec
-      if (videoRef.current) {
-        await videoRef.current.setStatusAsync({
-          positionMillis: position,
-          shouldPlay: true,
+        fastRewindOpacityValue.value = withSequence(withTiming(1), withDelay(500, withTiming(0)));
+      } else if (event.absoluteX > (2 * dimensions.width) / 3) {
+        const position = playbackInstanceInfo.position + 10 * 1000; // + 10 sec
+        if (videoRef.current) {
+          await videoRef.current.setStatusAsync({
+            positionMillis: position,
+            shouldPlay: true,
+          });
+        }
+        setPlaybackInstanceInfo({
+          ...playbackInstanceInfo,
+          position,
         });
+        fastFowardOpacityValue.value = withSequence(withTiming(1), withDelay(500, withTiming(0)));
       }
-      setPlaybackInstanceInfo({
-        ...playbackInstanceInfo,
-        position,
-      });
-      fastFowardOpacityValue.value = withSequence(withTiming(1), withDelay(500, withTiming(0)));
-    }
-  });
+    })
+    .runOnJS(true);
 
   if (playbackInstanceInfo.state === PlaybackStates.Error) {
     return (

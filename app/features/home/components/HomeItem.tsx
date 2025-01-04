@@ -8,10 +8,12 @@ const HomeItem = ({
   subreddit,
   icon,
   description,
+  onIconNotFoundError,
 }: {
   subreddit: string;
   icon: string | null | undefined;
   description: string | null | undefined;
+  onIconNotFoundError: () => void;
 }) => {
   const theme = useTheme();
 
@@ -36,7 +38,12 @@ const HomeItem = ({
               alignItems: 'center',
               columnGap: 16,
             }}>
-            <SubredditIcon size={50} icon={icon} nsfw={false} />
+            <SubredditIcon
+              size={50}
+              icon={icon}
+              nsfw={false}
+              onIconNotFoundError={onIconNotFoundError}
+            />
             <View
               style={{
                 flex: 1,

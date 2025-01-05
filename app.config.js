@@ -9,8 +9,7 @@ export default {
     icon: './assets/icon.png',
     userInterfaceStyle: 'light',
     splash: {
-      image: './assets/splash.png',
-      resizeMode: 'contain',
+      image: './assets/splash-image.png',
       backgroundColor: '#000000',
     },
     backgroundColor: '#000000',

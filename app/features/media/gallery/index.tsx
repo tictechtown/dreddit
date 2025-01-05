@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 20,
     borderRadius: Spacing.s8,
-    backgroundColor: PaletteDark.surfaceContainerLow,
+    backgroundColor: PaletteDark.surfaceContainerLowest,
   },
   pageIndexContainer: {
     position: 'absolute',
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   pageIndexBackground: {
-    backgroundColor: PaletteDark.surfaceContainerHigh,
+    backgroundColor: PaletteDark.surfaceContainerHighest,
     opacity: 0.6,
     position: 'absolute',
     top: 0,
@@ -181,6 +181,6 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.s8,
   },
   pageIndexTextColor: {
-    color: PaletteDark.onSurfaceVariant,
+    color: PaletteDark.onSurface,
   },
 });

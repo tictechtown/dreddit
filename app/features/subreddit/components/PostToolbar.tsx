@@ -97,7 +97,7 @@ const PostToolbar = ({
             <Icons
               name={isSaved ? 'bookmark' : 'bookmark-outline'}
               size={24}
-              color={isSaved ? theme.onSurface : theme.onSurfaceVariant}
+              color={isSaved ? theme.primary : theme.onSurfaceVariant}
             />
           </View>
         </TouchableNativeFeedback>

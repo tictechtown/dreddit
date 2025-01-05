@@ -330,7 +330,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                     <Icons
                       name={isSaved ? 'bookmark' : 'bookmark-outline'}
                       size={24}
-                      color={theme.onBackground}
+                      color={isSaved ? theme.primary : theme.onBackground}
                     />
                   </View>
                 </TouchableNativeFeedback>

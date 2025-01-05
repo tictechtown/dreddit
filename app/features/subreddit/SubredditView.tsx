@@ -341,7 +341,7 @@ const SubRedditView = (props: Props) => {
             <Icons
               name={isFavorite ? 'bookmark' : 'bookmark-outline'}
               size={24}
-              color={theme.onBackground}
+              color={isFavorite ? theme.primary : theme.onBackground}
             />
           </View>
         </TouchableNativeFeedback>

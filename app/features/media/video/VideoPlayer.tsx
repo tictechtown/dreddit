@@ -17,9 +17,9 @@ import {
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  TouchableWithoutFeedback,
   View,
   useWindowDimensions,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -35,6 +35,7 @@ import { PaletteDark } from '../../colors';
 import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
+import { useKeepAwake } from 'expo-keep-awake';
 
 type Props = VideoProps & { activityIndicator?: any };
 
@@ -62,6 +63,7 @@ enum ControlStates {
 
 const VideoPlayer = (props: Props) => {
   const videoRef = useRef<Video>(null);
+  useKeepAwake();
   const dimensions = useWindowDimensions();
   const isMutedAtLaunch = useStore((state) => !state.videoStartSound);
 
@@ -355,7 +357,7 @@ const VideoPlayer = (props: Props) => {
         ]}>
         <Video
           ref={videoRef}
-          style={props.style}
+          style={{ width: dimensions.width, height: dimensions.height - 200 }}
           source={props.source}
           onFullscreenUpdate={onFullscreenUpdate}
           resizeMode={ResizeMode.CONTAIN}
@@ -364,6 +366,7 @@ const VideoPlayer = (props: Props) => {
           shouldPlay
           onPlaybackStatusUpdate={updatePlaybackCallback}
           onReadyForDisplay={updateReadyForDisplay}
+          videoStyle={{ flex: 1 }}
         />
       </Animated.View>
       <GestureDetector gesture={doubleTapGesture}>
@@ -371,6 +374,7 @@ const VideoPlayer = (props: Props) => {
           <View
             style={{
               ...StyleSheet.absoluteFillObject,
+              maxHeight: dimensions.height - 100,
               position: 'absolute',
             }}>
             {/** Fast Rewind */}

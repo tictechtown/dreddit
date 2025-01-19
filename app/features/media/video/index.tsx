@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { DimensionValue, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
 import { PaletteDark } from '../../colors';
@@ -13,8 +13,6 @@ import { extractMetaTags } from './metadata';
 
 type RedditVideoProps = {
   hls_url: string;
-  height: DimensionValue;
-  width: DimensionValue;
 };
 
 export default function Page() {
@@ -30,7 +28,7 @@ export default function Page() {
       const result = extractMetaTags(html, { customMetaTags: [] });
       if (result && 'ogVideo' in result) {
         console.log('loading', result);
-        setRVideo({ hls_url: result.ogVideo.url, height: '100%', width: '100%' });
+        setRVideo({ hls_url: result.ogVideo.url });
       } else {
         setErrorMessage(`cant load video from url ${uri}`);
         WebBrowser.openBrowserAsync(uri);
@@ -93,7 +91,7 @@ export default function Page() {
       )}
       {videoData && (
         <VideoPlayer
-          style={{ height: videoData.height, width: '100%', flex: 1 }}
+          style={{ height: '100%', width: '100%', flex: 1 }}
           source={{
             uri: videoData.hls_url,
           }}

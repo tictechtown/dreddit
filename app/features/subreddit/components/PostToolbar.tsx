@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { Share, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import { TouchableNativeFeedback, TouchableOpacity } from 'react-native-gesture-handler';
+import { Share, View } from 'react-native';
 import { Post } from '../../../services/api';
 import { ColorPalette } from '../../colors';
 import Icons from '../../components/Icons';
@@ -58,7 +59,7 @@ const PostToolbar = ({
         <PostKarmaButton karma={post.data.score} />
         <TouchableOpacity
           hitSlop={20}
-          onPressIn={() => {
+          onPress={() => {
             router.push({
               pathname: `features/post/${post.data.id}`,
               params: { postid: post.data.id },
@@ -75,7 +76,7 @@ const PostToolbar = ({
         }}>
         {/* Share */}
         <TouchableOpacity
-          onPressIn={async () => {
+          onPress={async () => {
             await Share.share({ message: post.data.url });
           }}
           hitSlop={20}>
@@ -85,7 +86,7 @@ const PostToolbar = ({
         {/* Save */}
         <TouchableNativeFeedback
           background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true, 20)}
-          onPressIn={async () => {
+          onPress={async () => {
             if (isSaved) {
               removeFromSavedPosts?.(post);
             } else {
@@ -105,7 +106,7 @@ const PostToolbar = ({
         {!!onMoreOptions && (
           <TouchableNativeFeedback
             background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true, 20)}
-            onPressIn={() => {
+            onPress={() => {
               onMoreOptions(post);
             }}
             hitSlop={20}>

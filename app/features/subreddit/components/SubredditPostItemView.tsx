@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback } from 'react';
-import { Pressable, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { Post } from '../../../services/api';
 import postCache from '../../../services/postCache';
 import { ColorPalette } from '../../colors';
@@ -14,6 +14,7 @@ import PostPreview from './PostPreview';
 import PostToolbar from './PostToolbar';
 import useMediaPressCallback from '../../../hooks/useMediaPressCallback';
 import useGalleryData from '../../../hooks/useGalleryData';
+import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
   post: Post;
@@ -62,7 +63,7 @@ const SubredditPostItemView = ({
   const authorColor = post.data.stickied ? theme['custom-green'] : theme.primary;
 
   return (
-    <Pressable onPress={onPress}>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View
         style={{
           flex: 1,
@@ -130,7 +131,7 @@ const SubredditPostItemView = ({
           onMoreOptions={onMoreOptions}
         />
       </View>
-    </Pressable>
+    </TouchableWithoutFeedback>
   );
 };
 

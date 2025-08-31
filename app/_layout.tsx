@@ -88,19 +88,15 @@ export default function Layout() {
         <ThemeProvider value={rnScheme}>
           <Stack
             screenOptions={{
-              headerStyle: {
-                backgroundColor: schemes[color ?? 'light'].surface,
-              },
+              headerStyle: { backgroundColor: schemes[color ?? 'light'].surface },
               // headerBackTitleVisible: false,
               headerShadowVisible: false,
-              headerTitleStyle: {
-                color: schemes[color ?? 'light'].onSurface,
-              },
+              headerTitleStyle: { color: schemes[color ?? 'light'].onSurface },
               headerTintColor: schemes[color ?? 'light'].onSurface,
               navigationBarColor: schemes[color ?? 'light'].background,
             }}>
-            <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
-            <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" />
+            {/* <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
+            <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" /> */}
           </Stack>
         </ThemeProvider>
       </ThemeContext.Provider>

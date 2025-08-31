@@ -11,9 +11,7 @@ import { Spacing } from '../../tokens';
 import VideoPlayer from './VideoPlayer';
 import { extractMetaTags } from './metadata';
 
-type RedditVideoProps = {
-  hls_url: string;
-};
+type RedditVideoProps = { hls_url: string };
 
 export default function Page() {
   const { title, reddit_video, prefetchuri } = useLocalSearchParams();
@@ -25,10 +23,10 @@ export default function Page() {
       const options = { url: uri };
       const req = await fetch(options.url);
       const html = await req.text();
-      const result = extractMetaTags(html, { customMetaTags: [] });
+      const result = extractMetaTags(html, { customMetaTags: [], allMedia: true });
       if (result && 'ogVideo' in result) {
         console.log('loading', result);
-        setRVideo({ hls_url: result.ogVideo.url });
+        setRVideo({ hls_url: result.ogVideo.at(-1).url });
       } else {
         setErrorMessage(`cant load video from url ${uri}`);
         WebBrowser.openBrowserAsync(uri);
@@ -57,19 +55,12 @@ export default function Page() {
       <Stack.Screen
         options={{
           title: decode(title as string),
-          headerStyle: {
-            backgroundColor: PaletteDark.scrim,
-          },
+          headerStyle: { backgroundColor: PaletteDark.scrim },
           navigationBarColor: PaletteDark.scrim,
         }}
       />
       {errorMessage && (
-        <View
-          style={{
-            backgroundColor: PaletteDark.scrim,
-            width: '100%',
-            height: '100%',
-          }}>
+        <View style={{ backgroundColor: PaletteDark.scrim, width: '100%', height: '100%' }}>
           <View
             style={{
               flex: 0,
@@ -92,9 +83,7 @@ export default function Page() {
       {videoData && (
         <VideoPlayer
           style={{ height: '100%', width: '100%', flex: 1 }}
-          source={{
-            uri: videoData.hls_url,
-          }}
+          source={{ uri: videoData.hls_url }}
         />
       )}
     </View>

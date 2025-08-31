@@ -27,10 +27,7 @@ import SortOptions from './components/SortOptions';
 import { flattenComments, getMaxPreview, mergeComments } from './utils';
 import useMediaPressCallback from '../../hooks/useMediaPressCallback';
 
-type Props = {
-  postId: string;
-  cachedPost?: Post | null;
-};
+type Props = { postId: string; cachedPost?: Post | null };
 
 type CommentsAndPost = {
   comments: Comment[]; // flat list, no replies
@@ -101,11 +98,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         include_over_18: string;
         sort?: string;
         threaded: string;
-      } = {
-        limit: COMMENT_LIMIT,
-        include_over_18: 'true',
-        threaded: 'false',
-      };
+      } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false' };
       if (sortOrder !== null) {
         searchParams['sort'] = sortOrder;
       }
@@ -166,12 +159,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       sort?: string;
       v?: string;
       threaded: string;
-    } = {
-      limit: COMMENT_LIMIT,
-      include_over_18: 'true',
-      threaded: 'false',
-      v: `${Date.now()}`,
-    };
+    } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false', v: `${Date.now()}` };
     if (sortOrder !== null) {
       searchParams['sort'] = sortOrder;
     }
@@ -207,13 +195,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       threaded: string;
       comment: string;
       depth: string;
-    } = {
-      limit: '25',
-      include_over_18: 'true',
-      threaded: 'false',
-      comment: commentId,
-      depth: '0',
-    };
+    } = { limit: '25', include_over_18: 'true', threaded: 'false', comment: commentId, depth: '0' };
     if (sortOrder !== null) {
       searchParams['sort'] = sortOrder;
     }
@@ -281,11 +263,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
   }, [refreshLoading, refreshData, theme]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.surface,
-      }}>
+    <View style={{ flex: 1, backgroundColor: theme.surface }}>
       <Stack.Screen
         options={{
           title: queryData.post?.data.subreddit_name_prefixed ?? '',
@@ -361,38 +339,18 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       {queryData.loading && <IndeterminateProgressBarView />}
       {showingModal && (
         <Pressable
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-          }}
+          style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0 }}
           onPress={() => {
             bottomSheetModalRef.current?.close();
             opacityValue.value = 0;
             setShowingModal(false);
           }}>
-          <Animated.View
-            style={[
-              {
-                flex: 1,
-                backgroundColor: theme.scrim,
-              },
-              animatedStyle,
-            ]}
-          />
+          <Animated.View style={[{ flex: 1, backgroundColor: theme.scrim }, animatedStyle]} />
         </Pressable>
       )}
       {showMediaItem && (
         <Pressable
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-          }}
+          style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0 }}
           onPress={() => {
             opacityValue.value = withTiming(0);
             setShowMediaItem(null);
@@ -432,9 +390,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
             borderTopLeftRadius: 14,
             borderTopRightRadius: 14,
           }}
-          handleIndicatorStyle={{
-            backgroundColor: theme.onSurface,
-          }}>
+          handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
           <SortOptions
             currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
             onSortPressed={onSortPressed}

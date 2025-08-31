@@ -25,10 +25,7 @@ import ModalOptionRow from './components/ModalOptionRow';
 import PostItemBottomSheet from './components/PostItemBottomSheet';
 import SubredditPostItemView from './components/SubredditPostItemView';
 
-type Props = {
-  subreddit: string;
-  icon: string | undefined | null;
-};
+type Props = { subreddit: string; icon: string | undefined | null };
 
 const keyExtractor = (item: Post, index: number) => `${item.data.id}.${index}`;
 
@@ -89,11 +86,7 @@ const SubRedditView = (props: Props) => {
     display: boolean;
     post: Post | null;
     popup: boolean;
-  }>({
-    display: false,
-    post: null,
-    popup: false,
-  });
+  }>({ display: false, post: null, popup: false });
 
   const [loading, setLoading] = useState(false);
   const [refreshLoading, setRefreshLoading] = useState(false);
@@ -293,11 +286,7 @@ const SubRedditView = (props: Props) => {
             <SubredditIcon size={32} icon={props.icon} nsfw={false} />
             <View style={{ flex: 1 }}>
               <Text
-                style={{
-                  color: _p.tintColor,
-                  fontWeight: '600',
-                  fontSize: 20,
-                }}
+                style={{ color: _p.tintColor, fontWeight: '600', fontSize: 20 }}
                 numberOfLines={1}
                 ellipsizeMode={'tail'}>
                 {props.subreddit}
@@ -359,22 +348,14 @@ const SubRedditView = (props: Props) => {
   }, [!!subredditData, toggleSubreddit, searchPosts, theme]);
 
   const screenOptions = useMemo(() => {
-    return {
-      title: props.subreddit,
-      headerTitle: HeaderTitle,
-      headerRight: HeaderRight,
-    };
+    return { title: props.subreddit, headerTitle: HeaderTitle, headerRight: HeaderRight };
   }, [HeaderTitle, HeaderRight, props.subreddit]);
 
   return (
     <>
       <Stack.Screen options={screenOptions} />
 
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: theme.surface,
-        }}>
+      <View style={{ flex: 1, backgroundColor: theme.surface }}>
         <FlatList
           ref={flatListRef}
           data={filteredData}
@@ -403,27 +384,13 @@ const SubRedditView = (props: Props) => {
         />
         {showingModal.display && (
           <Pressable
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              right: 0,
-              left: 0,
-            }}
+            style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0 }}
             onPress={() => {
               bottomSheetModalRef.current?.close();
               opacityValue.value = 0;
               setShowingModal({ display: false, post: null, popup: false });
             }}>
-            <Animated.View
-              style={[
-                {
-                  flex: 1,
-                  backgroundColor: theme.scrim,
-                },
-                animatedStyle,
-              ]}
-            />
+            <Animated.View style={[{ flex: 1, backgroundColor: theme.scrim }, animatedStyle]} />
           </Pressable>
         )}
 
@@ -438,10 +405,7 @@ const SubRedditView = (props: Props) => {
             <SubredditIcon size={128} icon={props.icon} nsfw={false} />
             <Typography
               variant="headlineLarge"
-              style={{
-                color: theme.onBackground,
-                textAlign: 'center',
-              }}
+              style={{ color: theme.onBackground, textAlign: 'center' }}
               onPress={scrollToTop}>
               r/{props.subreddit}
             </Typography>
@@ -458,10 +422,7 @@ const SubRedditView = (props: Props) => {
             }}>
             <Typography
               variant="headlineLarge"
-              style={{
-                color: theme.onBackground,
-                textAlign: 'center',
-              }}
+              style={{ color: theme.onBackground, textAlign: 'center' }}
               onPress={scrollToTop}>
               Subreddit not found
             </Typography>
@@ -548,9 +509,7 @@ const SubRedditView = (props: Props) => {
               borderTopLeftRadius: 14,
               borderTopRightRadius: 14,
             }}
-            handleIndicatorStyle={{
-              backgroundColor: theme.onSurface,
-            }}>
+            handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
             {showingModal.post && (
               <PostItemBottomSheet
                 post={showingModal.post}

@@ -7,12 +7,9 @@ import { ColorPalette } from '../../colors';
 import Icons, { IconName } from '../../components/Icons';
 import Typography from '../../components/Typography';
 import { onLinkPress } from '../utils';
+import { BottomSheetView } from '@gorhom/bottom-sheet';
 
-type RowProps = {
-  icon: IconName;
-  title: string;
-  theme: ColorPalette;
-};
+type RowProps = { icon: IconName; title: string; theme: ColorPalette };
 
 const Row = ({ icon, title, theme }: RowProps) => {
   return (
@@ -44,12 +41,10 @@ const PostItemBottomSheet = ({
   }));
 
   return (
-    <View>
+    <BottomSheetView>
       <Pressable
         onPress={() => {
-          router.push({
-            pathname: `features/subreddit/${post.data.subreddit}`,
-          });
+          router.push({ pathname: `features/subreddit/${post.data.subreddit}` });
           onClose(null);
         }}>
         <Row
@@ -60,10 +55,7 @@ const PostItemBottomSheet = ({
       </Pressable>
       <Pressable
         onPress={() => {
-          router.push({
-            pathname: `features/user`,
-            params: { userid: post.data.author },
-          });
+          router.push({ pathname: `features/user`, params: { userid: post.data.author } });
           onClose(null);
         }}>
         <Row icon={'person'} title={`View ${post.data.author} Profile`} theme={theme} />
@@ -93,7 +85,7 @@ const PostItemBottomSheet = ({
         </Pressable>
       )}
       <Row icon={'image'} title={'View Preview Image'} theme={theme} />
-    </View>
+    </BottomSheetView>
   );
 };
 

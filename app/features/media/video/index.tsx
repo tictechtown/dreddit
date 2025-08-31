@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
 import { PaletteDark } from '../../colors';
@@ -26,7 +26,13 @@ export default function Page() {
       const result = extractMetaTags(html, { customMetaTags: [], allMedia: true });
       if (result && 'ogVideo' in result) {
         console.log('loading', result);
-        setRVideo({ hls_url: result.ogVideo.at(-1).url });
+        let ogVideo;
+        if (Array.isArray(result.ogVideo)) {
+          ogVideo = result.ogVideo.at(-1);
+        } else {
+          ogVideo = result.ogVideo;
+        }
+        setRVideo({ hls_url: ogVideo.url });
       } else {
         setErrorMessage(`cant load video from url ${uri}`);
         WebBrowser.openBrowserAsync(uri);
@@ -78,6 +84,10 @@ export default function Page() {
             <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
             <Text style={{ color: PaletteDark.onErrorContainer }}>{errorMessage}</Text>
           </View>
+          <Button
+            onPress={() => WebBrowser.openBrowserAsync(prefetchuri as string)}
+            title="Open Link"
+          />
         </View>
       )}
       {videoData && (

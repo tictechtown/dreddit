@@ -23,7 +23,7 @@ const FlairTextView = (props: Props) => {
   const displayPin = props.pinned || props.stickied;
 
   let elementsToDisplay: FlairRichText[] = Array.isArray(props.flair_richtext)
-    ? props.flair_richtext ?? []
+    ? (props.flair_richtext ?? [])
     : [];
 
   if (elementsToDisplay.length === 0 && props.flair_text !== null) {
@@ -60,16 +60,8 @@ const FlairTextView = (props: Props) => {
     : {};
 
   const textStyle: TextStyle = props.outlined
-    ? {
-        color: props.theme.onSurfaceVariant,
-        fontSize: 12,
-        fontWeight: '500',
-      }
-    : {
-        color: props.theme.onSurfaceVariant,
-        fontSize: 11,
-        fontWeight: '400',
-      };
+    ? { color: props.theme.onSurfaceVariant, fontSize: 12, fontWeight: '500' }
+    : { color: props.theme.onSurfaceVariant, fontSize: 11, fontWeight: '400' };
 
   return (
     <Pressable
@@ -79,13 +71,7 @@ const FlairTextView = (props: Props) => {
           props.onPress(props.flair_text);
         }
       }}>
-      <View
-        style={{
-          ...containerStyle,
-          flexDirection: 'row',
-          alignItems: 'center',
-          columnGap: 2,
-        }}>
+      <View style={{ ...containerStyle, flexDirection: 'row', alignItems: 'center', columnGap: 2 }}>
         {elementsToDisplay.map((it, index) => {
           if (it.e === 'text') {
             let displayedItem = decode(it.t);

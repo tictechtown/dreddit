@@ -6,6 +6,8 @@ import { ColorSchemeName } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeContext } from './services/theme/theme';
 import useColorScheme from './services/theme/useColorScheme';
+import { Edge, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
 
 type RNScheme = {
   dark: boolean;
@@ -72,6 +74,8 @@ function useMD3(
   return values;
 }
 
+const EDGES: Edge[] = [];
+
 export default function Layout() {
   const colorScheme = useColorScheme();
   // If the device is not compatible, it will return a theme based on the fallback source color (optional, default to #6750A4)
@@ -86,18 +90,19 @@ export default function Layout() {
       {/* @ts-ignore */}
       <ThemeContext.Provider value={schemes[color ?? 'light']}>
         <ThemeProvider value={rnScheme}>
-          <Stack
-            screenOptions={{
-              headerStyle: { backgroundColor: schemes[color ?? 'light'].surface },
-              // headerBackTitleVisible: false,
-              headerShadowVisible: false,
-              headerTitleStyle: { color: schemes[color ?? 'light'].onSurface },
-              headerTintColor: schemes[color ?? 'light'].onSurface,
-              navigationBarColor: schemes[color ?? 'light'].background,
-            }}>
-            {/* <Stack.Screen getId={({ params }) => params?.id} name="features/subreddit/[id]" />
-            <Stack.Screen getId={({ params }) => params?.id} name="features/post/[id]" /> */}
-          </Stack>
+          <SafeAreaView
+            edges={EDGES}
+            style={{ flex: 1, backgroundColor: schemes[color ?? 'light'].background }}>
+            <Stack
+              screenOptions={{
+                headerStyle: { backgroundColor: schemes[color ?? 'light'].surface },
+                // headerBackTitleVisible: false,
+                headerShadowVisible: false,
+                headerTitleStyle: { color: schemes[color ?? 'light'].onSurface },
+                headerTintColor: schemes[color ?? 'light'].onSurface,
+              }}
+            />
+          </SafeAreaView>
         </ThemeProvider>
       </ThemeContext.Provider>
     </GestureHandlerRootView>

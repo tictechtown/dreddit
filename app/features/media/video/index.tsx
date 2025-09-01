@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, TouchableNativeFeedback, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
 import { PaletteDark } from '../../colors';
@@ -10,13 +10,16 @@ import Icons from '../../components/Icons';
 import { Spacing } from '../../tokens';
 import VideoPlayer from './VideoPlayer';
 import { extractMetaTags } from './metadata';
+import Typography from '../../components/Typography';
+import useTheme from '../../../services/theme/useTheme';
 
 type RedditVideoProps = { hls_url: string };
 
 export default function Page() {
   const { title, reddit_video, prefetchuri } = useLocalSearchParams();
   const [videoData, setRVideo] = React.useState<RedditVideoProps>();
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>();
+  const theme = useTheme();
 
   React.useEffect(() => {
     async function fetchMetadata(uri: string) {
@@ -84,10 +87,24 @@ export default function Page() {
             <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
             <Text style={{ color: PaletteDark.onErrorContainer }}>{errorMessage}</Text>
           </View>
-          <Button
-            onPress={() => WebBrowser.openBrowserAsync(prefetchuri as string)}
-            title="Open Link"
-          />
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 12 }}>
+            <TouchableNativeFeedback
+              onPress={() => WebBrowser.openBrowserAsync(prefetchuri as string)}>
+              <View
+                style={{
+                  backgroundColor: theme.primaryContainer,
+                  borderRadius: 20,
+                  paddingVertical: 10,
+                  paddingHorizontal: 24,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Typography style={{ color: theme.onPrimaryContainer }} variant="bodyMedium">
+                  Open Link
+                </Typography>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
         </View>
       )}
       {videoData && (

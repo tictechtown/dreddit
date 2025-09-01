@@ -75,7 +75,12 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
         onLoadProgress={onProgress}
         onLoadEnd={onLoadEnd}
         onError={onError}
-        style={{ flex: 1, backgroundColor: PaletteDark.scrim }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{
+          flex: 1,
+          backgroundColor: PaletteDark.scrim,
+        }}
         source={{ html: `<img width="100%" src="${_uri}"/>` }}
         javaScriptEnabled={false}
         androidLayerType="hardware"

@@ -529,6 +529,7 @@ const VideoPlayer = (props: Props) => {
                     hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
                     style={{
                       flex: 1,
+                      width: '100%',
                       marginHorizontal: 0,
                     }}
                     tapToSeek={true}

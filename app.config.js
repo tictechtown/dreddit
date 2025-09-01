@@ -14,7 +14,7 @@ export default {
     },
     backgroundColor: '#000000',
     assetBundlePatterns: ['**/*'],
-    newArchEnabled: true,
+    newArchEnabled: false,
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.tictechtown.app.dreddit',
@@ -24,6 +24,7 @@ export default {
         foregroundImage: './assets/adaptive-icon.png',
         monochromeImage: './assets/monochrone-icon.png',
       },
+      edgeToEdgeEnabled: true,
       package: IS_PROD ? 'com.tictechtown.app.dreddit' : 'com.tictechtown.app.dreddit.dev',
     },
     web: {

@@ -4,6 +4,7 @@ import useTheme from '../../../services/theme/useTheme';
 import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
+import { BottomSheetView } from '@gorhom/bottom-sheet';
 
 const SortOptions = ({
   currentSort,
@@ -22,28 +23,14 @@ const SortOptions = ({
     borderColor: theme.surface,
   };
 
-  const selectedChoiceContainer = {
-    borderRadius: 10,
-    borderColor: theme.secondaryContainer,
-  };
+  const selectedChoiceContainer = { borderRadius: 10, borderColor: theme.secondaryContainer };
 
-  const choices = {
-    marginVertical: Spacing.s12,
-    marginLeft: Spacing.s12,
-  };
+  const choices = { marginVertical: Spacing.s12, marginLeft: Spacing.s12 };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.surface,
-        paddingHorizontal: Spacing.s16,
-      }}>
-      <Typography
-        variant="titleLarge"
-        style={{
-          marginBottom: Spacing.s16,
-        }}>
+    <BottomSheetView
+      style={{ flex: 1, backgroundColor: theme.surface, paddingHorizontal: Spacing.s16 }}>
+      <Typography variant="titleLarge" style={{ marginBottom: Spacing.s16 }}>
         Sort options
       </Typography>
       <TouchableOpacity
@@ -97,7 +84,7 @@ const SortOptions = ({
           Random
         </Typography>
       </TouchableOpacity>
-    </View>
+    </BottomSheetView>
   );
 };
 

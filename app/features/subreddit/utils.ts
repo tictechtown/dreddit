@@ -52,18 +52,12 @@ export const onLinkPress = (post: Post): HrefObject => {
 
         return {
           pathname: 'features/media/video',
-          params: {
-            title,
-            reddit_video: base64.encode(JSON.stringify(reddit_video)),
-          },
+          params: { title, reddit_video: base64.encode(JSON.stringify(reddit_video)) },
         };
       }
     }
 
-    return {
-      pathname: 'features/media/image',
-      params: { uri: originalPost.data.url, title },
-    };
+    return { pathname: 'features/media/image', params: { uri: originalPost.data.url, title } };
   }
   if (domain.startsWith('i.imgur.com') && originalPost.data.preview?.reddit_video_preview != null) {
     return {
@@ -92,10 +86,7 @@ export const onLinkPress = (post: Post): HrefObject => {
     }
     return {
       pathname: 'features/media/image',
-      params: {
-        title,
-        uri: originalPost.data.url_overridden_by_dest,
-      },
+      params: { title, uri: originalPost.data.url_overridden_by_dest },
     };
   }
   if (domain.startsWith('v.redd.it') && typeof originalPost.data?.media !== 'string') {
@@ -115,10 +106,7 @@ export const onLinkPress = (post: Post): HrefObject => {
   ) {
     return {
       pathname: 'features/media/video',
-      params: {
-        title,
-        prefetchuri: originalPost.data.url,
-      },
+      params: { title, prefetchuri: originalPost.data.url },
     };
   }
 
@@ -126,20 +114,18 @@ export const onLinkPress = (post: Post): HrefObject => {
     // usually, that's a video?
     return {
       pathname: 'features/media/video',
-      params: {
-        title,
-        prefetchuri: originalPost.data.url,
-      },
+      params: { title, prefetchuri: originalPost.data.url },
     };
   }
 
-  if (domain.startsWith('streamin.one') || domain.startsWith('streamable.com')) {
+  if (
+    domain.startsWith('streamin.one') ||
+    domain.startsWith('streamable.com') ||
+    domain.startsWith('streamain.com')
+  ) {
     return {
       pathname: 'features/media/video',
-      params: {
-        title,
-        prefetchuri: originalPost.data.url,
-      },
+      params: { title, prefetchuri: originalPost.data.url },
     };
   }
 
@@ -152,11 +138,7 @@ export const onLinkPress = (post: Post): HrefObject => {
       params: {
         title,
         reddit_video: base64.encode(
-          JSON.stringify({
-            hls_url: newUrl,
-            height: '100%',
-            width: '100%',
-          })
+          JSON.stringify({ hls_url: newUrl, height: '100%', width: '100%' })
         ),
       },
     };
@@ -196,10 +178,7 @@ export const onLinkPress = (post: Post): HrefObject => {
     } else {
       return {
         pathname: 'features/media/video',
-        params: {
-          title,
-          prefetchuri: originalPost.data.url,
-        },
+        params: { title, prefetchuri: originalPost.data.url },
       };
     }
   }
@@ -207,18 +186,12 @@ export const onLinkPress = (post: Post): HrefObject => {
   if (domain.startsWith('i.redgifs.com')) {
     return {
       pathname: 'features/media/image',
-      params: {
-        title,
-        uri: originalPost.data.preview?.images[0].source.url,
-      },
+      params: { title, uri: originalPost.data.preview?.images[0].source.url },
     };
   }
 
   {
-    return {
-      pathname: 'features/full',
-      params: { uri: originalPost.data.url, title },
-    };
+    return { pathname: 'features/full', params: { uri: originalPost.data.url, title } };
   }
 };
 

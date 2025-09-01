@@ -1,5 +1,5 @@
 // const cheerio = require('cheerio');
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import fallback from './fallback';
 import fields from './fields';
 import { mediaSetup } from './media';
@@ -14,11 +14,8 @@ export const extractMetaTags = (
   body: string,
   options: {
     onlyGetOpenGraphInfo?: boolean;
-    customMetaTags: {
-      multiple: false;
-      property: 'og:type';
-      fieldName: 'ogType';
-    }[];
+    allMedia?: boolean;
+    customMetaTags: { multiple: false; property: 'og:type'; fieldName: 'ogType' }[];
   }
 ): Record<string, any> => {
   let ogObject: Record<string, any> = {};

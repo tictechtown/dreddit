@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { DimensionValue, Text, View } from 'react-native';
+import { Button, Text, TouchableNativeFeedback, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
 import { PaletteDark } from '../../colors';
@@ -10,27 +10,32 @@ import Icons from '../../components/Icons';
 import { Spacing } from '../../tokens';
 import VideoPlayer from './VideoPlayer';
 import { extractMetaTags } from './metadata';
+import Typography from '../../components/Typography';
+import useTheme from '../../../services/theme/useTheme';
 
-type RedditVideoProps = {
-  hls_url: string;
-  height: DimensionValue;
-  width: DimensionValue;
-};
+type RedditVideoProps = { hls_url: string };
 
 export default function Page() {
   const { title, reddit_video, prefetchuri } = useLocalSearchParams();
   const [videoData, setRVideo] = React.useState<RedditVideoProps>();
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>();
+  const theme = useTheme();
 
   React.useEffect(() => {
     async function fetchMetadata(uri: string) {
       const options = { url: uri };
       const req = await fetch(options.url);
       const html = await req.text();
-      const result = extractMetaTags(html, { customMetaTags: [] });
+      const result = extractMetaTags(html, { customMetaTags: [], allMedia: true });
       if (result && 'ogVideo' in result) {
         console.log('loading', result);
-        setRVideo({ hls_url: result.ogVideo.url, height: '100%', width: '100%' });
+        let ogVideo;
+        if (Array.isArray(result.ogVideo)) {
+          ogVideo = result.ogVideo.at(-1);
+        } else {
+          ogVideo = result.ogVideo;
+        }
+        setRVideo({ hls_url: ogVideo.url });
       } else {
         setErrorMessage(`cant load video from url ${uri}`);
         WebBrowser.openBrowserAsync(uri);
@@ -59,19 +64,12 @@ export default function Page() {
       <Stack.Screen
         options={{
           title: decode(title as string),
-          headerStyle: {
-            backgroundColor: PaletteDark.scrim,
-          },
+          headerStyle: { backgroundColor: PaletteDark.scrim },
           navigationBarColor: PaletteDark.scrim,
         }}
       />
       {errorMessage && (
-        <View
-          style={{
-            backgroundColor: PaletteDark.scrim,
-            width: '100%',
-            height: '100%',
-          }}>
+        <View style={{ backgroundColor: PaletteDark.scrim, width: '100%', height: '100%' }}>
           <View
             style={{
               flex: 0,
@@ -89,14 +87,30 @@ export default function Page() {
             <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
             <Text style={{ color: PaletteDark.onErrorContainer }}>{errorMessage}</Text>
           </View>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 12 }}>
+            <TouchableNativeFeedback
+              onPress={() => WebBrowser.openBrowserAsync(prefetchuri as string)}>
+              <View
+                style={{
+                  backgroundColor: theme.primaryContainer,
+                  borderRadius: 20,
+                  paddingVertical: 10,
+                  paddingHorizontal: 24,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Typography style={{ color: theme.onPrimaryContainer }} variant="bodyMedium">
+                  Open Link
+                </Typography>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
         </View>
       )}
       {videoData && (
         <VideoPlayer
-          style={{ height: videoData.height, width: '100%', flex: 1 }}
-          source={{
-            uri: videoData.hls_url,
-          }}
+          style={{ height: '100%', width: '100%', flex: 1 }}
+          source={{ uri: videoData.hls_url }}
         />
       )}
     </View>

@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useMemo } from 'react';
 import { ScrollView, Share, Text, View } from 'react-native';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+// import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { Comment, Post } from '../../services/api';
 import markdownRedditHeadingPlugin from '../../services/markdown/mardownRedditHeading';
 import markdownItRedditLink from '../../services/markdown/markdownRedditLink';
@@ -14,10 +14,7 @@ import { Spacing } from '../tokens';
 import { getPreviewImageFromStreaminMe, getPreviewImageFromYoutube } from '../utils';
 import PostSpoiler from './PostSpoiler';
 
-export const markdownIt = MarkdownIt({
-  linkify: true,
-  typographer: true,
-})
+export const markdownIt = MarkdownIt({ linkify: true, typographer: true })
   .use(markdownRedditHeadingPlugin)
   .use(markdownItRedditSupsubscript)
   .use(markdownItRedditLink)
@@ -45,31 +42,16 @@ export function useMarkdownStyle(theme: ColorPalette) {
         marginBottom: Spacing.s12,
         fontWeight: 'bold',
       },
-      heading3: {
-        marginVertical: Spacing.s8,
-        fontWeight: 'bold',
-      },
-      heading4: {
-        marginVertical: Spacing.s8,
-      },
-      heading5: {
-        marginVertical: Spacing.s8,
-      },
-      heading6: {
-        marginVertical: Spacing.s8,
-      },
-      bullet_list: {
-        marginVertical: Spacing.s12,
-      },
-      ordered_list: {
-        marginVertical: Spacing.s12,
-      },
+      heading3: { marginVertical: Spacing.s8, fontWeight: 'bold' },
+      heading4: { marginVertical: Spacing.s8 },
+      heading5: { marginVertical: Spacing.s8 },
+      heading6: { marginVertical: Spacing.s8 },
+      bullet_list: { marginVertical: Spacing.s12 },
+      ordered_list: { marginVertical: Spacing.s12 },
       hr: { backgroundColor: theme.onSurface, marginVertical: Spacing.s16 },
       link: { color: theme.primary },
       paragraph: { marginTop: 0, marginBottom: 0 },
-      code_inline: {
-        backgroundColor: theme.surfaceVariant,
-      },
+      code_inline: { backgroundColor: theme.surfaceVariant },
       code_block: {
         backgroundColor: theme.surfaceVariant,
         borderWidth: 0,
@@ -83,17 +65,9 @@ export function useMarkdownStyle(theme: ColorPalette) {
         paddingLeft: 6,
         marginVertical: Spacing.s4,
       },
-      fence: {
-        backgroundColor: theme.surfaceVariant,
-        borderWidth: 0,
-        marginVertical: Spacing.s8,
-      },
-      table: {
-        borderWidth: 0,
-      },
-      tr: {
-        borderBottomWidth: 0,
-      },
+      fence: { backgroundColor: theme.surfaceVariant, borderWidth: 0, marginVertical: Spacing.s8 },
+      table: { borderWidth: 0 },
+      tr: { borderBottomWidth: 0 },
       theme: theme,
     };
   }, [theme]);
@@ -202,7 +176,7 @@ export const markdownRenderRules: RenderRules = {
       key={node.key}
       style={styles.link}
       onLongPress={async () => {
-        ReactNativeHapticFeedback.trigger('effectHeavyClick');
+        // ReactNativeHapticFeedback.trigger('effectHeavyClick');
         await Share.share({ message: node.attributes.href.replaceAll('%5C', '') });
       }}
       onPress={() => {
@@ -210,10 +184,10 @@ export const markdownRenderRules: RenderRules = {
         if (onLinkPress) {
           const res = onLinkPress(link);
           if (res) {
-            WebBrowser.openBrowserAsync(link);
+            WebBrowser.openBrowserAsync(link.replaceAll('&amp;', '&'));
           }
         } else {
-          WebBrowser.openBrowserAsync(link);
+          WebBrowser.openBrowserAsync(link.replaceAll('&amp;', '&'));
         }
       }}>
       {children}
@@ -222,47 +196,26 @@ export const markdownRenderRules: RenderRules = {
   superscript: (node, children, parent, styles) => (
     <Text
       key={node.key}
-      style={{
-        ...styles.body,
-        fontSize: 10,
-        lineHeight: 16,
-        textAlignVertical: 'top',
-      }}>
+      style={{ ...styles.body, fontSize: 10, lineHeight: 16, textAlignVertical: 'top' }}>
       {node.content}
     </Text>
   ),
   superscriptParenthesized: (node, children, parent, styles) => (
     <Text
       key={node.key}
-      style={{
-        ...styles.body,
-        fontSize: 10,
-        lineHeight: 16,
-        textAlignVertical: 'top',
-      }}>
+      style={{ ...styles.body, fontSize: 10, lineHeight: 16, textAlignVertical: 'top' }}>
       {node.content}
     </Text>
   ),
   subscript: (node, children, parent, styles) => (
     <Text
       key={node.key}
-      style={{
-        ...styles.body,
-        fontSize: 10,
-        lineHeight: 16,
-        textAlignVertical: 'top',
-      }}>
+      style={{ ...styles.body, fontSize: 10, lineHeight: 16, textAlignVertical: 'top' }}>
       {node.content}
     </Text>
   ),
   subscriptParenthesized: (node, children, parent, styles) => (
-    <Text
-      key={node.key}
-      style={{
-        ...styles.body,
-        fontSize: 10,
-        lineHeight: 16,
-      }}>
+    <Text key={node.key} style={{ ...styles.body, fontSize: 10, lineHeight: 16 }}>
       {node.content}
     </Text>
   ),
@@ -285,11 +238,7 @@ export const markdownRenderRules: RenderRules = {
     }
     const subreddit = node.content.replace('/r/', '').replace('r/', '').trim();
     return (
-      <Link
-        key={node.key}
-        href={{
-          pathname: `features/subreddit/${subreddit}`,
-        }}>
+      <Link key={node.key} href={{ pathname: `features/subreddit/${subreddit}` }}>
         {' '}
         <Text style={[styles.link, { color: styles.theme.error, fontSize }]}>
           {node.content.trim()}

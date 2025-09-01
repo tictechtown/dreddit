@@ -12,9 +12,7 @@ import SubredditPostItemView from '../subreddit/components/SubredditPostItemView
 import { Spacing } from '../tokens';
 import { timeDifference } from '../utils';
 
-type Props = {
-  userId: string;
-};
+type Props = { userId: string };
 
 type CommentOrPostOrTrophy = Comment | Post | Trophy;
 
@@ -52,21 +50,12 @@ const CommentItem = ({
 
   if (commentOrPost.kind === 't3') {
     // Post
-    return (
-      <TouchableOpacity onPress={onPress}>
-        <SubredditPostItemView post={commentOrPost} theme={theme} />
-      </TouchableOpacity>
-    );
+    return <SubredditPostItemView post={commentOrPost} theme={theme} />;
   }
   if (commentOrPost.kind === 't1') {
     // Comment
     return (
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: Spacing.s12,
-          paddingBottom: Spacing.s12,
-        }}>
+      <View style={{ flex: 1, paddingHorizontal: Spacing.s12, paddingBottom: Spacing.s12 }}>
         <TouchableOpacity onPress={onPress}>
           <View style={{ flex: 1 }}>
             <Typography variant="headlineSmall">
@@ -101,9 +90,7 @@ const CommentItem = ({
           style={{ borderRadius: 10, marginRight: Spacing.s16 }}
           width={40}
           height={40}
-          source={{
-            uri: commentOrPost.data.icon_70.replaceAll('&amp;', '&'),
-          }}></Image>
+          source={{ uri: commentOrPost.data.icon_70.replaceAll('&amp;', '&') }}></Image>
         <Typography variant="bodyLarge">{commentOrPost.data.name}</Typography>
       </View>
     );
@@ -217,12 +204,7 @@ const UserView = (props: Props) => {
   }, [commentsData, userTrophies, sortOrder]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        width: '100%',
-        backgroundColor: theme.surface,
-      }}>
+    <View style={{ flex: 1, width: '100%', backgroundColor: theme.surface }}>
       <Stack.Screen options={{ title: props.userId }} />
       <FlatList
         data={filteredData}

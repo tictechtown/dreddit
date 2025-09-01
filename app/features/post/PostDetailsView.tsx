@@ -1,5 +1,4 @@
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { Image } from 'expo-image';
 import { router, Stack, useFocusEffect } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -27,10 +26,7 @@ import SortOptions from './components/SortOptions';
 import { flattenComments, getMaxPreview, mergeComments } from './utils';
 import useMediaPressCallback from '../../hooks/useMediaPressCallback';
 
-type Props = {
-  postId: string;
-  cachedPost?: Post | null;
-};
+type Props = { postId: string; cachedPost?: Post | null };
 
 type CommentsAndPost = {
   comments: Comment[]; // flat list, no replies
@@ -101,11 +97,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         include_over_18: string;
         sort?: string;
         threaded: string;
-      } = {
-        limit: COMMENT_LIMIT,
-        include_over_18: 'true',
-        threaded: 'false',
-      };
+      } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false' };
       if (sortOrder !== null) {
         searchParams['sort'] = sortOrder;
       }
@@ -126,7 +118,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
 
   const _onHeaderPressed = useCallback(() => {
     if (queryData.post) {
-      WebBrowser.openBrowserAsync(queryData.post.data.url);
+      WebBrowser.openBrowserAsync(queryData.post.data.url.replaceAll('&amp;', '&'));
     }
   }, [queryData.post?.data.id]);
 
@@ -166,12 +158,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       sort?: string;
       v?: string;
       threaded: string;
-    } = {
-      limit: COMMENT_LIMIT,
-      include_over_18: 'true',
-      threaded: 'false',
-      v: `${Date.now()}`,
-    };
+    } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false', v: `${Date.now()}` };
     if (sortOrder !== null) {
       searchParams['sort'] = sortOrder;
     }
@@ -191,13 +178,11 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
     setRefreshLoading(false);
   }, []);
 
-  const displayMediaItem = useCallback(
-    (gif: RedditMediaMedata) => {
-      opacityValue.value = withTiming(0.9);
-      setShowMediaItem(gif);
-    },
-    [opacityValue]
-  );
+  const displayMediaItem = useCallback((mediaItem: RedditMediaMedata) => {
+    const mediadSource = (mediaItem.s.gif ?? mediaItem.s.u).replaceAll('&amp;', '&');
+    const href = { pathname: 'features/media/image', params: { uri: mediadSource, title: '' } };
+    router.push(href);
+  }, []);
 
   const fetchMoreComments = useCallback(async (commentId: string, childrenIds: string[]) => {
     const searchParams: {
@@ -207,13 +192,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       threaded: string;
       comment: string;
       depth: string;
-    } = {
-      limit: '25',
-      include_over_18: 'true',
-      threaded: 'false',
-      comment: commentId,
-      depth: '0',
-    };
+    } = { limit: '25', include_over_18: 'true', threaded: 'false', comment: commentId, depth: '0' };
     if (sortOrder !== null) {
       searchParams['sort'] = sortOrder;
     }
@@ -281,11 +260,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
   }, [refreshLoading, refreshData, theme]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.surface,
-      }}>
+    <View style={{ flex: 1, backgroundColor: theme.surface }}>
       <Stack.Screen
         options={{
           title: queryData.post?.data.subreddit_name_prefixed ?? '',
@@ -312,7 +287,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
                   columnGap: 8,
                 }}>
                 <TouchableOpacity onPressIn={_onHeaderPressed} hitSlop={20}>
-                  <Icons name="info-outline" size={24} color={theme.onSurfaceVariant} />
+                  <Icons name="open-in-new" size={24} color={theme.onSurfaceVariant} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPressIn={async () => {
@@ -361,64 +336,13 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
       {queryData.loading && <IndeterminateProgressBarView />}
       {showingModal && (
         <Pressable
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-          }}
+          style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0 }}
           onPress={() => {
             bottomSheetModalRef.current?.close();
             opacityValue.value = 0;
             setShowingModal(false);
           }}>
-          <Animated.View
-            style={[
-              {
-                flex: 1,
-                backgroundColor: theme.scrim,
-              },
-              animatedStyle,
-            ]}
-          />
-        </Pressable>
-      )}
-      {showMediaItem && (
-        <Pressable
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-          }}
-          onPress={() => {
-            opacityValue.value = withTiming(0);
-            setShowMediaItem(null);
-          }}>
-          <Animated.View
-            style={[
-              {
-                flex: 1,
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                backgroundColor: theme.scrim,
-              },
-              animatedStyle,
-            ]}
-          />
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Image
-              source={(showMediaItem.s.gif ?? showMediaItem.s.u).replaceAll('&amp;', '&')}
-              contentFit="contain"
-              transition={500}
-              style={{ width: showMediaItem.s.x, height: showMediaItem.s.y, maxWidth: '100%' }}
-            />
-          </View>
+          <Animated.View style={[{ flex: 1, backgroundColor: theme.scrim }, animatedStyle]} />
         </Pressable>
       )}
       <BottomSheetModalProvider>
@@ -432,9 +356,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
             borderTopLeftRadius: 14,
             borderTopRightRadius: 14,
           }}
-          handleIndicatorStyle={{
-            backgroundColor: theme.onSurface,
-          }}>
+          handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
           <SortOptions
             currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
             onSortPressed={onSortPressed}

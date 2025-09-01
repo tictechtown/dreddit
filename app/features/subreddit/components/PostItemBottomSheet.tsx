@@ -8,6 +8,7 @@ import Icons, { IconName } from '../../components/Icons';
 import Typography from '../../components/Typography';
 import { onLinkPress } from '../utils';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
+import * as WebBrowser from 'expo-web-browser';
 
 type RowProps = { icon: IconName; title: string; theme: ColorPalette };
 
@@ -84,6 +85,13 @@ const PostItemBottomSheet = ({
           <Row icon={'verified'} title={'View Original Post'} theme={theme} />
         </Pressable>
       )}
+      <Pressable
+        onPress={() => {
+          WebBrowser.openBrowserAsync(post.data.url.replaceAll('&amp;', '&'));
+        }}>
+        <Row icon={'open-in-new'} title={'Open Link with Browser'} theme={theme} />
+      </Pressable>
+
       <Row icon={'image'} title={'View Preview Image'} theme={theme} />
     </BottomSheetView>
   );

@@ -184,10 +184,10 @@ export const markdownRenderRules: RenderRules = {
         if (onLinkPress) {
           const res = onLinkPress(link);
           if (res) {
-            WebBrowser.openBrowserAsync(link);
+            WebBrowser.openBrowserAsync(link.replaceAll('&amp;', '&'));
           }
         } else {
-          WebBrowser.openBrowserAsync(link);
+          WebBrowser.openBrowserAsync(link.replaceAll('&amp;', '&'));
         }
       }}>
       {children}

@@ -16,7 +16,9 @@ export default (post: Post | null | undefined, router: Router) => {
     ) {
       const href = onLinkPress(post);
       if (href.pathname === 'features/full' && href.params) {
-        WebBrowser.openBrowserAsync(href.params.uri as string, { createTask: false });
+        WebBrowser.openBrowserAsync((href.params.uri as string).replaceAll('&amp;', '&'), {
+          createTask: false,
+        });
       } else {
         router.push(href);
       }

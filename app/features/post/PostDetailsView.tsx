@@ -331,7 +331,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
           );
         }}
         refreshControl={refreshControl}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
       />
       {queryData.loading && <IndeterminateProgressBarView />}
       {showingModal && (

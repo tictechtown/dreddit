@@ -8,6 +8,7 @@ import { Post } from '../../../services/api';
 import { PaletteDark } from '../../colors';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface GalleryImageProps {
   uri: string;
@@ -43,11 +44,14 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ uri }) => {
 };
 
 function CaptionFooter({ caption }: { caption: string | null }) {
+  const padding = useSafeAreaInsets();
+
   if (!caption) {
     return;
   }
+
   return (
-    <View style={styles.footer}>
+    <View style={[styles.footer, { paddingBottom: padding.bottom + 40 }]}>
       <Typography variant="bodyMedium">{caption}</Typography>
     </View>
   );
@@ -83,6 +87,8 @@ const CarouselTab = ({
     setShowCaption((prevValue) => !prevValue);
   }, [setShowCaption]);
 
+  const padding = useSafeAreaInsets();
+
   return (
     <>
       <Gallery
@@ -97,8 +103,7 @@ const CarouselTab = ({
       {showCaption && (
         <>
           <CaptionFooter caption={captions ? captions[pageIndex] : null} />
-
-          <View style={styles.pageIndexContainer}>
+          <View style={[styles.pageIndexContainer, { bottom: padding.bottom + 10 }]}>
             <View style={styles.pageIndexBackground} />
             <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
               {pageIndex + 1}
@@ -160,10 +165,10 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: Spacing.s8,
     backgroundColor: PaletteDark.surfaceContainerLowest,
+    opacity: 0.8,
   },
   pageIndexContainer: {
     position: 'absolute',
-    bottom: 10,
     right: 10,
     borderRadius: Spacing.s8,
     paddingHorizontal: Spacing.s8,

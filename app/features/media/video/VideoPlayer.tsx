@@ -357,7 +357,10 @@ const VideoPlayer = (props: Props) => {
         ]}>
         <Video
           ref={videoRef}
-          style={{ width: dimensions.width, height: dimensions.height - 200 }}
+          style={{
+            width: dimensions.width,
+            height: dimensions.height - 195,
+          }}
           source={props.source}
           onFullscreenUpdate={onFullscreenUpdate}
           resizeMode={ResizeMode.CONTAIN}
@@ -374,7 +377,6 @@ const VideoPlayer = (props: Props) => {
           <View
             style={{
               ...StyleSheet.absoluteFillObject,
-              maxHeight: dimensions.height - 100,
               position: 'absolute',
             }}>
             {/** Fast Rewind */}
@@ -446,7 +448,7 @@ const VideoPlayer = (props: Props) => {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: '30%',
+                  height: 300,
                 }}
               />
 
@@ -456,15 +458,14 @@ const VideoPlayer = (props: Props) => {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  paddingBottom: 40,
-                  paddingHorizontal: 16,
+                  paddingBottom: 80,
+                  gap: 8,
                 }}>
                 {/* Timing */}
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'flex-end',
-                    paddingBottom: 8,
                     justifyContent: 'flex-end',
                     alignContent: 'flex-end',
                   }}>
@@ -478,103 +479,115 @@ const VideoPlayer = (props: Props) => {
                       </Typography>
                     </Typography>
                   </View>
-                  <Text style={{ color: PaletteDark.onBackground }}></Text>
-                  <MaterialIcons.Button
-                    name={'fullscreen'}
-                    size={28}
-                    hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                    iconStyle={{ marginRight: 0 }}
-                    borderRadius={24}
-                    backgroundColor={PaletteDark.primaryContainer}
-                    color={PaletteDark.onPrimaryContainer}
-                    onPress={enterFullScreen}
-                  />
                 </View>
+                {/* Slider */}
+                <Slider
+                  style={{
+                    flex: 1,
+                    width: '100%',
+                    height: 40,
+                    borderRadius: 2,
+                  }}
+                  hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
+                  tapToSeek={true}
+                  minimumTrackTintColor={PaletteDark.primary}
+                  maximumTrackTintColor={PaletteDark.secondaryContainer}
+                  thumbTintColor={PaletteDark.primary}
+                  value={
+                    playbackInstanceInfo.duration
+                      ? playbackInstanceInfo.position / playbackInstanceInfo.duration
+                      : 0
+                  }
+                  onSlidingStart={() => {
+                    if (playbackInstanceInfo.state === PlaybackStates.Playing) {
+                      togglePlay();
+                      setPlaybackInstanceInfo({
+                        ...playbackInstanceInfo,
+                        state: PlaybackStates.Paused,
+                      });
+                      playbackStateRef.current = PlaybackStates.Paused;
+                    }
+                  }}
+                  onSlidingComplete={async (e) => {
+                    const position = e * playbackInstanceInfo.duration;
+                    if (videoRef.current) {
+                      await videoRef.current.setStatusAsync({
+                        positionMillis: position,
+                        shouldPlay: true,
+                      });
+                    }
+                    setPlaybackInstanceInfo({
+                      ...playbackInstanceInfo,
+                      position,
+                    });
+                  }}
+                />
                 {/* Controls */}
                 <View
                   style={{
                     flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 4,
-                    paddingHorizontal: 4,
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 12,
                   }}>
-                  {/** Play Button */}
+                  {/* Play Button */}
                   <View
                     pointerEvents={controlsState === ControlStates.Visible ? 'auto' : 'none'}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    <TouchableNativeFeedback
-                      background={TouchableNativeFeedback.Ripple(PaletteDark.surfaceVariant, true)}
-                      onPress={togglePlay}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Icons
-                          name={
-                            playbackInstanceInfo.state === PlaybackStates.Playing
-                              ? 'pause'
-                              : playbackInstanceInfo.state === PlaybackStates.Paused
-                                ? 'play-arrow'
-                                : playbackInstanceInfo.state === PlaybackStates.Ended
-                                  ? 'replay'
-                                  : 'cloud-download'
-                          }
-                          size={34}
-                          color={PaletteDark.onSurface}
-                        />
-                      </View>
-                    </TouchableNativeFeedback>
-                  </View>
-                  <Slider
-                    hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
-                    style={{
-                      flex: 1,
-                      width: '100%',
-                      marginHorizontal: 0,
-                    }}
-                    tapToSeek={true}
-                    minimumTrackTintColor={PaletteDark.onSurface}
-                    thumbTintColor={PaletteDark.onSurface}
-                    value={
-                      playbackInstanceInfo.duration
-                        ? playbackInstanceInfo.position / playbackInstanceInfo.duration
-                        : 0
-                    }
-                    onSlidingStart={() => {
-                      if (playbackInstanceInfo.state === PlaybackStates.Playing) {
-                        togglePlay();
-                        setPlaybackInstanceInfo({
-                          ...playbackInstanceInfo,
-                          state: PlaybackStates.Paused,
-                        });
-                        playbackStateRef.current = PlaybackStates.Paused;
-                      }
-                    }}
-                    onSlidingComplete={async (e) => {
-                      const position = e * playbackInstanceInfo.duration;
-                      if (videoRef.current) {
-                        await videoRef.current.setStatusAsync({
-                          positionMillis: position,
-                          shouldPlay: true,
-                        });
-                      }
-                      setPlaybackInstanceInfo({
-                        ...playbackInstanceInfo,
-                        position,
-                      });
-                    }}
-                  />
-                  <View
-                    pointerEvents={controlsState === ControlStates.Visible ? 'box-none' : 'none'}>
                     <MaterialIcons.Button
-                      name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
-                      size={18}
+                      name={
+                        playbackInstanceInfo.state === PlaybackStates.Playing
+                          ? 'pause'
+                          : playbackInstanceInfo.state === PlaybackStates.Paused
+                            ? 'play-arrow'
+                            : playbackInstanceInfo.state === PlaybackStates.Ended
+                              ? 'replay'
+                              : 'cloud-download'
+                      }
+                      size={28}
+                      hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                      iconStyle={{ marginRight: 20, marginLeft: 20 }}
+                      borderRadius={playbackInstanceInfo.state === PlaybackStates.Playing ? 8 : 24}
+                      backgroundColor={PaletteDark.primaryContainer}
+                      color={PaletteDark.onPrimaryContainer}
+                      onPress={togglePlay}
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                    {/* Mute Button */}
+                    <View
+                      pointerEvents={controlsState === ControlStates.Visible ? 'box-none' : 'none'}>
+                      <MaterialIcons.Button
+                        name={playbackInstanceInfo.isMuted ? 'volume-off' : 'volume-up'}
+                        size={28}
+                        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                        iconStyle={{ marginRight: 0 }}
+                        borderRadius={playbackInstanceInfo.isMuted ? 28 : 14}
+                        backgroundColor={
+                          playbackInstanceInfo.isMuted
+                            ? PaletteDark.primaryContainer
+                            : PaletteDark.secondaryContainer
+                        }
+                        color={
+                          playbackInstanceInfo.isMuted
+                            ? PaletteDark.onPrimaryContainer
+                            : PaletteDark.onSecondaryContainer
+                        }
+                        onPress={toggleMute}
+                      />
+                    </View>
+                    {/* Full screen */}
+                    <MaterialIcons.Button
+                      name={'fullscreen'}
+                      size={28}
                       hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
                       iconStyle={{ marginRight: 0 }}
-                      borderRadius={24}
-                      backgroundColor={PaletteDark.surface}
-                      color={PaletteDark.onSurface}
-                      onPress={toggleMute}
+                      borderRadius={14}
+                      backgroundColor={PaletteDark.secondaryContainer}
+                      color={PaletteDark.onSecondaryContainer}
+                      onPress={enterFullScreen}
                     />
                   </View>
                 </View>

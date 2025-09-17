@@ -23,19 +23,24 @@ export default function Page() {
 
   React.useEffect(() => {
     async function fetchMetadata(uri: string) {
-      const options = { url: uri };
-      const req = await fetch(options.url);
+      const req = await fetch(uri);
       const html = await req.text();
       const result = extractMetaTags(html, { customMetaTags: [], allMedia: true });
       if (result && 'ogVideo' in result) {
-        console.log('loading', result);
+        console.log('loading', uri, result);
         let ogVideo;
         if (Array.isArray(result.ogVideo)) {
-          ogVideo = result.ogVideo.at(-1);
+          const availableVideos = result.ogVideo.filter((video) => video.url.startsWith('http'));
+          ogVideo = availableVideos.at(-1);
         } else {
           ogVideo = result.ogVideo;
         }
-        setRVideo({ hls_url: ogVideo.url });
+        if (ogVideo == undefined) {
+          setErrorMessage(`cant load video from url ${uri}`);
+          WebBrowser.openBrowserAsync(uri);
+        } else {
+          setRVideo({ hls_url: ogVideo.url });
+        }
       } else {
         setErrorMessage(`cant load video from url ${uri}`);
         WebBrowser.openBrowserAsync(uri);
@@ -53,6 +58,7 @@ export default function Page() {
     }
   }, []);
 
+  console.log('playing', videoData?.hls_url);
   return (
     <View
       style={{
@@ -74,7 +80,7 @@ export default function Page() {
             style={{
               flex: 0,
               position: 'absolute',
-              bottom: 20,
+              bottom: 40,
               left: 0,
               right: 0,
               paddingHorizontal: Spacing.s16,
@@ -111,6 +117,7 @@ export default function Page() {
         <VideoPlayer
           style={{ height: '100%', width: '100%', flex: 1 }}
           source={{ uri: videoData.hls_url }}
+          onError={setErrorMessage}
         />
       )}
     </View>

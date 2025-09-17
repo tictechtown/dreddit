@@ -15,8 +15,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
-  Text,
-  TouchableNativeFeedback,
   View,
   useWindowDimensions,
   TouchableWithoutFeedback,
@@ -37,7 +35,7 @@ import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 import { useKeepAwake } from 'expo-keep-awake';
 
-type Props = VideoProps & { activityIndicator?: any };
+type Props = VideoProps & { activityIndicator?: any; onError?: (errorMsg: string) => void };
 
 const getMinutesSecondsFromMilliseconds = (ms: number) => {
   const totalSeconds = ms / 1000;
@@ -75,7 +73,6 @@ const VideoPlayer = (props: Props) => {
     readyToDisplay: false,
     videoOrientation: 'landscape',
   });
-  const [errorMessage, setErrorMessage] = useState('');
   const controlsOpacityValue = useSharedValue(0);
   const fastFowardOpacityValue = useSharedValue(0);
   const fastRewindOpacityValue = useSharedValue(0);
@@ -112,7 +109,7 @@ const VideoPlayer = (props: Props) => {
         '[VideoPlayer] `Source` is a required in `videoProps`. ' +
           'Check https://docs.expo.io/versions/latest/sdk/video/#usage'
       );
-      setErrorMessage('`Source` is a required in `videoProps`');
+      props.onError?.('`Source` is a required in `videoProps`');
       setPlaybackInstanceInfo({
         ...playbackInstanceInfo,
         state: PlaybackStates.Error,
@@ -170,7 +167,7 @@ const VideoPlayer = (props: Props) => {
     } else {
       if (status.isLoaded === false && status.error) {
         const errorMsg = `Encountered a fatal error during playback: ${status.error}`;
-        setErrorMessage(errorMsg);
+        props.onError?.(errorMsg);
         setPlaybackInstanceInfo({
           ...playbackInstanceInfo,
           state: PlaybackStates.Error,
@@ -296,33 +293,7 @@ const VideoPlayer = (props: Props) => {
     .runOnJS(true);
 
   if (playbackInstanceInfo.state === PlaybackStates.Error) {
-    return (
-      <View
-        style={{
-          backgroundColor: PaletteDark.scrim,
-          width: '100%',
-          height: '100%',
-        }}>
-        <View
-          style={{
-            flex: 0,
-            position: 'absolute',
-            bottom: 20,
-            left: 0,
-            right: 0,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-            backgroundColor: PaletteDark.errorContainer,
-            borderRadius: 10,
-            flexDirection: 'row',
-          }}>
-          <Icons name="error" size={36} color={PaletteDark.onErrorContainer} />
-          <Text style={{ color: PaletteDark.onErrorContainer, marginLeft: Spacing.s16 }}>
-            {errorMessage}
-          </Text>
-        </View>
-      </View>
-    );
+    return <></>;
   }
 
   return (

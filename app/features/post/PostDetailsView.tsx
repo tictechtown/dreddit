@@ -320,6 +320,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ListHeaderComponent={Header}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => {
           if (queryData.loading) {
             return null;

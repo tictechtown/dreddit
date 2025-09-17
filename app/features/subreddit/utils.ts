@@ -1,8 +1,8 @@
-import { HrefObject } from 'expo-router/build/link/href';
+import { Href } from 'expo-router/build/typed-routes/types';
 import base64 from 'react-native-base64';
 import { Post } from '../../services/api';
 
-export const onLinkPress = (post: Post): HrefObject => {
+export const onLinkPress = (post: Post): Href => {
   let originalPost = post;
 
   console.log('onLinkPress', post);

@@ -9,7 +9,7 @@ import CarouselView from '../../../components/CarouselView';
 import Typography from '../../../components/Typography';
 import { Spacing } from '../../../tokens';
 import { timeDifference } from '../../../utils';
-import FlairTextView from './FlairTextView';
+import PostFlairChip from '../../../components/PostFlairChip';
 import PostContentPreview from './PostContentPreview';
 import PostFeedItemToolbar from './PostFeedItemToolbar';
 import useMediaPressCallback from '../../../../hooks/useMediaPressCallback';
@@ -88,7 +88,7 @@ const PostFeedItem = ({
           </Typography>
           {post.data.link_flair_text && (
             <View style={{ flexDirection: 'row', paddingTop: 4 }}>
-              <FlairTextView
+              <PostFlairChip
                 flair_text={post.data.link_flair_text}
                 flair_type={post.data.link_flair_type}
                 flair_richtext={post.data.link_flair_richtext}

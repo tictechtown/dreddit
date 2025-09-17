@@ -12,7 +12,7 @@ import markdownItRedditSupsubscript from '../../services/markdown/markdownSupSub
 import { ColorPalette } from '../colors';
 import { Spacing } from '../tokens';
 import { getPreviewImageFromStreaminMe, getPreviewImageFromYoutube } from '../utils';
-import PostSpoiler from './PostSpoiler';
+import CommentSpoiler from './components/CommentSpoiler';
 
 export const markdownIt = MarkdownIt({ linkify: true, typographer: true })
   .use(markdownRedditHeadingPlugin)
@@ -220,7 +220,7 @@ export const markdownRenderRules: RenderRules = {
     </Text>
   ),
   spoiler: (node) => {
-    return <PostSpoiler key={node.key} content={node.content.trim()} />;
+    return <CommentSpoiler key={node.key} content={node.content.trim()} />;
   },
   subreddit: (node, children, parent, styles) => {
     let fontSize = undefined;

@@ -21,8 +21,8 @@ import IndeterminateProgressBarView from '../components/IndeterminateProgressBar
 import Typography from '../components/Typography';
 import { Spacing } from '../tokens';
 import CommentItem from './components/CommentItem';
-import PostHeader from './components/PostHeader';
-import SortOptions from './components/SortOptions';
+import PostDetailsHeader from './components/PostDetailsHeader';
+import SortOptions from './modals/PostDetailsSortOptions';
 import { flattenComments, getMaxPreview, mergeComments } from './utils';
 import useMediaPressCallback from '../../hooks/useMediaPressCallback';
 
@@ -40,7 +40,7 @@ const COMMENT_LIMIT = '100';
 
 const keyExtractor = (item: Comment) => item.data.id;
 
-const PostDetailsView = ({ postId, cachedPost }: Props) => {
+const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
   const [queryData, setQueryData] = useState<CommentsAndPost>({
     comments: [],
     rawComments: [],
@@ -132,7 +132,7 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
 
   const Header = useCallback(() => {
     return (
-      <PostHeader
+      <PostDetailsHeader
         post={queryData.post ?? null}
         forcedSortOrder={sortOrder}
         onMediaPress={_onMediaHeaderPressed}
@@ -368,4 +368,4 @@ const PostDetailsView = ({ postId, cachedPost }: Props) => {
   );
 };
 
-export default PostDetailsView;
+export default PostDetailsScreen;

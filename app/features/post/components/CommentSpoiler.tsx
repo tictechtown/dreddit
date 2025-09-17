@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { Text } from 'react-native';
-import useTheme from '../../services/theme/useTheme';
+import useTheme from '../../../services/theme/useTheme';
 
-const PostSpoiler = ({ content }: { content: string }) => {
+const CommentSpoiler = ({ content }: { content: string }) => {
   const theme = useTheme();
   const [isRevealed, setIsRevealed] = useState(false);
 
@@ -22,4 +22,4 @@ const PostSpoiler = ({ content }: { content: string }) => {
   );
 };
 
-export default PostSpoiler;
+export default CommentSpoiler;

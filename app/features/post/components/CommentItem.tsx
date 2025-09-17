@@ -5,10 +5,10 @@ import { decode } from 'html-entities';
 import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
-import { ColorPalette } from '../../colors';
+import type { ColorPalette } from '../../colors';
 import ItemSeparator from '../../components/ItemSeparator';
 import Typography from '../../components/Typography';
-import FlairTextView from '../../subreddit/feed/components/FlairTextView';
+import PostFlairChip from '../../components/PostFlairChip';
 import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, useCommentMarkdownStyle } from '../utils';
@@ -128,7 +128,9 @@ const CommentItem = ({
 
   let fontColor = comment.data.is_submitter ? theme.primary : theme.onSurfaceVariant;
   fontColor =
-    isAutomoderator || comment.data.distinguished !== null ? theme['custom-green'] : fontColor;
+    isAutomoderator || comment.data.distinguished !== null
+      ? (theme['custom-green'] ?? fontColor)
+      : fontColor;
   const opacity = fontColor === theme.onSurfaceVariant ? 0.6 : 1;
   const hasReplies = comment.data.replies !== undefined;
 
@@ -163,7 +165,7 @@ const CommentItem = ({
             {comment.data.author}
           </Typography>
         </TouchableOpacity>
-        <FlairTextView
+        <PostFlairChip
           flair_richtext={comment.data.author_flair_richtext}
           flair_text={comment.data.author_flair_text}
           stickied={comment.data.stickied}

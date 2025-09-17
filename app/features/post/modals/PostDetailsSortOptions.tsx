@@ -6,7 +6,7 @@ import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 
-const SortOptions = ({
+const PostDetailsSortOptions = ({
   currentSort,
   onSortPressed,
 }: {
@@ -88,4 +88,4 @@ const SortOptions = ({
   );
 };
 
-export default SortOptions;
+export default PostDetailsSortOptions;

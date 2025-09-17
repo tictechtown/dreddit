@@ -62,6 +62,8 @@ export type ColorPalette = {
   surfaceContainer: string;
   surfaceContainerHigh: string;
   surfaceContainerHighest: string;
+} & {
+  'custom-green'?: string;
 };
 
 export const PaletteDark: ColorPalette = {

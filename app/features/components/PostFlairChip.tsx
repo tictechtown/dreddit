@@ -1,10 +1,10 @@
 import { Image } from 'expo-image';
 import { decode } from 'html-entities';
 import { Pressable, TextStyle, View, ViewStyle } from 'react-native';
-import { FlairRichText, Post } from '../../../../services/api';
-import { ColorPalette } from '../../../colors';
-import Typography from '../../../components/Typography';
-import { Spacing } from '../../../tokens';
+import type { FlairRichText, Post } from '../../services/api';
+import { ColorPalette } from '../colors';
+import Typography from './Typography';
+import { Spacing } from '../tokens';
 
 type Props = {
   flair_text: string | null;
@@ -19,7 +19,7 @@ type Props = {
   onPress?: ((text: string) => void) | undefined;
 };
 
-const FlairTextView = (props: Props) => {
+const PostFlairChip = (props: Props) => {
   const displayPin = props.pinned || props.stickied;
 
   let elementsToDisplay: FlairRichText[] = Array.isArray(props.flair_richtext)
@@ -107,4 +107,4 @@ const FlairTextView = (props: Props) => {
   );
 };
 
-export default FlairTextView;
+export default PostFlairChip;

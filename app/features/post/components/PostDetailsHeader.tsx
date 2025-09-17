@@ -9,7 +9,7 @@ import CarouselView from '../../components/CarouselView';
 import Icons from '../../components/Icons';
 import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
-import FlairTextView from '../../subreddit/feed/components/FlairTextView';
+import PostFlairChip from '../../components/PostFlairChip';
 import PostContentPreview from '../../subreddit/feed/components/PostContentPreview';
 import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
@@ -27,7 +27,7 @@ function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: stri
   return sort[0].toLocaleUpperCase() + sort.slice(1);
 }
 
-const PostHeader = ({
+const PostDetailsHeader = ({
   post,
   forcedSortOrder,
   onMediaPress,
@@ -94,7 +94,7 @@ const PostHeader = ({
           <Typography variant="overline" style={{ color: authorColor }}>
             {post.data.author}
           </Typography>
-          <FlairTextView
+          <PostFlairChip
             flair_richtext={post.data.author_flair_richtext}
             flair_text={post.data.author_flair_text}
             stickied={false}
@@ -124,7 +124,7 @@ const PostHeader = ({
               paddingTop: Spacing.s4,
               flexDirection: 'row',
             }}>
-            <FlairTextView
+            <PostFlairChip
               flair_text={post.data.link_flair_text}
               flair_type={post.data.link_flair_type}
               flair_richtext={post.data.link_flair_richtext}
@@ -237,4 +237,4 @@ const PostHeader = ({
   );
 };
 
-export default React.memo(PostHeader);
+export default React.memo(PostDetailsHeader);

@@ -8,7 +8,7 @@ import { Comment, RedditMediaMedata } from '../../../services/api';
 import { ColorPalette } from '../../colors';
 import ItemSeparator from '../../components/ItemSeparator';
 import Typography from '../../components/Typography';
-import FlairTextView from '../../subreddit/components/FlairTextView';
+import FlairTextView from '../../subreddit/feed/components/FlairTextView';
 import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, useCommentMarkdownStyle } from '../utils';

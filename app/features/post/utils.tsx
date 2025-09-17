@@ -238,7 +238,7 @@ export const markdownRenderRules: RenderRules = {
     }
     const subreddit = node.content.replace('/r/', '').replace('r/', '').trim();
     return (
-      <Link key={node.key} href={{ pathname: `features/subreddit/${subreddit}` }}>
+      <Link key={node.key} href={{ pathname: `features/subreddit/feed/${subreddit}` }}>
         {' '}
         <Text style={[styles.link, { color: styles.theme.error, fontSize }]}>
           {node.content.trim()}

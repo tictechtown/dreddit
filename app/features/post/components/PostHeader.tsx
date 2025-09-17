@@ -9,8 +9,8 @@ import CarouselView from '../../components/CarouselView';
 import Icons from '../../components/Icons';
 import PostKarmaButton from '../../components/PostKarmaButton';
 import Typography from '../../components/Typography';
-import FlairTextView from '../../subreddit/components/FlairTextView';
-import PostPreview from '../../subreddit/components/PostPreview';
+import FlairTextView from '../../subreddit/feed/components/FlairTextView';
+import PostContentPreview from '../../subreddit/feed/components/PostContentPreview';
 import { Spacing } from '../../tokens';
 import { timeDifference } from '../../utils';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
@@ -140,7 +140,7 @@ const PostHeader = ({
       {/* Image */}
       <Pressable onPress={onMediaPress}>
         <View style={{ marginHorizontal: 12 }}>
-          <PostPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
+          <PostContentPreview post={post} imageWidth={dimensions.width - 24} theme={theme} />
           {maxGaleryResolutions && (
             <CarouselView
               captions={galleryCaptions}

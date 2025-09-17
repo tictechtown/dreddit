@@ -1,12 +1,12 @@
 import { router } from 'expo-router';
 import { Pressable, View } from 'react-native';
-import { Post } from '../../../services/api';
-import { useStore } from '../../../services/store';
-import useTheme from '../../../services/theme/useTheme';
-import { ColorPalette } from '../../colors';
-import Icons, { IconName } from '../../components/Icons';
-import Typography from '../../components/Typography';
-import { onLinkPress } from '../utils';
+import { Post } from '../../../../services/api';
+import { useStore } from '../../../../services/store';
+import useTheme from '../../../../services/theme/useTheme';
+import { ColorPalette } from '../../../colors';
+import Icons, { IconName } from '../../../components/Icons';
+import Typography from '../../../components/Typography';
+import { onLinkPress } from '../../utils';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import * as WebBrowser from 'expo-web-browser';
 
@@ -28,7 +28,7 @@ const Row = ({ icon, title, theme }: RowProps) => {
   );
 };
 
-const PostItemBottomSheet = ({
+const PostActionSheet = ({
   post,
   onClose,
 }: {
@@ -45,7 +45,7 @@ const PostItemBottomSheet = ({
     <BottomSheetView>
       <Pressable
         onPress={() => {
-          router.push({ pathname: `features/subreddit/${post.data.subreddit}` });
+          router.push({ pathname: `features/subreddit/feed/${post.data.subreddit}` });
           onClose(null);
         }}>
         <Row
@@ -67,7 +67,7 @@ const PostItemBottomSheet = ({
           <Pressable
             onPress={() => {
               router.push({
-                pathname: `features/subreddit/${post.data.crosspost_parent_list![0].subreddit}`,
+                pathname: `features/subreddit/feed/${post.data.crosspost_parent_list![0].subreddit}`,
               });
               onClose(null);
             }}>
@@ -117,4 +117,4 @@ const PostItemBottomSheet = ({
   );
 };
 
-export default PostItemBottomSheet;
+export default PostActionSheet;

@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
-import useTheme from '../../../services/theme/useTheme';
-import Icons from '../../components/Icons';
-import Typography from '../../components/Typography';
+import useTheme from '../../../../services/theme/useTheme';
+import Icons from '../../../components/Icons';
+import Typography from '../../../components/Typography';
 
 type Props = {
   title: string;
   onPress: () => void;
 };
 
-export default function ModalOptionRow({ title, onPress }: Props) {
+export default function ActionSheetOptionRow({ title, onPress }: Props) {
   const theme = useTheme();
   return (
     <Pressable onPress={onPress}>

@@ -11,19 +11,19 @@ import {
   View,
 } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { Post, RedditApi, SubReddit } from '../../services/api';
-import { useStore } from '../../services/store';
-import useTheme from '../../services/theme/useTheme';
-import Icons from '../components/Icons';
-import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
-import ItemSeparator from '../components/ItemSeparator';
-import SubredditIcon from '../components/SubredditIcon';
-import Tabs from '../components/Tabs';
-import ToastView from '../components/ToastView';
-import Typography from '../components/Typography';
-import ModalOptionRow from './components/ModalOptionRow';
-import PostItemBottomSheet from './components/PostItemBottomSheet';
-import SubredditPostItemView from './components/SubredditPostItemView';
+import { Post, RedditApi, SubReddit } from '../../../services/api';
+import { useStore } from '../../../services/store';
+import useTheme from '../../../services/theme/useTheme';
+import Icons from '../../components/Icons';
+import IndeterminateProgressBarView from '../../components/IndeterminateProgressBarView';
+import ItemSeparator from '../../components/ItemSeparator';
+import SubredditIcon from '../../components/SubredditIcon';
+import Tabs from '../../components/Tabs';
+import ToastView from '../../components/ToastView';
+import Typography from '../../components/Typography';
+import ModalOptionRow from './modals/ActionSheetOptionRow';
+import PostItemBottomSheet from './modals/PostActionSheet';
+import PostFeedItem from './components/PostFeedItem';
 
 type Props = { subreddit: string; icon: string | undefined | null };
 
@@ -65,7 +65,7 @@ const SortOrderView = (props: SortOrderProps) => {
 
 const SortOrderViewMemo = React.memo(SortOrderView);
 
-const SubRedditView = (props: Props) => {
+const SubredditFeedScreen = (props: Props) => {
   const theme = useTheme();
   const [sortOrder, setSortOrder] = useState<'hot' | 'new' | 'top'>('hot');
 
@@ -227,7 +227,7 @@ const SubRedditView = (props: Props) => {
   const renderItem = useCallback(
     ({ item }: { item: Post }) => {
       return (
-        <SubredditPostItemView
+        <PostFeedItem
           post={item}
           theme={theme}
           isSaved={savedPostIds[item.data.id]}
@@ -549,4 +549,4 @@ const SubRedditView = (props: Props) => {
     </>
   );
 };
-export default SubRedditView;
+export default SubredditFeedScreen;

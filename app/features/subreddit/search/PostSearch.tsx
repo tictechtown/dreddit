@@ -7,7 +7,7 @@ import { Post, RedditApi } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
-import SubredditPostItemView from '../components/SubredditPostItemView';
+import SubredditPostItemView from '../feed/components/PostFeedItem';
 
 type Props = {
   subreddit: string;

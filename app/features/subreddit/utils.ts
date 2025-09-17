@@ -5,7 +5,7 @@ import { Post } from '../../services/api';
 export const onLinkPress = (post: Post): HrefObject => {
   let originalPost = post;
 
-  console.log('onLinkPRess', post);
+  console.log('onLinkPress', post);
 
   if (
     Array.isArray(post.data.crosspost_parent_list) &&

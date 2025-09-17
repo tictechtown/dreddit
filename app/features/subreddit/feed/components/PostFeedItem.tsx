@@ -2,18 +2,18 @@ import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback } from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import { Post } from '../../../services/api';
-import postCache from '../../../services/postCache';
-import { ColorPalette } from '../../colors';
-import CarouselView from '../../components/CarouselView';
-import Typography from '../../components/Typography';
-import { Spacing } from '../../tokens';
-import { timeDifference } from '../../utils';
+import { Post } from '../../../../services/api';
+import postCache from '../../../../services/postCache';
+import { ColorPalette } from '../../../colors';
+import CarouselView from '../../../components/CarouselView';
+import Typography from '../../../components/Typography';
+import { Spacing } from '../../../tokens';
+import { timeDifference } from '../../../utils';
 import FlairTextView from './FlairTextView';
-import PostPreview from './PostPreview';
-import PostToolbar from './PostToolbar';
-import useMediaPressCallback from '../../../hooks/useMediaPressCallback';
-import useGalleryData from '../../../hooks/useGalleryData';
+import PostContentPreview from './PostContentPreview';
+import PostFeedItemToolbar from './PostFeedItemToolbar';
+import useMediaPressCallback from '../../../../hooks/useMediaPressCallback';
+import useGalleryData from '../../../../hooks/useGalleryData';
 import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
@@ -25,7 +25,7 @@ type Props = {
   onMoreOptions?: (post: Post) => void;
 };
 
-const SubredditPostItemView = ({
+const PostFeedItem = ({
   post,
   isSaved,
   addToSavedPosts,
@@ -112,7 +112,7 @@ const SubredditPostItemView = ({
         </View>
 
         <View style={{ paddingVertical: Spacing.s16, paddingTop: Spacing.s12 }}>
-          <PostPreview post={post} imageWidth={imageWidth} theme={theme} />
+          <PostContentPreview post={post} imageWidth={imageWidth} theme={theme} />
           {!isCrosspost && maxGaleryResolutions && (
             <CarouselView
               captions={galleryCaptions}
@@ -122,7 +122,7 @@ const SubredditPostItemView = ({
           )}
         </View>
 
-        <PostToolbar
+        <PostFeedItemToolbar
           post={post}
           isSaved={isSaved}
           addToSavedPosts={addToSavedPosts}
@@ -135,4 +135,4 @@ const SubredditPostItemView = ({
   );
 };
 
-export default React.memo(SubredditPostItemView);
+export default React.memo(PostFeedItem);

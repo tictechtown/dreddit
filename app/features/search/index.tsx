@@ -19,7 +19,7 @@ import Icons from '../components/Icons';
 import SubredditIcon, { defaultSubredditIcon } from '../components/SubredditIcon';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
-import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
+import SubredditPostItemView from '../subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../tokens';
 
 function getSubredditIcon(icon: string | undefined): string {
@@ -62,7 +62,7 @@ const SearchResultSub = (props: { result: SubReddit; theme: ColorPalette }) => {
   return (
     <Link
       href={{
-        pathname: `features/subreddit/${data.display_name}`,
+        pathname: `features/subreddit/feed/${data.display_name}`,
         params: { icon: icon },
       }}
       asChild>

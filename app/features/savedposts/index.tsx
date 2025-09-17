@@ -5,7 +5,7 @@ import { Post } from '../../services/api';
 import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
 import ItemSeparator from '../components/ItemSeparator';
-import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
+import SubredditPostItemView from '../subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../tokens';
 
 export default function Page() {

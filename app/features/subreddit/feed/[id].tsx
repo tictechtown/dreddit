@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import SubRedditView from './SubredditView';
+import SubRedditView from './SubredditFeedScreen';
 
 export default function Page() {
   const { id, icon } = useLocalSearchParams();

@@ -1,17 +1,17 @@
 import { Image } from 'expo-image';
 import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
-import { Post } from '../../../services/api';
-import { DataUsage, useStore } from '../../../services/store';
-import { ColorPalette } from '../../colors';
-import Icons from '../../components/Icons';
-import Typography from '../../components/Typography';
-import { Spacing } from '../../tokens';
+import { Post } from '../../../../services/api';
+import { DataUsage, useStore } from '../../../../services/store';
+import { ColorPalette } from '../../../colors';
+import Icons from '../../../components/Icons';
+import Typography from '../../../components/Typography';
+import { Spacing } from '../../../tokens';
 import {
   getPreviewImageFromDubz,
   getPreviewImageFromStreaminMe,
   getPreviewImageFromYoutube,
-} from '../../utils';
+} from '../../../utils';
 
 type PostPreviewImageProps = {
   domain: Post['data']['domain'];
@@ -28,7 +28,7 @@ function getVideoDuration(duration: number): string {
   return `${`${mins}`.padStart(2, '0')}:${`${seconds}`.padStart(2, '0')}`;
 }
 
-const YOUTUBE_PLACEHOLDER = require('../../../../assets/images/youtube_placeholder.jpg');
+const YOUTUBE_PLACEHOLDER = require('../../../../../assets/images/youtube_placeholder.jpg');
 
 const PostPreviewVideo = memo(
   ({
@@ -393,7 +393,7 @@ const PostPreviewImage = ({
   );
 };
 
-const PostPreview = ({
+const PostContentPreview = ({
   post,
   imageWidth,
   theme,
@@ -439,4 +439,4 @@ const PostPreview = ({
   );
 };
 
-export default React.memo(PostPreview);
+export default React.memo(PostContentPreview);

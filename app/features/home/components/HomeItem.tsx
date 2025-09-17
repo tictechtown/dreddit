@@ -21,7 +21,7 @@ const HomeItem = ({
     <View style={{ flex: 1 }}>
       <Link
         href={{
-          pathname: `features/subreddit/${subreddit}`,
+          pathname: `features/subreddit/feed/${subreddit}`,
           params: {
             icon: icon?.replaceAll('&amp;', '&') ?? require('../../../../assets/images/subbit.svg'),
           },

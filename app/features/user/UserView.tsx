@@ -8,7 +8,7 @@ import { ColorPalette } from '../colors';
 import IndeterminateProgressBarView from '../components/IndeterminateProgressBarView';
 import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
-import SubredditPostItemView from '../subreddit/components/SubredditPostItemView';
+import SubredditPostItemView from '../subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../tokens';
 import { timeDifference } from '../utils';
 

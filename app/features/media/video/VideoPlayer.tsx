@@ -435,11 +435,11 @@ const VideoPlayer = (props: Props) => {
                 </View>
               </Animated.View>
             </View>
-
             {/* Bottom Bar */}
             <Animated.View style={controlsOpacityStyle}>
               {/** Scrim */}
               <LinearGradient
+                pointerEvents="none"
                 // Background Linear Gradient
                 colors={['transparent', PaletteDark.scrim]}
                 locations={[0, 0.7]}
@@ -458,70 +458,13 @@ const VideoPlayer = (props: Props) => {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  paddingBottom: 80,
+                  marginBottom: 36,
+                  paddingVertical: 16,
+                  marginHorizontal: 4,
                   gap: 8,
+                  backgroundColor: PaletteDark.surfaceContainerLowest,
+                  borderRadius: 24,
                 }}>
-                {/* Timing */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    alignContent: 'flex-end',
-                  }}>
-                  <View style={{ flex: 1, paddingLeft: 14 }}>
-                    <Typography variant="bodyMedium">
-                      {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
-                      <Typography
-                        variant="bodyMedium"
-                        style={{ color: PaletteDark.onSurfaceVariant }}>
-                        / {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
-                      </Typography>
-                    </Typography>
-                  </View>
-                </View>
-                {/* Slider */}
-                <Slider
-                  style={{
-                    flex: 1,
-                    width: '100%',
-                    height: 40,
-                    borderRadius: 2,
-                  }}
-                  hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
-                  tapToSeek={true}
-                  minimumTrackTintColor={PaletteDark.primary}
-                  maximumTrackTintColor={PaletteDark.secondaryContainer}
-                  thumbTintColor={PaletteDark.primary}
-                  value={
-                    playbackInstanceInfo.duration
-                      ? playbackInstanceInfo.position / playbackInstanceInfo.duration
-                      : 0
-                  }
-                  onSlidingStart={() => {
-                    if (playbackInstanceInfo.state === PlaybackStates.Playing) {
-                      togglePlay();
-                      setPlaybackInstanceInfo({
-                        ...playbackInstanceInfo,
-                        state: PlaybackStates.Paused,
-                      });
-                      playbackStateRef.current = PlaybackStates.Paused;
-                    }
-                  }}
-                  onSlidingComplete={async (e) => {
-                    const position = e * playbackInstanceInfo.duration;
-                    if (videoRef.current) {
-                      await videoRef.current.setStatusAsync({
-                        positionMillis: position,
-                        shouldPlay: true,
-                      });
-                    }
-                    setPlaybackInstanceInfo({
-                      ...playbackInstanceInfo,
-                      position,
-                    });
-                  }}
-                />
                 {/* Controls */}
                 <View
                   style={{
@@ -548,13 +491,32 @@ const VideoPlayer = (props: Props) => {
                       }
                       size={28}
                       hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                      iconStyle={{ marginRight: 20, marginLeft: 20 }}
-                      borderRadius={playbackInstanceInfo.state === PlaybackStates.Playing ? 8 : 24}
+                      iconStyle={{
+                        marginRight: 20,
+                        marginLeft: 20,
+                      }}
+                      borderRadius={24}
                       backgroundColor={PaletteDark.primaryContainer}
                       color={PaletteDark.onPrimaryContainer}
                       onPress={togglePlay}
                     />
                   </View>
+                  {/* Timing */}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <Typography variant="bodyMedium" style={{ color: PaletteDark.onSurface }}>
+                      {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.position)}
+                      <Typography
+                        variant="bodyMedium"
+                        style={{ color: PaletteDark.onSurfaceVariant }}>
+                        / {getMinutesSecondsFromMilliseconds(playbackInstanceInfo.duration)}
+                      </Typography>
+                    </Typography>
+                  </View>
+
                   <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
                     {/* Mute Button */}
                     <View
@@ -591,6 +553,48 @@ const VideoPlayer = (props: Props) => {
                     />
                   </View>
                 </View>
+
+                {/* Slider */}
+                <Slider
+                  style={{
+                    flex: 1,
+                    width: '100%',
+                    height: 40,
+                    borderRadius: 2,
+                  }}
+                  tapToSeek={true}
+                  minimumTrackTintColor={PaletteDark.primary}
+                  maximumTrackTintColor={PaletteDark.secondaryContainer}
+                  thumbTintColor={PaletteDark.primary}
+                  value={
+                    playbackInstanceInfo.duration
+                      ? playbackInstanceInfo.position / playbackInstanceInfo.duration
+                      : 0
+                  }
+                  onSlidingStart={() => {
+                    if (playbackInstanceInfo.state === PlaybackStates.Playing) {
+                      togglePlay();
+                      setPlaybackInstanceInfo({
+                        ...playbackInstanceInfo,
+                        state: PlaybackStates.Paused,
+                      });
+                      playbackStateRef.current = PlaybackStates.Paused;
+                    }
+                  }}
+                  onSlidingComplete={async (e) => {
+                    const position = e * playbackInstanceInfo.duration;
+                    if (videoRef.current) {
+                      await videoRef.current.setStatusAsync({
+                        positionMillis: position,
+                        shouldPlay: true,
+                      });
+                    }
+                    setPlaybackInstanceInfo({
+                      ...playbackInstanceInfo,
+                      position,
+                    });
+                  }}
+                />
               </View>
             </Animated.View>
           </View>

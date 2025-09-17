@@ -123,7 +123,7 @@ const SubRedditView = (props: Props) => {
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
   const flatListRef = React.useRef<FlatList>(null);
   // variables
-  const snapPoints = useMemo(() => ['38%'], []);
+  const snapPoints = useMemo(() => ['50%'], []);
 
   const isFavorite = favorites.map((f) => f.name).includes(props.subreddit);
 

@@ -23,7 +23,7 @@ const Row = ({ icon, title, theme }: RowProps) => {
         columnGap: 8,
       }}>
       <Icons name={icon} size={24} color={theme.onSurface} />
-      <Typography variant="bodyMedium">{title}</Typography>
+      <Typography variant="titleSmall">{title}</Typography>
     </View>
   );
 };
@@ -54,6 +54,32 @@ const PostItemBottomSheet = ({
           theme={theme}
         />
       </Pressable>
+      {Array.isArray(post.data.crosspost_parent_list) && (
+        // TODO - go to the comments for this post instead
+        <>
+          <Pressable
+            onPress={() => {
+              router.push(onLinkPress(post));
+              onClose(null);
+            }}>
+            <Row icon={'share'} title={'View Original Post'} theme={theme} />
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              router.push({
+                pathname: `features/subreddit/${post.data.crosspost_parent_list![0].subreddit}`,
+              });
+              onClose(null);
+            }}>
+            <Row
+              icon={'repeat'}
+              title={`View ${post.data.crosspost_parent_list![0].subreddit_name_prefixed}`}
+              theme={theme}
+            />
+          </Pressable>
+        </>
+      )}
+
       <Pressable
         onPress={() => {
           router.push({ pathname: `features/user`, params: { userid: post.data.author } });
@@ -73,18 +99,12 @@ const PostItemBottomSheet = ({
           addToBannedList(post.data.subreddit_name_prefixed);
           onClose('BANNED_SUBREDDIT');
         }}>
-        <Row icon={'report'} title={`Hide ${post.data.subreddit_name_prefixed}`} theme={theme} />
+        <Row
+          icon={'visibility-off'}
+          title={`Hide ${post.data.subreddit_name_prefixed}`}
+          theme={theme}
+        />
       </Pressable>
-      {Array.isArray(post.data.crosspost_parent_list) && (
-        // TODO - go to the comments for this post instead
-        <Pressable
-          onPress={() => {
-            router.push(onLinkPress(post));
-            onClose(null);
-          }}>
-          <Row icon={'verified'} title={'View Original Post'} theme={theme} />
-        </Pressable>
-      )}
       <Pressable
         onPress={() => {
           WebBrowser.openBrowserAsync(post.data.url.replaceAll('&amp;', '&'));

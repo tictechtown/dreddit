@@ -58,6 +58,7 @@
     "@types/react-native-base64": "^0.2.2",
     "eslint": "^9.0.0",
     "eslint-config-universe": "^14.0.0",
+    "oxlint": "^1.16.0",
     "patch-package": "^8.0.0",
     "prettier": "^3.6.2",
     "typescript": "~5.8.3"

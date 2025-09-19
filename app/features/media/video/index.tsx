@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { Button, Text, TouchableNativeFeedback, View } from 'react-native';
+import { Text, TouchableNativeFeedback, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { RedditVideo } from '../../../services/api';
 import { PaletteDark } from '../../colors';

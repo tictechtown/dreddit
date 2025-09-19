@@ -6,8 +6,7 @@ import { ColorSchemeName } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeContext } from './services/theme/theme';
 import useColorScheme from './services/theme/useColorScheme';
-import { Edge, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Constants from 'expo-constants';
+import { Edge, SafeAreaView } from 'react-native-safe-area-context';
 
 type RNScheme = {
   dark: boolean;

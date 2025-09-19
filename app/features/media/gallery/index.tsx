@@ -8,7 +8,7 @@ import { Post } from '../../../services/api';
 import { PaletteDark } from '../../colors';
 import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface GalleryImageProps {
   uri: string;

@@ -31,11 +31,11 @@ const PostFlairChip = (props: Props) => {
   }
 
   if (props.over_18) {
-    elementsToDisplay = [...[{ e: 'text', t: 'NSFW' } as FlairRichText], ...elementsToDisplay];
+    elementsToDisplay = [{ e: 'text', t: 'NSFW' } as FlairRichText, ...elementsToDisplay];
   }
 
   if (displayPin) {
-    elementsToDisplay = [...[{ e: 'text', t: '📍' } as FlairRichText], ...elementsToDisplay];
+    elementsToDisplay = [{ e: 'text', t: '📍' } as FlairRichText, ...elementsToDisplay];
     if (elementsToDisplay.length === 1) {
       elementsToDisplay.push({ e: 'text', t: 'Pinned' });
     }

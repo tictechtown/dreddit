@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity, View, ViewStyle } from 'react-native';
+import { TouchableOpacity, ViewStyle } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
 import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';

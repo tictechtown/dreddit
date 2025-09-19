@@ -32,7 +32,6 @@ import { useStore } from '../../../services/store';
 import { PaletteDark } from '../../colors';
 import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../tokens';
 import { useKeepAwake } from 'expo-keep-awake';
 
 type Props = VideoProps & { activityIndicator?: any; onError?: (errorMsg: string) => void };

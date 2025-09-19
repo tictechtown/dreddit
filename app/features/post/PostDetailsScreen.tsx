@@ -22,7 +22,7 @@ import Typography from '../components/Typography';
 import { Spacing } from '../tokens';
 import CommentItem from './components/CommentItem';
 import PostDetailsHeader from './components/PostDetailsHeader';
-import SortOptions from './modals/PostDetailsSortOptions';
+import PostDetailsSortOptions from './modals/PostDetailsSortOptions';
 import { flattenComments, getMaxPreview, mergeComments } from './utils';
 import useMediaPressCallback from '../../hooks/useMediaPressCallback';
 
@@ -358,9 +358,16 @@ const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
             borderTopRightRadius: 14,
           }}
           handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
-          <SortOptions
+          <PostDetailsSortOptions
             currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
             onSortPressed={onSortPressed}
+            options={[
+              { key: 'best', display: 'Best', icon: 'rocket' },
+              { key: 'top', display: 'Top', icon: 'leaderboard' },
+              { key: 'new', display: 'New', icon: 'access-time' },
+              { key: 'controversial', display: 'Controversial', icon: 'question-answer' },
+              { key: 'random', display: 'Random', icon: 'shuffle' },
+            ]}
           />
         </BottomSheetModal>
       </BottomSheetModalProvider>

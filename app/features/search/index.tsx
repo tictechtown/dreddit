@@ -2,7 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { Link, Stack, useFocusEffect } from 'expo-router';
 import { decode } from 'html-entities';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Keyboard,
@@ -21,6 +21,36 @@ import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../tokens';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import PostDetailsSortOptions from '../post/modals/PostDetailsSortOptions';
+
+function Chip(props: { value: string; allValues: string[]; onChange: () => void }) {
+  const theme = useTheme();
+
+  return (
+    <Pressable onPress={props.onChange} style={{ flexDirection: 'row', flex: 1 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          borderRadius: 8,
+          flex: 1,
+          backgroundColor: theme.secondaryContainer,
+          paddingLeft: 12,
+          paddingVertical: 6,
+          paddingRight: 4,
+          columnGap: 2,
+          alignItems: 'center',
+        }}>
+        <Typography
+          variant="bodyMedium"
+          style={{ fontWeight: 'bold', color: theme.onSurfaceVariant }}>
+          {props.value}
+        </Typography>
+        <Icons name="arrow-drop-down" color={theme.onSurfaceVariant} size={18} />
+      </View>
+    </Pressable>
+  );
+}
 
 function getSubredditIcon(icon: string | undefined): string {
   if (!icon || icon?.length === 0) {
@@ -229,12 +259,26 @@ enum SearchType {
   Posts,
 }
 
-const HomeSearchContent = ({ searchText }: { searchText: string }) => {
+const HomeSearchContent = ({
+  searchText,
+  onFocusOut,
+}: {
+  searchText: string;
+  onFocusOut: () => void;
+}) => {
   const theme = useTheme();
   const [results, setResults] = useState<{ [k: string]: SearchResult[] }>({});
   const [defaultResults, setDefaultResults] = useState<SubReddit[]>([]);
   const [searchType, setSearchType] = useState<SearchType>(SearchType.Subreddits);
   const flatListRef = React.useRef<FlatList>(null);
+
+  const [searchSort, setSearchSort] = useState<'relevance' | 'hot' | 'top' | 'new' | 'comments'>(
+    'top'
+  );
+
+  const [searchRange, setSearchRange] = useState<
+    'hour' | 'day' | 'week' | 'month' | 'year' | 'all'
+  >('all');
 
   useEffect(() => {
     const fn = async () => {
@@ -252,17 +296,25 @@ const HomeSearchContent = ({ searchText }: { searchText: string }) => {
   }, []);
 
   useEffect(() => {
+    // sort: relevance, hot, top, new, comments
+    // t: hour, day, week, month, year, all
     const searchSubReddits = async (txt: string, searchType: SearchType) => {
       if (txt && txt.length > 2) {
         if (searchType === SearchType.Subreddits) {
-          const searchResults = await new RedditApi().searchSubreddits(txt, { sort: 'top' });
+          const searchResults = await new RedditApi().searchSubreddits(txt, {
+            sort: 'top',
+            limit: '100',
+          });
           if (searchResults) {
             setResults((prev) => ({ ...prev, [txt]: sortResults(searchResults.items, txt) }));
           } else {
             setResults((prev) => ({ ...prev, [txt]: [] }));
           }
         } else if (searchType === SearchType.Users) {
-          const searchResults = await new RedditApi().searchUsers(txt, { sort: 'top' });
+          const searchResults = await new RedditApi().searchUsers(txt, {
+            sort: 'top',
+            limit: '100',
+          });
           if (searchResults) {
             setResults((prev) => ({ ...prev, [txt]: sortUserResults(searchResults.items) }));
           } else {
@@ -270,7 +322,9 @@ const HomeSearchContent = ({ searchText }: { searchText: string }) => {
           }
         } else if (searchType === SearchType.Posts) {
           const searchResults = await new RedditApi().searchSubmissions(txt, undefined, {
-            sort: 'top',
+            sort: searchSort,
+            t: searchRange,
+            limit: '100',
           });
           if (searchResults) {
             setResults((prev) => ({ ...prev, [txt]: searchResults.items }));
@@ -285,12 +339,20 @@ const HomeSearchContent = ({ searchText }: { searchText: string }) => {
     };
 
     searchSubReddits(searchText, searchType);
-  }, [searchText, searchType]);
+  }, [searchText, searchType, searchSort, searchRange]);
+
+  useEffect(() => {
+    bottomSheetModalRef.current?.dismiss();
+  }, [searchSort, searchRange]);
 
   const displayedResults = results[searchText] ?? [];
+  const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '42%'], []);
 
   return (
-    <>
+    <BottomSheetModalProvider>
       {searchText.length < 3 && (
         <View
           style={{
@@ -302,12 +364,43 @@ const HomeSearchContent = ({ searchText }: { searchText: string }) => {
         </View>
       )}
       {searchText.length >= 3 && (
-        <Tabs
-          selectedTabId={searchType}
-          tabIds={[SearchType.Subreddits, SearchType.Users, SearchType.Posts]}
-          tabNames={['Subreddits', 'Users', 'Posts']}
-          onPress={setSearchType}
-        />
+        <>
+          <Tabs
+            selectedTabId={searchType}
+            tabIds={[SearchType.Subreddits, SearchType.Users, SearchType.Posts]}
+            tabNames={['Subreddits', 'Users', 'Posts']}
+            onPress={setSearchType}
+          />
+          {searchType === SearchType.Posts && (
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                gap: 24,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Chip
+                value={searchSort}
+                allValues={['relevance', 'hot', 'top', 'new', 'comments']}
+                onChange={() => {
+                  onFocusOut();
+                  bottomSheetModalRef.current?.present('sort');
+                }}
+              />
+              <Chip
+                value={searchRange}
+                allValues={['hour', 'day', 'week', 'month', 'year', 'all']}
+                onChange={() => {
+                  onFocusOut();
+                  bottomSheetModalRef.current?.present('range');
+                }}
+              />
+            </View>
+          )}
+        </>
       )}
       <FlatList
         ref={flatListRef}
@@ -319,7 +412,48 @@ const HomeSearchContent = ({ searchText }: { searchText: string }) => {
         onScrollBeginDrag={Keyboard.dismiss}
         contentContainerStyle={{ paddingBottom: Spacing.s24 }}
       />
-    </>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={1}
+        snapPoints={snapPoints}
+        backgroundStyle={{ backgroundColor: theme.surface }}
+        handleStyle={{
+          backgroundColor: theme.surface,
+          borderTopLeftRadius: 14,
+          borderTopRightRadius: 14,
+        }}
+        handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
+        {({ data }) =>
+          data === 'sort' ? (
+            <PostDetailsSortOptions
+              currentSort={searchSort}
+              onSortPressed={setSearchSort}
+              options={[
+                { key: 'relevance', display: 'Relevance', icon: 'rocket' },
+                { key: 'hot', display: 'Hot', icon: 'local-fire-department' },
+                { key: 'top', display: 'Top', icon: 'leaderboard' },
+                { key: 'new', display: 'New', icon: 'access-time' },
+                { key: 'comments', display: 'Comments', icon: 'question-answer' },
+              ]}
+            />
+          ) : (
+            <PostDetailsSortOptions
+              currentSort={searchRange}
+              onSortPressed={setSearchRange}
+              title={'Sort Range'}
+              options={[
+                { key: 'hour', display: 'Hour' },
+                { key: 'day', display: 'Day' },
+                { key: 'week', display: 'Week' },
+                { key: 'month', display: 'Month' },
+                { key: 'year', display: 'Year' },
+                { key: 'all', display: 'All' },
+              ]}
+            />
+          )
+        }
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
   );
 };
 
@@ -418,7 +552,12 @@ const HomeSearch = () => {
           />
         </View>
       )}
-      <HomeSearchContent searchText={searchText} />
+      <HomeSearchContent
+        searchText={searchText}
+        onFocusOut={() => {
+          inputRef.current?.blur();
+        }}
+      />
     </View>
   );
 };

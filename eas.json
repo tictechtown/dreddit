@@ -14,7 +14,8 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "APP_VARIANT": "prod"
+        "APP_VARIANT": "prod",
+        "NODE_ENV": "production"
       }
     }
   },

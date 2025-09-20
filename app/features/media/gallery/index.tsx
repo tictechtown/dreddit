@@ -148,7 +148,6 @@ export default function Page() {
           headerStyle: {
             backgroundColor: PaletteDark.scrim,
           },
-          navigationBarColor: PaletteDark.scrim,
         }}
       />
       <CarouselTab pages={resolutions} captions={captions} />

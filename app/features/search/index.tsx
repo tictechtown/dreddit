@@ -23,34 +23,7 @@ import SubredditPostItemView from '../subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../tokens';
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import PostDetailsSortOptions from '../post/modals/PostDetailsSortOptions';
-
-function Chip(props: { value: string; allValues: string[]; onChange: () => void }) {
-  const theme = useTheme();
-
-  return (
-    <Pressable onPress={props.onChange} style={{ flexDirection: 'row', flex: 1 }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          borderRadius: 8,
-          flex: 1,
-          backgroundColor: theme.secondaryContainer,
-          paddingLeft: 12,
-          paddingVertical: 6,
-          paddingRight: 4,
-          columnGap: 2,
-          alignItems: 'center',
-        }}>
-        <Typography
-          variant="bodyMedium"
-          style={{ fontWeight: 'bold', color: theme.onSurfaceVariant }}>
-          {props.value}
-        </Typography>
-        <Icons name="arrow-drop-down" color={theme.onSurfaceVariant} size={18} />
-      </View>
-    </Pressable>
-  );
-}
+import FilterChip from '../components/FilterChip';
 
 function getSubredditIcon(icon: string | undefined): string {
   if (!icon || icon?.length === 0) {
@@ -296,8 +269,6 @@ const HomeSearchContent = ({
   }, []);
 
   useEffect(() => {
-    // sort: relevance, hot, top, new, comments
-    // t: hour, day, week, month, year, all
     const searchSubReddits = async (txt: string, searchType: SearchType) => {
       if (txt && txt.length > 2) {
         if (searchType === SearchType.Subreddits) {
@@ -339,6 +310,7 @@ const HomeSearchContent = ({
     };
 
     searchSubReddits(searchText, searchType);
+    bottomSheetModalRef.current?.dismiss();
   }, [searchText, searchType, searchSort, searchRange]);
 
   useEffect(() => {
@@ -382,7 +354,7 @@ const HomeSearchContent = ({
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Chip
+              <FilterChip
                 value={searchSort}
                 allValues={['relevance', 'hot', 'top', 'new', 'comments']}
                 onChange={() => {
@@ -390,7 +362,7 @@ const HomeSearchContent = ({
                   bottomSheetModalRef.current?.present('sort');
                 }}
               />
-              <Chip
+              <FilterChip
                 value={searchRange}
                 allValues={['hour', 'day', 'week', 'month', 'year', 'all']}
                 onChange={() => {

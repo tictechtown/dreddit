@@ -1,10 +1,10 @@
 import { useLocalSearchParams } from 'expo-router';
-import PostSearch from './PostSearch';
+import SubredditSearch from './SubredditSearch';
 
 export default function Page() {
   const { subreddit, initialQuery } = useLocalSearchParams();
 
   return (
-    <PostSearch subreddit={subreddit as string} initialQuery={initialQuery as string | null} />
+    <SubredditSearch subreddit={subreddit as string} initialQuery={initialQuery as string | null} />
   );
 }

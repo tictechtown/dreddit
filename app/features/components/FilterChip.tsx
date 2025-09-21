@@ -1,37 +1,37 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import useTheme from '../../services/theme/useTheme';
-import { Spacing } from '../tokens';
+import Icons from './Icons';
+import Typography from './Typography';
 
-interface Props<T> {
-  selected: boolean;
-  filterName: string;
-  filterType: T;
-  onTap: (value: T) => void;
-}
-
-const FilterChip = <T extends number>({ selected, filterName, filterType, onTap }: Props<T>) => {
+export default function FilterChip(props: {
+  value: string;
+  allValues: string[];
+  onChange: () => void;
+}) {
   const theme = useTheme();
 
   return (
-    <TouchableOpacity onPress={() => onTap(filterType)}>
+    <Pressable onPress={props.onChange} style={{ flexDirection: 'row', flex: 1 }}>
       <View
         style={{
-          flex: 0,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: selected ? theme.surfaceVariant : theme.surface,
+          flexDirection: 'row',
           borderRadius: 8,
-          borderWidth: 1,
-          borderColor: theme.surfaceVariant,
-          paddingHorizontal: Spacing.s12,
-          paddingVertical: Spacing.s8,
-          marginRight: Spacing.s12,
+          flex: 1,
+          backgroundColor: theme.secondaryContainer,
+          paddingLeft: 12,
+          paddingVertical: 6,
+          paddingRight: 4,
+          columnGap: 2,
+          alignItems: 'center',
         }}>
-        <Text style={{ color: theme.onBackground, fontSize: 11 }}>{filterName}</Text>
+        <Typography
+          variant="bodyMedium"
+          style={{ fontWeight: 'bold', color: theme.onSurfaceVariant }}>
+          {props.value}
+        </Typography>
+        <Icons name="arrow-drop-down" color={theme.onSurfaceVariant} size={18} />
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
-};
-
-export default React.memo(FilterChip);
+}

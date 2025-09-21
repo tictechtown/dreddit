@@ -6,8 +6,6 @@ import { PaletteDark } from '../colors';
 import { Spacing } from '../tokens';
 import Typography from './Typography';
 
-const panGestureHandlerProps = { activeOffsetX: [-10, 10] };
-
 const CarouselView = ({
   resolutions,
   captions,
@@ -86,7 +84,9 @@ const CarouselView = ({
         autoPlay={false}
         data={resolutions}
         onSnapToItem={setPageIndex}
-        panGestureHandlerProps={panGestureHandlerProps}
+        onConfigurePanGesture={(panGesture) => {
+          panGesture.activeOffsetX([-10, 10]);
+        }}
         renderItem={renderItem}
         windowSize={2}
         autoFillData={false}

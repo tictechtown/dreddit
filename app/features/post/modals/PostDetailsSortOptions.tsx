@@ -40,7 +40,12 @@ const PostDetailsSortOptions = <T extends string>({
 
   return (
     <BottomSheetView
-      style={{ flex: 1, backgroundColor: theme.surface, paddingHorizontal: Spacing.s16 }}>
+      style={{
+        flex: 1,
+        backgroundColor: theme.surface,
+        paddingHorizontal: Spacing.s16,
+        paddingBottom: Spacing.s32,
+      }}>
       <Typography variant="titleLarge" style={{ marginBottom: Spacing.s16 }}>
         {title ?? 'Sort options'}
       </Typography>

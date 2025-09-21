@@ -21,9 +21,15 @@ import Tabs from '../components/Tabs';
 import Typography from '../components/Typography';
 import SubredditPostItemView from '../subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../tokens';
-import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 import PostDetailsSortOptions from '../post/modals/PostDetailsSortOptions';
 import FilterChip from '../components/FilterChip';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import * as Haptics from 'expo-haptics';
 
 function getSubredditIcon(icon: string | undefined): string {
   if (!icon || icon?.length === 0) {
@@ -320,8 +326,12 @@ const HomeSearchContent = ({
   const displayedResults = results[searchText] ?? [];
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
 
-  // variables
-  const snapPoints = useMemo(() => ['25%', '42%'], []);
+  const renderBackdrop = useCallback(
+    (props: BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
+    ),
+    []
+  );
 
   return (
     <BottomSheetModalProvider>
@@ -360,6 +370,7 @@ const HomeSearchContent = ({
                 onChange={() => {
                   onFocusOut();
                   bottomSheetModalRef.current?.present('sort');
+                  Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
                 }}
               />
               <FilterChip
@@ -368,6 +379,7 @@ const HomeSearchContent = ({
                 onChange={() => {
                   onFocusOut();
                   bottomSheetModalRef.current?.present('range');
+                  Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
                 }}
               />
             </View>
@@ -386,14 +398,15 @@ const HomeSearchContent = ({
       />
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        index={1}
-        snapPoints={snapPoints}
+        index={0}
         backgroundStyle={{ backgroundColor: theme.surface }}
         handleStyle={{
           backgroundColor: theme.surface,
           borderTopLeftRadius: 14,
           borderTopRightRadius: 14,
         }}
+        maxDynamicContentSize={600}
+        backdropComponent={renderBackdrop}
         handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
         {({ data }) =>
           data === 'sort' ? (

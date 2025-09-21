@@ -102,7 +102,7 @@ const SubredditSearch = ({ subreddit, initialQuery }: Props) => {
 
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop {...props} disappearsOnIndex={0} appearsOnIndex={1} />
+      <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
     ),
     []
   );
@@ -212,8 +212,8 @@ const SubredditSearch = ({ subreddit, initialQuery }: Props) => {
       </View>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        index={1}
-        snapPoints={['45%']}
+        index={0}
+        maxDynamicContentSize={600}
         backgroundStyle={{ backgroundColor: theme.surface }}
         handleStyle={{
           backgroundColor: theme.surface,

@@ -1,18 +1,20 @@
-import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 import { router, Stack, useFocusEffect } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   BackHandler,
   FlatList,
-  Pressable,
   RefreshControl,
   Share,
   TouchableNativeFeedback,
   TouchableOpacity,
   View,
 } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Comment, Post, RedditApi, RedditMediaMedata } from '../../services/api';
 import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
@@ -25,6 +27,8 @@ import PostDetailsHeader from './components/PostDetailsHeader';
 import PostDetailsSortOptions from './modals/PostDetailsSortOptions';
 import { flattenComments, getMaxPreview, mergeComments } from './utils';
 import useMediaPressCallback from '../../hooks/useMediaPressCallback';
+import * as Haptics from 'expo-haptics';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 
 type Props = { postId: string; cachedPost?: Post | null };
 
@@ -51,7 +55,6 @@ const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
 
   const theme = useTheme();
   const [sortOrder, setSortOrder] = useState<string | null>(null);
-  const [showingModal, setShowingModal] = useState(false);
   const [refreshLoading, setRefreshLoading] = useState(false);
   const [showMediaItem, setShowMediaItem] = useState<RedditMediaMedata | null>(null);
 
@@ -61,17 +64,9 @@ const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
     state.removeFromSavedPosts,
   ]);
 
-  const opacityValue = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => {
-    return { opacity: opacityValue.value };
-  }, []);
-
   // ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const flatListRef = useRef<FlatList>(null);
-
-  // variables
-  const snapPoints = useMemo(() => ['25%', '42%'], []);
 
   // Android: handle back button when media is displayed
   useFocusEffect(
@@ -124,11 +119,10 @@ const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
 
   const _onMediaHeaderPressed = useMediaPressCallback(queryData.post, router);
 
-  const _onChangeSort = useCallback(() => {
-    setShowingModal(true);
-    opacityValue.value = withTiming(0.6);
+  const _onChangeSort = () => {
     bottomSheetModalRef.current?.present();
-  }, [setShowingModal]);
+    Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
+  };
 
   const Header = useCallback(() => {
     return (
@@ -145,8 +139,6 @@ const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
   const onSortPressed = useCallback((newChoice: string) => {
     setSortOrder(newChoice);
     bottomSheetModalRef.current?.close();
-    opacityValue.value = 0;
-    setShowingModal(false);
   }, []);
 
   const refreshData = useCallback(async () => {
@@ -259,6 +251,13 @@ const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
     );
   }, [refreshLoading, refreshData, theme]);
 
+  const renderBackdrop = useCallback(
+    (props: BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
+    ),
+    []
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.surface }}>
       <Stack.Screen
@@ -335,23 +334,14 @@ const PostDetailsScreen = ({ postId, cachedPost }: Props) => {
         contentContainerStyle={{ paddingBottom: 40 }}
       />
       {queryData.loading && <IndeterminateProgressBarView />}
-      {showingModal && (
-        <Pressable
-          style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0 }}
-          onPress={() => {
-            bottomSheetModalRef.current?.close();
-            opacityValue.value = 0;
-            setShowingModal(false);
-          }}>
-          <Animated.View style={[{ flex: 1, backgroundColor: theme.scrim }, animatedStyle]} />
-        </Pressable>
-      )}
       <BottomSheetModalProvider>
         <BottomSheetModal
           ref={bottomSheetModalRef}
-          index={1}
-          snapPoints={snapPoints}
+          index={0}
+          maxDynamicContentSize={600}
           backgroundStyle={{ backgroundColor: theme.surface }}
+          backdropComponent={renderBackdrop}
+          enableDynamicSizing
           handleStyle={{
             backgroundColor: theme.surface,
             borderTopLeftRadius: 14,

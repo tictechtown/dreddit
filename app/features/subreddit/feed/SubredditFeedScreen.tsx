@@ -24,6 +24,7 @@ import Typography from '../../components/Typography';
 import ModalOptionRow from './modals/ActionSheetOptionRow';
 import PostItemBottomSheet from './modals/PostActionSheet';
 import PostFeedItem from './components/PostFeedItem';
+import * as Haptics from 'expo-haptics';
 
 type Props = { subreddit: string; icon: string | undefined | null };
 
@@ -122,8 +123,6 @@ const SubredditFeedScreen = (props: Props) => {
   // ref
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
   const flatListRef = React.useRef<FlatList>(null);
-  // variables
-  const snapPoints = useMemo(() => ['50%'], []);
 
   const isFavorite = favorites.map((f) => f.name).includes(props.subreddit);
 
@@ -220,6 +219,7 @@ const SubredditFeedScreen = (props: Props) => {
       setShowingModal({ display: true, post, popup: false });
       opacityValue.value = withTiming(0.6);
       bottomSheetModalRef.current?.present();
+      Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
     },
     [setShowingModal]
   );
@@ -501,9 +501,9 @@ const SubredditFeedScreen = (props: Props) => {
         <BottomSheetModalProvider>
           <BottomSheetModal
             ref={bottomSheetModalRef}
-            index={1}
-            snapPoints={snapPoints}
+            index={0}
             backgroundStyle={{ backgroundColor: theme.surfaceContainer }}
+            maxDynamicContentSize={600}
             handleStyle={{
               backgroundColor: theme.surfaceContainer,
               borderTopLeftRadius: 14,

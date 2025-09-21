@@ -9,6 +9,7 @@ import Typography from '../../../components/Typography';
 import { onLinkPress } from '../../utils';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import * as WebBrowser from 'expo-web-browser';
+import { Spacing } from '../../../tokens';
 
 type RowProps = { icon: IconName; title: string; theme: ColorPalette };
 
@@ -42,7 +43,12 @@ const PostActionSheet = ({
   }));
 
   return (
-    <BottomSheetView>
+    <BottomSheetView
+      style={{
+        flex: 1,
+        backgroundColor: theme.surfaceContainer,
+        paddingBottom: Spacing.s32,
+      }}>
       <Pressable
         onPress={() => {
           router.push({ pathname: `features/subreddit/feed/${post.data.subreddit}` });

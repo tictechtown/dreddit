@@ -7,6 +7,7 @@ import { ColorPalette } from '../../../colors';
 import Icons from '../../../components/Icons';
 import PostKarmaButton from '../../../components/PostKarmaButton';
 import Typography from '../../../components/Typography';
+import * as Haptics from 'expo-haptics';
 
 type Props = {
   post: Post;
@@ -78,6 +79,7 @@ const PostFeedItemToolbar = ({
         <TouchableOpacity
           onPress={async () => {
             await Share.share({ message: post.data.url });
+            await Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
           }}
           hitSlop={20}>
           <Icons name="share" size={24} color={theme.onSurfaceVariant} />
@@ -92,6 +94,7 @@ const PostFeedItemToolbar = ({
             } else {
               addToSavedPosts?.(post);
             }
+            await Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
           }}
           hitSlop={20}>
           <View>

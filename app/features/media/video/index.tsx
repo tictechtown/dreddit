@@ -71,7 +71,6 @@ export default function Page() {
         options={{
           title: decode(title as string),
           headerStyle: { backgroundColor: PaletteDark.scrim },
-          navigationBarColor: PaletteDark.scrim,
         }}
       />
       {errorMessage && (

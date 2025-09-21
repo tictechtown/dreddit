@@ -28,7 +28,6 @@ export default function Page() {
           headerStyle: {
             backgroundColor: PaletteDark.scrim,
           },
-          navigationBarColor: PaletteDark.scrim,
           headerRight: () => {
             return (
               <Icons

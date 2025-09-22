@@ -37,6 +37,14 @@ export default {
           initialOrientation: 'DEFAULT',
         },
       ],
+      [
+        'expo-build-properties',
+        {
+          android: {
+            buildArchs: ['arm64-v8a', 'armeabi-v7a'],
+          },
+        },
+      ],
     ],
     scheme: 'dreddit',
     extra: {

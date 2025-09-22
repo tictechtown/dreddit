@@ -1,3 +1,4 @@
+// TODO - move that to /components/ and rename it
 import { TouchableOpacity, ViewStyle } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
 import Icons, { IconName } from '../../../components/Icons';

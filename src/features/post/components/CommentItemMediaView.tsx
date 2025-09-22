@@ -9,7 +9,7 @@ import { Spacing } from '../../../tokens';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import Icons from '../../../components/Icons';
 
-const CommentMediaView = ({
+const CommentItemMediaView = ({
   item,
   body,
   showGif,
@@ -71,4 +71,4 @@ const CommentMediaView = ({
   );
 };
 
-export default CommentMediaView;
+export default CommentItemMediaView;

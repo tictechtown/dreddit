@@ -6,11 +6,11 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Comment, RedditMediaMedata } from '../../../services/api';
 import type { ColorPalette } from '../../../colors';
-import ItemSeparator from '../../components/ItemSeparator';
-import Typography from '../../components/Typography';
-import PostFlairChip from '../../components/PostFlairChip';
+import ItemSeparator from '../../../components/ItemSeparator';
+import Typography from '../../../components/Typography';
+import PostFlairChip from '../../../components/PostFlairChip';
 import { Spacing } from '../../../tokens';
-import { timeDifference } from '../../utils';
+import { timeDifference } from '../../../utils/get-time-difference';
 import { markdownIt, markdownRenderRules, useCommentMarkdownStyle } from '../utils';
 import CommentMediaView from './CommentMediaView';
 

@@ -30,8 +30,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useStore } from '../../../services/store';
 import { PaletteDark } from '../../../colors';
-import Icons from '../../../features/components/Icons';
-import Typography from '../../../features/components/Typography';
+import Icons from '../../../components/Icons';
+import Typography from '../../../components/Typography';
 import { useKeepAwake } from 'expo-keep-awake';
 
 type Props = VideoProps & { activityIndicator?: any; onError?: (errorMsg: string) => void };

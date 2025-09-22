@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TextInput, View } from 'react-native';
 import { Comment, Post, RedditApi } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
-import Typography from '../../../features/components/Typography';
+import Typography from '../../../components/Typography';
 import { Spacing } from '../../../tokens';
 import SubredditPostItemView from '../../../features/subreddit/feed/components/PostFeedItem';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@gorhom/bottom-sheet';
 import PostDetailsSortOptions from '../../../features/post/modals/PostDetailsSortOptions';
 import { ColorPalette } from '../../../colors';
-import FilterChip from '../../../features/components/FilterChip';
+import FilterChip from '../../../components/FilterChip';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 
 type Props = {

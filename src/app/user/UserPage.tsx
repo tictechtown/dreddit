@@ -5,12 +5,12 @@ import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { Comment, Post, RedditApi, Trophy, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../../colors';
-import IndeterminateProgressBarView from '../../features/components/IndeterminateProgressBarView';
-import Tabs from '../../features/components/Tabs';
-import Typography from '../../features/components/Typography';
+import IndeterminateProgressBarView from '../../components/IndeterminateProgressBarView';
+import Tabs from '../../components/Tabs';
+import Typography from '../../components/Typography';
 import SubredditPostItemView from '../../features/subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../../tokens';
-import { timeDifference } from '../../features/utils';
+import { timeDifference } from '../../utils/get-time-difference';
 
 type Props = { userId: string };
 

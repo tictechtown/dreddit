@@ -1,10 +1,10 @@
 import { Image } from 'expo-image';
 import { decode } from 'html-entities';
 import { Pressable, TextStyle, View, ViewStyle } from 'react-native';
-import type { FlairRichText, Post } from '../../services/api';
-import { ColorPalette } from '../../colors';
+import type { FlairRichText, Post } from '../services/api';
+import { ColorPalette } from '../colors';
 import Typography from './Typography';
-import { Spacing } from '../../tokens';
+import { Spacing } from '../tokens';
 
 type Props = {
   flair_text: string | null;

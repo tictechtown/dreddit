@@ -11,7 +11,10 @@ import markdownItRedditSpoiler from '../../services/markdown/markdownRedditSpoil
 import markdownItRedditSupsubscript from '../../services/markdown/markdownSupSubscript';
 import { ColorPalette } from '../../colors';
 import { Spacing } from '../../tokens';
-import { getPreviewImageFromStreaminMe, getPreviewImageFromYoutube } from '../utils';
+import {
+  getPreviewImageFromStreaminMe,
+  getPreviewImageFromYoutube,
+} from '../../utils/get-preview-url';
 import CommentSpoiler from './components/CommentSpoiler';
 
 export const markdownIt = MarkdownIt({ linkify: true, typographer: true })

@@ -18,9 +18,9 @@ import {
 import { Comment, Post, RedditApi, RedditMediaMedata } from '../../services/api';
 import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
-import Icons from '../../features/components/Icons';
-import IndeterminateProgressBarView from '../../features/components/IndeterminateProgressBarView';
-import Typography from '../../features/components/Typography';
+import Icons from '../../components/Icons';
+import IndeterminateProgressBarView from '../../components/IndeterminateProgressBarView';
+import Typography from '../../components/Typography';
 import { Spacing } from '../../tokens';
 import CommentItem from '../../features/post/components/CommentItem';
 import PostDetailsHeader from '../../features/post/components/PostDetailsHeader';

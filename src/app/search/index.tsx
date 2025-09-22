@@ -15,10 +15,10 @@ import {
 import { Post, RedditApi, SubReddit, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { ColorPalette } from '../../colors';
-import Icons from '../../features/components/Icons';
-import SubredditIcon, { defaultSubredditIcon } from '../../features/components/SubredditIcon';
-import Tabs from '../../features/components/Tabs';
-import Typography from '../../features/components/Typography';
+import Icons from '../../components/Icons';
+import SubredditIcon, { defaultSubredditIcon } from '../../components/SubredditIcon';
+import Tabs from '../../components/Tabs';
+import Typography from '../../components/Typography';
 // TODO
 import SubredditPostItemView from '../../features/subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../../tokens';
@@ -28,7 +28,7 @@ import {
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
 import PostDetailsSortOptions from '../../features/post/modals/PostDetailsSortOptions';
-import FilterChip from '../../features/components/FilterChip';
+import FilterChip from '../../components/FilterChip';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import * as Haptics from 'expo-haptics';
 

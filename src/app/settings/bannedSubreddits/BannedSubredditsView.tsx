@@ -3,8 +3,8 @@ import { FlatList, Pressable, View } from 'react-native';
 import { useStore } from '../../../services/store';
 import useTheme from '../../../services/theme/useTheme';
 import { ColorPalette } from '../../../colors';
-import Icons, { IconName } from '../../../features/components/Icons';
-import Typography from '../../../features/components/Typography';
+import Icons, { IconName } from '../../../components/Icons';
+import Typography from '../../../components/Typography';
 
 type RowProps = {
   icon: IconName;
@@ -44,7 +44,7 @@ const BannedSubredditsView = () => {
     removeFromBlockList: state.removeFromBlockedSubreddits,
   }));
 
-  const renderItem = React.useCallback(({ item }) => {
+  const renderItem = React.useCallback(({ item }: { item: string }) => {
     return (
       <Row
         icon="person"

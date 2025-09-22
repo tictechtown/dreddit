@@ -1,5 +1,5 @@
 import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
-import useTheme from '../../services/theme/useTheme';
+import useTheme from '../services/theme/useTheme';
 
 type Props = React.ComponentProps<typeof Text> & {
   variant:

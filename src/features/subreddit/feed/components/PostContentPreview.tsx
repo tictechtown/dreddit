@@ -4,14 +4,14 @@ import { View } from 'react-native';
 import { Post } from '../../../../services/api';
 import { DataUsage, useStore } from '../../../../services/store';
 import { ColorPalette } from '../../../../colors';
-import Icons from '../../../components/Icons';
-import Typography from '../../../components/Typography';
+import Icons from '../../../../components/Icons';
+import Typography from '../../../../components/Typography';
 import { Spacing } from '../../../../tokens';
 import {
   getPreviewImageFromDubz,
   getPreviewImageFromStreaminMe,
   getPreviewImageFromYoutube,
-} from '../../../utils';
+} from '../../../../utils/get-preview-url';
 
 type PostPreviewImageProps = {
   domain: Post['data']['domain'];

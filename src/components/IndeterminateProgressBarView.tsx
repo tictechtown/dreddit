@@ -8,7 +8,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import useTheme from '../../services/theme/useTheme';
+import useTheme from '../services/theme/useTheme';
 
 function IndeterminateProgressBarView() {
   const theme = useTheme();

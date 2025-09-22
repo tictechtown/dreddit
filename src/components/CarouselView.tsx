@@ -2,8 +2,8 @@ import { Image } from 'expo-image';
 import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { PaletteDark } from '../../colors';
-import { Spacing } from '../../tokens';
+import { PaletteDark } from '../colors';
+import { Spacing } from '../tokens';
 import Typography from './Typography';
 
 const CarouselView = ({

@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
 import { TouchableNativeFeedback, View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
-import Icons from '../../components/Icons';
-import Typography from '../../components/Typography';
+import Icons from '../../../components/Icons';
+import Typography from '../../../components/Typography';
 import { Spacing } from '../../../tokens';
 
 const SearchHeader = () => {

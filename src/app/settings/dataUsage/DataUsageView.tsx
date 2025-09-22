@@ -3,8 +3,8 @@ import { Pressable, View } from 'react-native';
 import { DataUsage, useStore } from '../../../services/store';
 import useTheme from '../../../services/theme/useTheme';
 import { ColorPalette } from '../../../colors';
-import Icons, { IconName } from '../../../features/components/Icons';
-import Typography from '../../../features/components/Typography';
+import Icons, { IconName } from '../../../components/Icons';
+import Typography from '../../../components/Typography';
 
 type RowProps = {
   icon: IconName;

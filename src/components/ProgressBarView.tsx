@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
 import Animated, { SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import useTheme from '../../services/theme/useTheme';
+import useTheme from '../services/theme/useTheme';
 
 function ProgressBarView({ progress }: { progress: SharedValue<number> }) {
   const theme = useTheme();

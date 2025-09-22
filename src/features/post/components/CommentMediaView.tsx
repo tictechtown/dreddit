@@ -7,7 +7,7 @@ import { RedditMediaMedata } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
 import { Spacing } from '../../../tokens';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
-import Icons from '../../components/Icons';
+import Icons from '../../../components/Icons';
 
 const CommentMediaView = ({
   item,

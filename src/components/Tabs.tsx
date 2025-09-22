@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import useTheme from '../../services/theme/useTheme';
-import { Spacing } from '../../tokens';
+import useTheme from '../services/theme/useTheme';
+import { Spacing } from '../tokens';
 import Icons, { IconName } from './Icons';
 import Typography from './Typography';
 

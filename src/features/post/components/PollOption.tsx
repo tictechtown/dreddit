@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
-import Typography from '../../components/Typography';
+import Typography from '../../../components/Typography';
 import { Spacing } from '../../../tokens';
 
 type Props = {

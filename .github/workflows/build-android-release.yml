@@ -1,8 +1,6 @@
 name: Build Android Release Artifact
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
   release:
     types: [published]
 

@@ -6,3 +6,4 @@
 [] Profile app
 [] E2E tests with maestro
 [] Remove x86, x86_64 from building
+[] Redo download file on disk

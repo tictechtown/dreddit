@@ -5,9 +5,9 @@ import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
 import base64 from 'react-native-base64';
 import { fitContainer, Gallery, GalleryType } from 'react-native-zoom-toolkit';
 import { Post } from '../../../services/api';
-import { PaletteDark } from '../../../features/colors';
+import { PaletteDark } from '../../../colors';
 import Typography from '../../../features/components/Typography';
-import { Spacing } from '../../../features/tokens';
+import { Spacing } from '../../../tokens';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface GalleryImageProps {

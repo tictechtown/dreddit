@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
 import { RedditMediaMedata } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
-import { Spacing } from '../../tokens';
+import { Spacing } from '../../../tokens';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import Icons from '../../components/Icons';
 

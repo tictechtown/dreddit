@@ -5,7 +5,7 @@ import { decode } from 'html-entities';
 import * as React from 'react';
 import { View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
-import { PaletteDark } from '../../../features/colors';
+import { PaletteDark } from '../../../colors';
 import Icons from '../../../features/components/Icons';
 import ProgressBarView from '../../../features/components/ProgressBarView';
 import ToastView from '../../../features/components/ToastView';

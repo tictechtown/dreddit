@@ -10,7 +10,7 @@ import ItemSeparator from '../../../features/components/ItemSeparator';
 import SubredditIcon from '../../../features/components/SubredditIcon';
 import Typography from '../../../features/components/Typography';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../../features/post/utils';
-import { Spacing } from '../../../features/tokens';
+import { Spacing } from '../../../tokens';
 
 type Wikipage = {
   content_md: string;

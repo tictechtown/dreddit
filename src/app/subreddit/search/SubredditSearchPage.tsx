@@ -6,7 +6,7 @@ import { ActivityIndicator, FlatList, TextInput, View } from 'react-native';
 import { Comment, Post, RedditApi } from '../../../services/api';
 import useTheme from '../../../services/theme/useTheme';
 import Typography from '../../../features/components/Typography';
-import { Spacing } from '../../../features/tokens';
+import { Spacing } from '../../../tokens';
 import SubredditPostItemView from '../../../features/subreddit/feed/components/PostFeedItem';
 import {
   BottomSheetModalProvider,
@@ -14,7 +14,7 @@ import {
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import PostDetailsSortOptions from '../../../features/post/modals/PostDetailsSortOptions';
-import { ColorPalette } from '../../../features/colors';
+import { ColorPalette } from '../../../colors';
 import FilterChip from '../../../features/components/FilterChip';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 

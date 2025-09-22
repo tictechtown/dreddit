@@ -7,7 +7,7 @@ import { ScrollView, View } from 'react-native';
 import { RedditApi, User } from '../../services/api';
 import useTheme from '../../services/theme/useTheme';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../features/post/utils';
-import { Spacing } from '../../features/tokens';
+import { Spacing } from '../../tokens';
 
 type Wikipage = {
   content_md: string;

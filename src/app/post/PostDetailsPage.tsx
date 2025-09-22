@@ -21,7 +21,7 @@ import useTheme from '../../services/theme/useTheme';
 import Icons from '../../features/components/Icons';
 import IndeterminateProgressBarView from '../../features/components/IndeterminateProgressBarView';
 import Typography from '../../features/components/Typography';
-import { Spacing } from '../../features/tokens';
+import { Spacing } from '../../tokens';
 import CommentItem from '../../features/post/components/CommentItem';
 import PostDetailsHeader from '../../features/post/components/PostDetailsHeader';
 import PostDetailsSortOptions from '../../features/post/modals/PostDetailsSortOptions';

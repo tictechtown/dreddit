@@ -2,9 +2,9 @@ import Constants from 'expo-constants';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { PaletteDark } from '../../../features/colors';
+import { PaletteDark } from '../../../colors';
 import Icons from '../../../features/components/Icons';
-import { Spacing } from '../../../features/tokens';
+import { Spacing } from '../../../tokens';
 
 export default function ImageView({ uri, progress }: { uri: string; progress: any }) {
   const _uri = (uri as string).replaceAll('&amp;', '&');

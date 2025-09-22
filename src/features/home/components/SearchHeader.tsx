@@ -3,7 +3,7 @@ import { TouchableNativeFeedback, View } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
 import Icons from '../../components/Icons';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../tokens';
+import { Spacing } from '../../../tokens';
 
 const SearchHeader = () => {
   const theme = useTheme();

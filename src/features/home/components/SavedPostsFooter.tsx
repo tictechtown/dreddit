@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { useStore } from '../../../services/store';
 import useTheme from '../../../services/theme/useTheme';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../tokens';
+import { Spacing } from '../../../tokens';
 
 const SavedPostsFooter = () => {
   const theme = useTheme();

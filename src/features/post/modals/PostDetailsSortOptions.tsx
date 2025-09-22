@@ -2,7 +2,7 @@ import { TouchableOpacity, ViewStyle } from 'react-native';
 import useTheme from '../../../services/theme/useTheme';
 import Icons, { IconName } from '../../components/Icons';
 import Typography from '../../components/Typography';
-import { Spacing } from '../../tokens';
+import { Spacing } from '../../../tokens';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 
 interface SortOption<T extends string> {

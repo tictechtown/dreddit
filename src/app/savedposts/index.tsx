@@ -6,7 +6,7 @@ import { useStore } from '../../services/store';
 import useTheme from '../../services/theme/useTheme';
 import ItemSeparator from '../../features/components/ItemSeparator';
 import SubredditPostItemView from '../../features/subreddit/feed/components/PostFeedItem';
-import { Spacing } from '../../features/tokens';
+import { Spacing } from '../../tokens';
 
 export default function Page() {
   const theme = useTheme();

@@ -29,7 +29,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useStore } from '../../../services/store';
-import { PaletteDark } from '../../../features/colors';
+import { PaletteDark } from '../../../colors';
 import Icons from '../../../features/components/Icons';
 import Typography from '../../../features/components/Typography';
 import { useKeepAwake } from 'expo-keep-awake';

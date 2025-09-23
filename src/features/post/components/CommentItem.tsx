@@ -12,7 +12,7 @@ import PostFlairChip from '../../../components/PostFlairChip';
 import { Spacing } from '../../../tokens';
 import { timeDifference } from '../../../utils/get-time-difference';
 import { markdownIt, markdownRenderRules, useCommentMarkdownStyle } from '../utils';
-import CommentMediaView from './CommentMediaView';
+import CommentMediaView from './CommentItemMediaView';
 
 const CommentItem = ({
   comment,

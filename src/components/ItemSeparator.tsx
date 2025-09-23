@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import useTheme from '../services/theme/useTheme';
+import useTheme from '@services/theme/useTheme';
 
 const ItemSeparator = ({ fullWidth = false }) => {
   const theme = useTheme();

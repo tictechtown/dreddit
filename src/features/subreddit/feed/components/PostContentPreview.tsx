@@ -1,17 +1,17 @@
 import { Image } from 'expo-image';
 import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
-import { Post } from '../../../../services/api';
-import { DataUsage, useStore } from '../../../../services/store';
-import { ColorPalette } from '../../../../colors';
-import Icons from '../../../../components/Icons';
-import Typography from '../../../../components/Typography';
-import { Spacing } from '../../../../tokens';
+import { Post } from '@services/api';
+import { DataUsage, useStore } from '@services/store';
+import { ColorPalette } from '@theme/colors';
+import Icons from '@components/Icons';
+import Typography from '@components/Typography';
+import { Spacing } from '@theme/tokens';
 import {
   getPreviewImageFromDubz,
   getPreviewImageFromStreaminMe,
   getPreviewImageFromYoutube,
-} from '../../../../utils/get-preview-url';
+} from '@utils/get-preview-url';
 
 type PostPreviewImageProps = {
   domain: Post['data']['domain'];

@@ -9,8 +9,8 @@ import markdownRedditHeadingPlugin from '../../services/markdown/mardownRedditHe
 import markdownItRedditLink from '../../services/markdown/markdownRedditLink';
 import markdownItRedditSpoiler from '../../services/markdown/markdownRedditSpoiler';
 import markdownItRedditSupsubscript from '../../services/markdown/markdownSupSubscript';
-import { ColorPalette } from '../../colors';
-import { Spacing } from '../../tokens';
+import { ColorPalette } from '../../theme/colors';
+import { Spacing } from '../../theme/tokens';
 import {
   getPreviewImageFromStreaminMe,
   getPreviewImageFromYoutube,

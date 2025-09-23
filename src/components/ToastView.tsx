@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Pressable, View } from 'react-native';
-import useTheme from '../services/theme/useTheme';
+import useTheme from '@services/theme/useTheme';
 import Icons from './Icons';
 import Typography from './Typography';
 

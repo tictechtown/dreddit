@@ -28,10 +28,10 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { useStore } from '../../../services/store';
-import { PaletteDark } from '../../../colors';
-import Icons from '../../../components/Icons';
-import Typography from '../../../components/Typography';
+import { useStore } from '@services/store';
+import { PaletteDark } from '@theme/colors';
+import Icons from '@components/Icons';
+import Typography from '@components/Typography';
 import { useKeepAwake } from 'expo-keep-awake';
 
 type Props = VideoProps & { activityIndicator?: any; onError?: (errorMsg: string) => void };

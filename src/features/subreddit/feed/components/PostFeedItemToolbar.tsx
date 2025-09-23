@@ -2,11 +2,11 @@ import { router } from 'expo-router';
 import React from 'react';
 import { TouchableNativeFeedback, TouchableOpacity } from 'react-native-gesture-handler';
 import { Share, View } from 'react-native';
-import { Post } from '../../../../services/api';
-import { ColorPalette } from '../../../../colors';
-import Icons from '../../../../components/Icons';
-import PostKarmaButton from '../../../../components/PostKarmaButton';
-import Typography from '../../../../components/Typography';
+import { Post } from '@services/api';
+import { ColorPalette } from '@theme/colors';
+import Icons from '@components/Icons';
+import PostKarmaButton from '@components/PostKarmaButton';
+import Typography from '@components/Typography';
 import * as Haptics from 'expo-haptics';
 
 type Props = {

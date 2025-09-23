@@ -1,15 +1,15 @@
 import { router } from 'expo-router';
 import { Pressable, View } from 'react-native';
-import { Post } from '../../../../services/api';
-import { useStore } from '../../../../services/store';
-import useTheme from '../../../../services/theme/useTheme';
-import { ColorPalette } from '../../../../colors';
-import Icons, { IconName } from '../../../../components/Icons';
-import Typography from '../../../../components/Typography';
+import { Post } from '@services/api';
+import { useStore } from '@services/store';
+import useTheme from '@services/theme/useTheme';
+import { ColorPalette } from '@theme/colors';
+import Icons, { IconName } from '@components/Icons';
+import Typography from '@components/Typography';
 import { onLinkPress } from '../../utils';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import * as WebBrowser from 'expo-web-browser';
-import { Spacing } from '../../../../tokens';
+import { Spacing } from '@theme/tokens';
 
 type RowProps = { icon: IconName; title: string; theme: ColorPalette };
 

@@ -1,8 +1,8 @@
 import { Link } from 'expo-router';
 import { TouchableNativeFeedback, View } from 'react-native';
-import useTheme from '../../../services/theme/useTheme';
-import SubredditIcon from '../../../components/SubredditIcon';
-import Typography from '../../../components/Typography';
+import useTheme from '@services/theme/useTheme';
+import SubredditIcon from '@components/SubredditIcon';
+import Typography from '@components/Typography';
 
 const HomeItem = ({
   subreddit,

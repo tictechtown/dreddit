@@ -3,7 +3,7 @@ import useTheme from '@services/theme/useTheme';
 import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import { DataUsage, useStore } from '@services/store';
-import { ColorPalette } from '../../../colors';
+import { ColorPalette } from '@theme/colors';
 import Icons, { IconName } from '@components/Icons';
 import Typography from '@components/Typography';
 

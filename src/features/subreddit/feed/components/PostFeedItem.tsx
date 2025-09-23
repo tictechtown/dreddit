@@ -2,18 +2,18 @@ import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback } from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import { Post } from '../../../../services/api';
-import postCache from '../../../../services/postCache';
-import { ColorPalette } from '../../../../colors';
-import CarouselView from '../../../../components/CarouselView';
-import Typography from '../../../../components/Typography';
-import { Spacing } from '../../../../tokens';
-import { timeDifference } from '../../../../utils/get-time-difference';
-import PostFlairChip from '../../../../components/PostFlairChip';
+import { Post } from '@services/api';
+import postCache from '@services/postCache';
+import { ColorPalette } from '@theme/colors';
+import CarouselView from '@components/CarouselView';
+import Typography from '@components/Typography';
+import { Spacing } from '@theme/tokens';
+import { timeDifference } from '@utils/get-time-difference';
+import PostFlairChip from '@components/PostFlairChip';
 import PostContentPreview from './PostContentPreview';
 import PostFeedItemToolbar from './PostFeedItemToolbar';
-import useMediaPressCallback from '../../../../hooks/useMediaPressCallback';
-import useGalleryData from '../../../../hooks/useGalleryData';
+import useMediaPressCallback from '@hooks/useMediaPressCallback';
+import useGalleryData from '@hooks/useGalleryData';
 import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {

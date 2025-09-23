@@ -1,7 +1,7 @@
 import { View } from 'react-native';
-import useTheme from '../../../services/theme/useTheme';
-import Typography from '../../../components/Typography';
-import { Spacing } from '../../../tokens';
+import useTheme from '@services/theme/useTheme';
+import Typography from '@components/Typography';
+import { Spacing } from '@theme/tokens';
 
 type Props = {
   option: {

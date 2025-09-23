@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Post } from '../services/api';
+import { Post } from '@services/api';
 
 export default function useGalleryData(
   galleryData: Post['data']['gallery_data'],

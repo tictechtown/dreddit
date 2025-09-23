@@ -14,14 +14,14 @@ import {
 } from 'react-native';
 import { Post, RedditApi, SubReddit, User } from '@services/api';
 import useTheme from '@services/theme/useTheme';
-import { ColorPalette } from '../../colors';
+import { ColorPalette } from '@theme/colors';
 import Icons from '@components/Icons';
 import SubredditIcon, { defaultSubredditIcon } from '@components/SubredditIcon';
 import Tabs from '@components/Tabs';
 import Typography from '@components/Typography';
 // TODO
 import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
-import { Spacing } from '../../tokens';
+import { Spacing } from '@theme/tokens';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,

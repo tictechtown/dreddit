@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { useStore } from '@services/store';
 import useTheme from '@services/theme/useTheme';
-import { ColorPalette } from '../../../colors';
+import { ColorPalette } from '@theme/colors';
 import Icons, { IconName } from '@components/Icons';
 import Typography from '@components/Typography';
 

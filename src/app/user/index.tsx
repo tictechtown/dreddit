@@ -5,12 +5,12 @@ import { decode } from 'html-entities';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { Comment, Post, RedditApi, Trophy, User } from '@services/api';
-import { ColorPalette } from '../../colors';
+import { ColorPalette } from '@theme/colors';
 import IndeterminateProgressBarView from '@components/IndeterminateProgressBarView';
 import Tabs from '@components/Tabs';
 import Typography from '@components/Typography';
 import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
-import { Spacing } from '../../tokens';
+import { Spacing } from '@theme/tokens';
 import { timeDifference } from '@utils/get-time-difference';
 
 type Props = { userId: string };

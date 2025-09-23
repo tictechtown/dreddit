@@ -4,7 +4,7 @@ import useTheme from '@services/theme/useTheme';
 import * as Application from 'expo-application';
 import { router } from 'expo-router';
 import { Pressable, View } from 'react-native';
-import { ColorPalette } from '../../colors';
+import { ColorPalette } from '@theme/colors';
 import Icons, { IconName } from '@components/Icons';
 import Typography from '@components/Typography';
 

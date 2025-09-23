@@ -3,11 +3,11 @@ import { Image } from 'expo-image';
 import { decode } from 'html-entities';
 import { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
-import { RedditMediaMedata } from '../../../services/api';
-import useTheme from '../../../services/theme/useTheme';
-import { Spacing } from '../../../tokens';
+import { RedditMediaMedata } from '@services/api';
+import useTheme from '@services/theme/useTheme';
+import { Spacing } from '@theme/tokens';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
-import Icons from '../../../components/Icons';
+import Icons from '@components/Icons';
 
 const CommentItemMediaView = ({
   item,

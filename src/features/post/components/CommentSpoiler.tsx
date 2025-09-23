@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Text } from 'react-native';
-import useTheme from '../../../services/theme/useTheme';
+import useTheme from '@services/theme/useTheme';
 
 const CommentSpoiler = ({ content }: { content: string }) => {
   const theme = useTheme();

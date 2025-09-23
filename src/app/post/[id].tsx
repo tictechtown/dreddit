@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import postCache from '../../services/postCache';
+import postCache from '@services/postCache';
 
 import {
   BottomSheetBackdrop,
@@ -24,7 +24,7 @@ import useTheme from '@services/theme/useTheme';
 import Icons from '@components/Icons';
 import IndeterminateProgressBarView from '@components/IndeterminateProgressBarView';
 import Typography from '@components/Typography';
-import { Spacing } from '../../tokens';
+import { Spacing } from '@theme/tokens';
 import CommentItem from '@features/post/components/CommentItem';
 import PostDetailsHeader from '@features/post/components/PostDetailsHeader';
 import PostDetailsSortOptions from '@features/post/modals/PostDetailsSortOptions';

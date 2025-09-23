@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { ColorPalette, PaletteDark } from '../../colors';
+import { ColorPalette, PaletteDark } from '@theme/colors';
 import { Material3Scheme } from '@pchmn/expo-material3-theme';
 
 export const ThemeContext = createContext<ColorPalette>(PaletteDark);

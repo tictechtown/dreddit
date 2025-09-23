@@ -1,5 +1,5 @@
 import { useLocalSearchParams, Stack, router } from 'expo-router';
-import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
@@ -9,7 +9,6 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Post, RedditApi, SubReddit } from '@services/api';
 import { useStore } from '@services/store';
 import useTheme from '@services/theme/useTheme';
@@ -20,10 +19,11 @@ import SubredditIcon from '@components/SubredditIcon';
 import Tabs from '@components/Tabs';
 import ToastView from '@components/ToastView';
 import Typography from '@components/Typography';
-import ModalOptionRow from '@features/subreddit/feed/modals/ActionSheetOptionRow';
 import PostItemBottomSheet from '@features/subreddit/feed/modals/PostActionSheet';
 import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
 import * as Haptics from 'expo-haptics';
+import useBackdrop from '@hooks/useBackdrop';
+import SortOptionsBottomSheet from '@features/post/modals/SortOptionsBottomSheet';
 
 type Props = { subreddit: string; icon: string | undefined | null };
 
@@ -82,11 +82,6 @@ const SubredditFeedPage = (props: Props) => {
   const [after, setAfter] = useState<string | null>(null);
   const [flairs] = useState<string[]>([]);
   const [selectedFlair, setSelectedFlair] = useState<string | null>(null);
-  const [showingModal, setShowingModal] = useState<{
-    display: boolean;
-    post: Post | null;
-    popup: boolean;
-  }>({ display: false, post: null, popup: false });
 
   const [loading, setLoading] = useState(false);
   const [refreshLoading, setRefreshLoading] = useState(false);
@@ -113,11 +108,6 @@ const SubredditFeedPage = (props: Props) => {
 
     return result;
   }, [savedPosts]);
-
-  const opacityValue = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => {
-    return { opacity: opacityValue.value };
-  }, []);
 
   // ref
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
@@ -203,6 +193,7 @@ const SubredditFeedPage = (props: Props) => {
       // add it
       addToFavorites(entry);
     }
+    Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
   }, [!!subredditData, isFavorite]);
 
   const searchPosts = useCallback(async () => {
@@ -213,15 +204,10 @@ const SubredditFeedPage = (props: Props) => {
     flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
   }, [flatListRef]);
 
-  const showMoreOptions = useCallback(
-    (post: Post) => {
-      setShowingModal({ display: true, post, popup: false });
-      opacityValue.value = withTiming(0.6);
-      bottomSheetModalRef.current?.present();
-      Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
-    },
-    [setShowingModal]
-  );
+  const showMoreOptions = useCallback((post: Post) => {
+    bottomSheetModalRef.current?.present({ type: 'post', post });
+    Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
+  }, []);
 
   const renderItem = useCallback(
     ({ item }: { item: Post }) => {
@@ -255,9 +241,8 @@ const SubredditFeedPage = (props: Props) => {
       if (value === 'hot' || value == 'new') {
         setSortOrder(value);
       } else {
-        setShowingModal({ display: true, post: null, popup: true });
-        opacityValue.value = withTiming(0.6);
-        // display popup
+        bottomSheetModalRef.current?.present({ type: 'sort' });
+        Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
       }
     },
     [setSortOrder]
@@ -350,6 +335,8 @@ const SubredditFeedPage = (props: Props) => {
     return { title: props.subreddit, headerTitle: HeaderTitle, headerRight: HeaderRight };
   }, [HeaderTitle, HeaderRight, props.subreddit]);
 
+  const renderBackdrop = useBackdrop();
+
   return (
     <>
       <Stack.Screen options={screenOptions} />
@@ -381,17 +368,6 @@ const SubredditFeedPage = (props: Props) => {
             />
           }
         />
-        {showingModal.display && (
-          <Pressable
-            style={{ position: 'absolute', top: 0, bottom: 0, right: 0, left: 0 }}
-            onPress={() => {
-              bottomSheetModalRef.current?.close();
-              opacityValue.value = 0;
-              setShowingModal({ display: false, post: null, popup: false });
-            }}>
-            <Animated.View style={[{ flex: 1, backgroundColor: theme.scrim }, animatedStyle]} />
-          </Pressable>
-        )}
 
         {posts.length === 0 && (
           <View
@@ -428,93 +404,41 @@ const SubredditFeedPage = (props: Props) => {
           </View>
         )}
 
-        {showingModal.popup && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 16,
-                marginHorizontal: 16,
-                backgroundColor: theme.surfaceContainerHigh,
-                borderRadius: 16,
-              }}>
-              <ModalOptionRow
-                onPress={() => {
-                  setTopOrder('day');
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={0}
+          backgroundStyle={{ backgroundColor: theme.surfaceContainerLow }}
+          maxDynamicContentSize={600}
+          handleStyle={{
+            backgroundColor: theme.surfaceContainerLow,
+            borderTopLeftRadius: 28,
+            borderTopRightRadius: 28,
+          }}
+          backdropComponent={renderBackdrop}
+          handleIndicatorStyle={{ backgroundColor: theme.onSurfaceVariant }}>
+          {({ data }) =>
+            data.type === 'sort' ? (
+              <SortOptionsBottomSheet
+                currentSort={null}
+                onSortPressed={(value) => {
+                  setTopOrder(value);
                   setSortOrder('top');
-                  opacityValue.value = 0;
-                  setShowingModal({ display: false, post: null, popup: false });
+                  bottomSheetModalRef.current?.close();
                 }}
-                title="Last 24h"
+                title={'Sort Range'}
+                options={[
+                  { key: 'day', display: 'Last 24h' },
+                  { key: 'week', display: 'Current Week' },
+                  { key: 'month', display: 'Current Month' },
+                  { key: 'year', display: 'Current Year' },
+                  { key: 'all', display: 'All Time' },
+                ]}
               />
-              <ModalOptionRow
-                onPress={() => {
-                  setTopOrder('week');
-                  setSortOrder('top');
-                  opacityValue.value = 0;
-                  setShowingModal({ display: false, post: null, popup: false });
-                }}
-                title="This Week"
-              />
-              <ModalOptionRow
-                onPress={() => {
-                  setTopOrder('month');
-                  setSortOrder('top');
-                  opacityValue.value = 0;
-                  setShowingModal({ display: false, post: null, popup: false });
-                }}
-                title="This Month"
-              />
-              <ModalOptionRow
-                onPress={() => {
-                  setTopOrder('year');
-                  setSortOrder('top');
-                  opacityValue.value = 0;
-                  setShowingModal({ display: false, post: null, popup: false });
-                }}
-                title="This Year"
-              />
-              <ModalOptionRow
-                onPress={() => {
-                  setTopOrder('all');
-                  setSortOrder('top');
-                  opacityValue.value = 0;
-                  setShowingModal({ display: false, post: null, popup: false });
-                }}
-                title="All Time"
-              />
-            </View>
-          </View>
-        )}
-
-        <BottomSheetModalProvider>
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            index={0}
-            backgroundStyle={{ backgroundColor: theme.surfaceContainer }}
-            maxDynamicContentSize={600}
-            handleStyle={{
-              backgroundColor: theme.surfaceContainer,
-              borderTopLeftRadius: 14,
-              borderTopRightRadius: 14,
-            }}
-            handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
-            {showingModal.post && (
+            ) : (
               <PostItemBottomSheet
-                post={showingModal.post}
+                post={data.post}
                 onClose={(reason) => {
                   bottomSheetModalRef.current?.close();
-                  setShowingModal({ display: false, post: null, popup: false });
                   if (reason === 'BLOCKED_USER') {
                     setDisplayUserBlockedToast(true);
                   } else if (reason === 'BANNED_SUBREDDIT') {
@@ -522,9 +446,9 @@ const SubredditFeedPage = (props: Props) => {
                   }
                 }}
               />
-            )}
-          </BottomSheetModal>
-        </BottomSheetModalProvider>
+            )
+          }
+        </BottomSheetModal>
       </View>
       {loading && (
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>

@@ -46,7 +46,7 @@ const PostActionSheet = ({
     <BottomSheetView
       style={{
         flex: 1,
-        backgroundColor: theme.surfaceContainer,
+        backgroundColor: theme.surfaceContainerLow,
         paddingBottom: Spacing.s32,
       }}>
       <Pressable

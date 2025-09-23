@@ -4,17 +4,14 @@ import * as WebBrowser from 'expo-web-browser';
 import { useMemo } from 'react';
 import { ScrollView, Share, Text, View } from 'react-native';
 // import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { Comment, Post } from '../../services/api';
-import markdownRedditHeadingPlugin from '../../services/markdown/mardownRedditHeading';
-import markdownItRedditLink from '../../services/markdown/markdownRedditLink';
-import markdownItRedditSpoiler from '../../services/markdown/markdownRedditSpoiler';
-import markdownItRedditSupsubscript from '../../services/markdown/markdownSupSubscript';
-import { ColorPalette } from '../../theme/colors';
-import { Spacing } from '../../theme/tokens';
-import {
-  getPreviewImageFromStreaminMe,
-  getPreviewImageFromYoutube,
-} from '../../utils/get-preview-url';
+import { Comment, Post } from '@services/api';
+import markdownRedditHeadingPlugin from '@services/markdown/mardownRedditHeading';
+import markdownItRedditLink from '@services/markdown/markdownRedditLink';
+import markdownItRedditSpoiler from '@services/markdown/markdownRedditSpoiler';
+import markdownItRedditSupsubscript from '@services/markdown/markdownSupSubscript';
+import { ColorPalette } from '@theme/colors';
+import { Spacing } from '@theme/tokens';
+import { getPreviewImageFromStreaminMe, getPreviewImageFromYoutube } from '@utils/get-preview-url';
 import CommentSpoiler from './components/CommentSpoiler';
 
 export const markdownIt = MarkdownIt({ linkify: true, typographer: true })

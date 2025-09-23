@@ -1,22 +1,18 @@
 import { useLocalSearchParams, Stack } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TextInput, View } from 'react-native';
 import { Comment, Post, RedditApi } from '@services/api';
 import useTheme from '@services/theme/useTheme';
 import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
 import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
-import {
-  BottomSheetModalProvider,
-  BottomSheetModal,
-  BottomSheetBackdrop,
-} from '@gorhom/bottom-sheet';
-import PostDetailsSortOptions from '@features/post/modals/PostDetailsSortOptions';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { ColorPalette } from '@theme/colors';
 import FilterChip from '@components/FilterChip';
-import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import useBackdrop from '@hooks/useBackdrop';
+import SortOptionsBottomSheet from '@features/post/modals/SortOptionsBottomSheet';
 
 type Props = {
   subreddit: string;
@@ -100,15 +96,10 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
     bottomSheetModalRef.current?.dismiss();
   }, [searchSort, searchRange]);
 
-  const renderBackdrop = useCallback(
-    (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
-    ),
-    []
-  );
+  const renderBackdrop = useBackdrop();
 
   return (
-    <BottomSheetModalProvider>
+    <>
       <View style={{ flex: 1, backgroundColor: theme.background }}>
         <Stack.Screen
           options={{
@@ -213,17 +204,17 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
         ref={bottomSheetModalRef}
         index={0}
         maxDynamicContentSize={600}
-        backgroundStyle={{ backgroundColor: theme.surface }}
+        backgroundStyle={{ backgroundColor: theme.surfaceContainerLow }}
         handleStyle={{
-          backgroundColor: theme.surface,
-          borderTopLeftRadius: 14,
-          borderTopRightRadius: 14,
+          backgroundColor: theme.surfaceContainerLow,
+          borderTopLeftRadius: 28,
+          borderTopRightRadius: 28,
         }}
         backdropComponent={renderBackdrop}
-        handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
+        handleIndicatorStyle={{ backgroundColor: theme.onSurfaceVariant }}>
         {({ data }) =>
           data === 'sort' ? (
-            <PostDetailsSortOptions
+            <SortOptionsBottomSheet
               currentSort={searchSort}
               onSortPressed={setSearchSort}
               options={[
@@ -235,7 +226,7 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
               ]}
             />
           ) : (
-            <PostDetailsSortOptions
+            <SortOptionsBottomSheet
               currentSort={searchRange}
               onSortPressed={setSearchRange}
               title={'Sort Range'}
@@ -251,7 +242,7 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
           )
         }
       </BottomSheetModal>
-    </BottomSheetModalProvider>
+    </>
   );
 };
 

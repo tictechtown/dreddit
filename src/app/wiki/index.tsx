@@ -24,7 +24,7 @@ const Page = () => {
   const theme = useTheme();
   const mdStyle = useMarkdownStyle(theme);
   const { subreddit, path } = useLocalSearchParams();
-  const [wiki, setWiki] = useState<null | Wikipage>(undefined);
+  const [wiki, setWiki] = useState<undefined | Wikipage>(undefined);
 
   useEffect(() => {
     async function getWiki() {

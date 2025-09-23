@@ -27,8 +27,8 @@ const Page = () => {
   const theme = useTheme();
   const mdStyle = useMarkdownStyle(theme);
   const { subreddit } = useLocalSearchParams();
-  const [about, setAbout] = useState<null | SubReddit['data']>(undefined);
-  const [wiki, setWiki] = useState<null | Wikipage>(undefined);
+  const [about, setAbout] = useState<undefined | SubReddit['data']>(undefined);
+  const [wiki, setWiki] = useState<undefined | Wikipage>(undefined);
 
   useEffect(() => {
     async function getAbout() {

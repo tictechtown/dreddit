@@ -39,7 +39,7 @@ const PostActionSheet = ({
   onClose,
 }: {
   post: Post;
-  onClose: (reason: string | null) => void;
+  onClose: (reason: string | undefined) => void;
 }) => {
   const theme = useTheme();
   const { addToBannedList, addToBlockList } = useStore((state) => ({

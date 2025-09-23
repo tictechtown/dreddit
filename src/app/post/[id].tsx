@@ -57,9 +57,9 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
   });
 
   const theme = useTheme();
-  const [sortOrder, setSortOrder] = useState<string | null>(undefined);
+  const [sortOrder, setSortOrder] = useState<string | undefined>(undefined);
   const [refreshLoading, setRefreshLoading] = useState(false);
-  const [showMediaItem, setShowMediaItem] = useState<RedditMediaMedata | null>(undefined);
+  const [showMediaItem, setShowMediaItem] = useState<RedditMediaMedata | undefined>(undefined);
 
   const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
     state.savedPosts,

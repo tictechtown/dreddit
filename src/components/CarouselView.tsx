@@ -16,7 +16,7 @@ const CarouselView = ({
     x: number;
     u: string;
   }[];
-  captions: null | (string | null)[];
+  captions: undefined | (string | undefined)[];
   width: number;
 }) => {
   const [pageIndex, setPageIndex] = React.useState(0);

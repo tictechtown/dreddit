@@ -44,7 +44,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ uri }) => {
   );
 };
 
-function CaptionFooter({ caption }: { caption: string | null }) {
+function CaptionFooter({ caption }: { caption: string | undefined }) {
   const padding = useSafeAreaInsets();
 
   if (!caption) {
@@ -62,7 +62,7 @@ const CarouselTab = ({
   pages,
   captions,
 }: {
-  captions: (string | null)[] | null;
+  captions: (string | undefined)[] | undefined;
   pages:
     | {
         y: number;
@@ -70,7 +70,7 @@ const CarouselTab = ({
         u: string;
         gif?: string;
       }[]
-    | null;
+    | undefined;
 }) => {
   const ref = React.useRef<GalleryType>(null);
 

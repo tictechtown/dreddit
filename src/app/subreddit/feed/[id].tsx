@@ -51,7 +51,7 @@ interface SortOrderProps {
   sortOrder: string;
   onSortOrderChanged: (value: string) => void;
   flairs: string[];
-  selectedFlair: string | null;
+  selectedFlair: string | undefined;
   onFlairTapped: (value: string) => void;
 }
 
@@ -76,16 +76,16 @@ const SubredditFeedPage = (props: Props) => {
   // hour, day, week, month, year, all
   const [topOrder, setTopOrder] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('all');
 
-  const [subredditData, setSubredditData] = useState<SubReddit['data'] | null>(undefined);
-  const [error, setError] = useState<string | null>(undefined);
+  const [subredditData, setSubredditData] = useState<SubReddit['data'] | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
   // toasts
   const [displayUserBlockedToast, setDisplayUserBlockedToast] = useState(false);
   const [displaySubredditBannedToast, setDisplaySubredditBannedToast] = useState(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  const [after, setAfter] = useState<string | null>(undefined);
+  const [after, setAfter] = useState<string | undefined>(undefined);
   const [flairs] = useState<string[]>([]);
-  const [selectedFlair, setSelectedFlair] = useState<string | null>(undefined);
+  const [selectedFlair, setSelectedFlair] = useState<string | undefined>(undefined);
 
   const [loading, setLoading] = useState(false);
   const [refreshLoading, setRefreshLoading] = useState(false);

@@ -17,7 +17,10 @@ import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import PollOption from './PollOption';
 import useGalleryData from '@hooks/useGalleryData';
 
-function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: string | null): string {
+function getDisplaySortOrder(
+  forcedSortOrder: string | undefined,
+  suggestedSort: string | undefined,
+): string {
   let sort = forcedSortOrder ?? suggestedSort ?? 'best';
   // confidence is deprecated. Display "best" instead
   if (sort === 'confidence') {
@@ -34,8 +37,8 @@ const PostDetailsHeader = ({
   onChangeSort,
   theme,
 }: {
-  post: null | Post;
-  forcedSortOrder: string | null;
+  post: undefined | Post;
+  forcedSortOrder: string | undefined;
   onMediaPress: () => void;
   onChangeSort: () => void;
   theme: ColorPalette;

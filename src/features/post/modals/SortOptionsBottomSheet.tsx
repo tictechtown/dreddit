@@ -15,8 +15,8 @@ interface SortOption<T extends string> {
 }
 
 interface SortOptionProps<T extends string = string> {
-  currentSort: T | null;
-  title?: string | null;
+  currentSort: T | undefined;
+  title?: string | undefined;
   onSortPressed: (value: T) => void;
   options: SortOption<T>[];
 }

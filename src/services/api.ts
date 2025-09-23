@@ -21,9 +21,9 @@ class RedditApi {
   }
 
   async getSubmissions(
-    sort: string | undefined | null = null,
-    subreddit: string | undefined | null = null,
-    options: Record<string, string> = {}
+    sort: string | undefined | null = undefined,
+    subreddit: string | undefined | null = undefined,
+    options: Record<string, string> = {},
   ) {
     const params = {
       limit: 25,
@@ -37,13 +37,13 @@ class RedditApi {
       this.host +
         notNullSubreddit +
         `/${notNullSort}.json?` +
-        new URLSearchParams(Object.assign(params, options))
+        new URLSearchParams(Object.assign(params, options)),
     );
     return await fetch(
       this.host +
         notNullSubreddit +
         `/${notNullSort}.json?` +
-        new URLSearchParams(Object.assign(params, options))
+        new URLSearchParams(Object.assign(params, options)),
     )
       .then((res) => res.json())
       .then((json) => {
@@ -57,14 +57,14 @@ class RedditApi {
           posts: data.children,
         };
       })
-      .catch((e) => {
-        console.log('error', e);
+      .catch((error) => {
+        console.log('error', error);
       });
   }
 
   async getDomainHot(domain: string, options: Record<string, string> = this.parameters) {
     return await fetch(
-      this.host + '/domain/' + domain + '/hot.json?' + new URLSearchParams(options)
+      this.host + '/domain/' + domain + '/hot.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -72,12 +72,12 @@ class RedditApi {
         after: data.after,
         posts: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getDomainBest(domain: string, options = this.parameters) {
     return await fetch(
-      this.host + '/domain/' + domain + '/best.json?' + new URLSearchParams(options)
+      this.host + '/domain/' + domain + '/best.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -85,12 +85,12 @@ class RedditApi {
         after: data.after,
         posts: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getDomainTop(domain: string, options = this.parameters) {
     return await fetch(
-      this.host + '/domain/' + domain + '/top.json?' + new URLSearchParams(options)
+      this.host + '/domain/' + domain + '/top.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -98,12 +98,12 @@ class RedditApi {
         after: data.after,
         posts: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getDomainNew(domain: string, options = this.parameters) {
     return await fetch(
-      this.host + '/domain/' + domain + '/new.json?' + new URLSearchParams(options)
+      this.host + '/domain/' + domain + '/new.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -111,12 +111,12 @@ class RedditApi {
         after: data.after,
         posts: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getDomainRising(domain: string, options = this.parameters) {
     return await fetch(
-      this.host + '/domain/' + domain + '/rising.json?' + new URLSearchParams(options)
+      this.host + '/domain/' + domain + '/rising.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -124,12 +124,12 @@ class RedditApi {
         after: data.after,
         posts: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getDomainControversial(domain: string, options = this.parameters) {
     return await fetch(
-      this.host + '/domain/' + domain + '/controversial.json?' + new URLSearchParams(options)
+      this.host + '/domain/' + domain + '/controversial.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -137,7 +137,7 @@ class RedditApi {
         after: data.after,
         posts: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubreddit(subreddit: string) {
@@ -145,14 +145,14 @@ class RedditApi {
     return await fetch(this.host + '/r/' + subreddit + '/about.json')
       .then((res) => res.json())
       .then((json) => json.data)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubredditRules(subreddit: string) {
     return await fetch(this.host + '/r/' + subreddit + '/about/rules.json')
       .then((res) => res.json())
       .then((json) => json.data)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubredditModerators(subreddit: string) {
@@ -162,14 +162,14 @@ class RedditApi {
       .then((data) => ({
         users: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubredditWikiPages(subreddit: string) {
     return await fetch(this.host + '/r/' + subreddit + '/wiki/pages.json')
       .then((res) => res.json())
       .then((json) => json.data)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubredditWikiPage(subreddit: string, page: string) {
@@ -177,14 +177,14 @@ class RedditApi {
     return await fetch(this.host + '/r/' + subreddit + '/wiki/' + page + '.json')
       .then((res) => res.json())
       .then((json) => json.data)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubredditWikiPageRevisions(subreddit: string, page: number) {
     return await fetch(this.host + '/r/' + subreddit + '/wiki/revisions' + page + '.json')
       .then((res) => res.json())
       .then((json) => json.data.children)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getPopularSubreddits(options = this.parameters) {
@@ -195,7 +195,7 @@ class RedditApi {
         after: data.after,
         subreddits: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getNewSubreddits(options = this.parameters) {
@@ -206,7 +206,7 @@ class RedditApi {
         after: data.after,
         subreddits: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getPremiumSubreddits(options = this.parameters) {
@@ -217,7 +217,7 @@ class RedditApi {
         after: data.after,
         subreddits: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getDefaultSubreddits(options = this.parameters) {
@@ -228,7 +228,7 @@ class RedditApi {
         after: data.after,
         subreddits: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getPopularUsers(options = this.parameters) {
@@ -239,7 +239,7 @@ class RedditApi {
         after: data.after,
         users: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getNewUsers(options = this.parameters) {
@@ -250,13 +250,13 @@ class RedditApi {
         after: data.after,
         users: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async searchSubmissions(
     query: string,
     subreddit: string | null | undefined,
-    options: Record<string, string> = {}
+    options: Record<string, string> = {},
   ) {
     options.q = query;
     if (subreddit) {
@@ -270,11 +270,11 @@ class RedditApi {
     };
     subreddit = subreddit ? '/r/' + subreddit : '';
     console.log(
-      this.host + subreddit + '/search.json?' + new URLSearchParams(Object.assign(params, options))
+      this.host + subreddit + '/search.json?' + new URLSearchParams(Object.assign(params, options)),
     );
 
     return await fetch(
-      this.host + subreddit + '/search.json?' + new URLSearchParams(Object.assign(params, options))
+      this.host + subreddit + '/search.json?' + new URLSearchParams(Object.assign(params, options)),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -282,7 +282,7 @@ class RedditApi {
         after: data.after,
         items: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async searchSubreddits(query: string, options: Record<string, string> = {}) {
@@ -295,11 +295,11 @@ class RedditApi {
 
     console.log(
       ['search'],
-      this.host + '/subreddits/search.json?' + new URLSearchParams(Object.assign(params, options))
+      this.host + '/subreddits/search.json?' + new URLSearchParams(Object.assign(params, options)),
     );
 
     return await fetch(
-      this.host + '/subreddits/search.json?' + new URLSearchParams(Object.assign(params, options))
+      this.host + '/subreddits/search.json?' + new URLSearchParams(Object.assign(params, options)),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -307,7 +307,7 @@ class RedditApi {
         after: data.after,
         items: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async searchUsers(query: string, options: Record<string, string> = {}) {
@@ -320,11 +320,11 @@ class RedditApi {
 
     console.log(
       ['search'],
-      this.host + '/users/search.json?' + new URLSearchParams(Object.assign(params, options))
+      this.host + '/users/search.json?' + new URLSearchParams(Object.assign(params, options)),
     );
 
     return await fetch(
-      this.host + '/users/search.json?' + new URLSearchParams(Object.assign(params, options))
+      this.host + '/users/search.json?' + new URLSearchParams(Object.assign(params, options)),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -332,13 +332,13 @@ class RedditApi {
         after: data.after,
         items: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async searchAll(
     query: string,
-    subreddit: string | undefined | null = null,
-    options: Record<string, string> = {}
+    subreddit: string | undefined | null = undefined,
+    options: Record<string, string> = {},
   ) {
     options.q = query;
     subreddit = subreddit ? '/r/' + subreddit : '';
@@ -350,7 +350,7 @@ class RedditApi {
     };
 
     return await fetch(
-      this.host + subreddit + '/search.json?' + new URLSearchParams(Object.assign(params, options))
+      this.host + subreddit + '/search.json?' + new URLSearchParams(Object.assign(params, options)),
     )
       .then((res) => res.json())
       .then((json) =>
@@ -362,22 +362,22 @@ class RedditApi {
           : {
               after: json.data.after,
               items: json.data.children,
-            }
+            },
       )
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubmission(id: string) {
     return await fetch(this.host + '/by_id/' + id + '.json')
       .then((res) => res.json())
       .then((json) => json.data.children[0].data)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubmissionComments(id: string, options = this.parameters) {
     console.log(
       '[calling]',
-      this.host + '/comments/' + id + '.json?' + new URLSearchParams(options)
+      this.host + '/comments/' + id + '.json?' + new URLSearchParams(options),
     );
 
     return await fetch(this.host + '/comments/' + id + '.json?' + new URLSearchParams(options))
@@ -386,16 +386,16 @@ class RedditApi {
         submission: json[0].data.children[0],
         comments: json[1].data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getSubredditComments(subreddit: string, options = this.parameters) {
     return await fetch(
-      this.host + '/r/' + subreddit + '/comments.json?' + new URLSearchParams(options)
+      this.host + '/r/' + subreddit + '/comments.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data.children)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getUser(username: string) {
@@ -403,7 +403,7 @@ class RedditApi {
     return await fetch(this.host + '/user/' + username + '/about.json')
       .then((res) => res.json())
       .then((json) => json.data)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getUserTrophies(username: string) {
@@ -411,16 +411,16 @@ class RedditApi {
     return await fetch(this.host + '/user/' + username + '/trophies.json')
       .then((res) => res.json())
       .then((json) => json.data.trophies)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getUserOverview(username: string, options = this.parameters) {
     console.log(
       '[calling]',
-      this.host + '/user/' + username + '/overview.json?' + new URLSearchParams(options)
+      this.host + '/user/' + username + '/overview.json?' + new URLSearchParams(options),
     );
     return await fetch(
-      this.host + '/user/' + username + '/overview.json?' + new URLSearchParams(options)
+      this.host + '/user/' + username + '/overview.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -428,12 +428,12 @@ class RedditApi {
         after: data.after,
         items: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getUserComments(username: string, options = this.parameters) {
     return await fetch(
-      this.host + '/user/' + username + '/comments.json?' + new URLSearchParams(options)
+      this.host + '/user/' + username + '/comments.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -441,12 +441,12 @@ class RedditApi {
         after: data.after,
         items: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getUserSubmissions(username: string, options = this.parameters) {
     return await fetch(
-      this.host + '/user/' + username + '/submitted.json?' + new URLSearchParams(options)
+      this.host + '/user/' + username + '/submitted.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data)
@@ -454,46 +454,46 @@ class RedditApi {
         after: data.after,
         items: data.children,
       }))
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getLiveThread(id: string) {
     return await fetch(this.host + '/live/' + id + '/about.json')
       .then((res) => res.json())
       .then((json) => json.data)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getLiveThreadUpdates(id: string, options = this.parameters) {
     return await fetch(this.host + '/live/' + id + '.json?' + new URLSearchParams(options))
       .then((res) => res.json())
       .then((json) => json.data.children)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getLiveThreadContributors(id: string, options = this.parameters) {
     return await fetch(
-      this.host + '/live/' + id + '/contributors.json?' + new URLSearchParams(options)
+      this.host + '/live/' + id + '/contributors.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data.children)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getLiveThreadDiscussions(id: string, options = this.parameters) {
     return await fetch(
-      this.host + '/live/' + id + '/discussions.json?' + new URLSearchParams(options)
+      this.host + '/live/' + id + '/discussions.json?' + new URLSearchParams(options),
     )
       .then((res) => res.json())
       .then((json) => json.data.children)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 
   async getLiveThreadsNow(options = this.parameters) {
     return await fetch(this.host + '/live/happening_now.json?' + new URLSearchParams(options))
       .then((res) => res.json())
       .then((json) => json.data.children)
-      .catch(() => null);
+      .catch(() => undefined);
   }
 }
 
@@ -586,7 +586,7 @@ type Comment =
       };
     };
 
-type CommentReply = {
+interface CommentReply {
   kind: string;
   data: {
     after: string | null;
@@ -595,9 +595,9 @@ type CommentReply = {
     geo_filter: string;
     children: Comment[];
   };
-};
+}
 
-type RedditMediaMedata = {
+interface RedditMediaMedata {
   status: string;
   e: string;
   m: string;
@@ -606,15 +606,15 @@ type RedditMediaMedata = {
   id: string;
   t?: string;
   ext?: string;
-};
+}
 
-type PollData = {
+interface PollData {
   voting_end_timestamp: number;
   total_vote_count: number;
   options: { id: string; text: string; vote_count?: number }[];
-};
+}
 
-type RedditVideo = {
+interface RedditVideo {
   bitrate_kbps: number;
   fallback_url: string;
   has_audio: boolean;
@@ -626,7 +626,7 @@ type RedditVideo = {
   hls_url: string;
   is_gif: boolean;
   transcoding_status: string;
-};
+}
 
 type FlairRichText =
   | {
@@ -639,7 +639,7 @@ type FlairRichText =
       t: string;
     };
 
-type Post = {
+interface Post {
   kind: 't3';
   data: {
     approved_at_utc: string | null;
@@ -785,9 +785,9 @@ type Post = {
     crosspost_parent_list?: [Post['data']];
     poll_data?: PollData;
   };
-};
+}
 
-type Trophy = {
+interface Trophy {
   kind: 't6';
   data: {
     icon_70: string;
@@ -799,16 +799,16 @@ type Trophy = {
     id: string | null;
     description: string | null;
   };
-};
+}
 
-type TrophyList = {
+interface TrophyList {
   kind: 'TrophyList';
   data: {
     trophies: Trophy[];
   };
-};
+}
 
-type SubReddit = {
+interface SubReddit {
   kind: 't5';
   data: {
     id: string;
@@ -831,9 +831,9 @@ type SubReddit = {
     public_description_html: string;
     subreddit_type: 'public' | 'private' | 'restricted';
   };
-};
+}
 
-type User = {
+interface User {
   kind: 't2';
   data: {
     id: string;
@@ -857,7 +857,7 @@ type User = {
       subreddit_type: 'user';
     };
   };
-};
+}
 
 // t1 (Comment)
 // t2 (User)

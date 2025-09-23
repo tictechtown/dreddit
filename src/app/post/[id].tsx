@@ -2,7 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import postCache from '@services/postCache';
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { router, Stack, useFocusEffect } from 'expo-router';
+import { Stack, router, useFocusEffect } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -14,7 +14,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Comment, Post, RedditApi, RedditMediaMedata } from '@services/api';
+import type { Comment, Post, RedditMediaMedata } from '@services/api';
+import { RedditApi } from '@services/api';
 import { useStore } from '@services/store';
 import useTheme from '@services/theme/useTheme';
 import Icons from '@components/Icons';
@@ -29,15 +30,18 @@ import useMediaPressCallback from '@hooks/useMediaPressCallback';
 import * as Haptics from 'expo-haptics';
 import useBackdrop from '@hooks/useBackdrop';
 
-type Props = { postId: string; cachedPost?: Post | null };
+interface Props {
+  postId: string;
+  cachedPost?: Post | null;
+}
 
-type CommentsAndPost = {
+interface CommentsAndPost {
   comments: Comment[]; // flat list, no replies
   rawComments: Comment[];
   post: Post | undefined | null;
   cached?: boolean;
   loading?: boolean;
-};
+}
 
 const COMMENT_LIMIT = '100';
 
@@ -53,9 +57,9 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
   });
 
   const theme = useTheme();
-  const [sortOrder, setSortOrder] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<string | undefined>(undefined);
   const [refreshLoading, setRefreshLoading] = useState(false);
-  const [showMediaItem, setShowMediaItem] = useState<RedditMediaMedata | null>(null);
+  const [showMediaItem, setShowMediaItem] = useState<RedditMediaMedata | undefined>(undefined);
 
   const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
     state.savedPosts,
@@ -72,7 +76,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
     useCallback(() => {
       const onBackPress = () => {
         if (showMediaItem) {
-          setShowMediaItem(null);
+          setShowMediaItem(undefined);
           return true;
         } else {
           return false;
@@ -81,7 +85,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
 
       const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
       return () => subscription.remove();
-    }, [showMediaItem, setShowMediaItem])
+    }, [showMediaItem, setShowMediaItem]),
   );
 
   useEffect(() => {
@@ -126,7 +130,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
   const Header = useCallback(() => {
     return (
       <PostDetailsHeader
-        post={queryData.post ?? null}
+        post={queryData.post ?? undefined}
         forcedSortOrder={sortOrder}
         onMediaPress={_onMediaHeaderPressed}
         onChangeSort={_onChangeSort}
@@ -215,8 +219,8 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
           prevValue?.comments.push(currentValue?.comments);
           return prevValue;
         },
-        { comments: [], submission: null }
-      ) ?? { comments: [], submission: null };
+        { comments: [], submission: undefined },
+      ) ?? { comments: [], submission: undefined };
       data.comments = data?.comments.flat();
       setQueryData((oldQuery) => ({
         comments: mergeComments(oldQuery.comments, data.comments),
@@ -236,7 +240,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
         theme={theme}
       />
     ),
-    [displayMediaItem, fetchMoreComments, theme]
+    [displayMediaItem, fetchMoreComments, theme],
   );
 
   const refreshControl = useMemo(() => {
@@ -317,7 +321,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => {
           if (queryData.loading) {
-            return null;
+            return;
           }
           return (
             <View style={{ marginHorizontal: Spacing.s12 }}>

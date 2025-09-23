@@ -1,4 +1,4 @@
-import { SubredditFavorite } from '.';
+import type { SubredditFavorite } from '.';
 
 // in case you want to include default subreddits
 export const SUBREDDITS: SubredditFavorite[] = [];

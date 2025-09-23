@@ -5,8 +5,9 @@
 function isSpace(code: number) {
   switch (code) {
     case 0x09:
-    case 0x20:
+    case 0x20: {
       return true;
+    }
   }
   return false;
 }
@@ -15,7 +16,7 @@ export default function blockquoteRule(
   state: any,
   startLine: number,
   endLine: number,
-  silent: boolean
+  silent: boolean,
 ) {
   let adjustTab,
     ch,

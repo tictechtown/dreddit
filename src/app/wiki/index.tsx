@@ -4,12 +4,13 @@ import { decode } from 'html-entities';
 import queryString from 'query-string';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { RedditApi, User } from '@services/api';
+import type { User } from '@services/api';
+import { RedditApi } from '@services/api';
 import useTheme from '@services/theme/useTheme';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '@features/post/utils';
 import { Spacing } from '@theme/tokens';
 
-type Wikipage = {
+interface Wikipage {
   content_md: string;
   may_revise: boolean;
   reason: string | null;
@@ -17,13 +18,13 @@ type Wikipage = {
   revision_id: string;
   revision_by: User;
   content_html: string;
-};
+}
 
 const Page = () => {
   const theme = useTheme();
   const mdStyle = useMarkdownStyle(theme);
   const { subreddit, path } = useLocalSearchParams();
-  const [wiki, setWiki] = useState<null | Wikipage>(null);
+  const [wiki, setWiki] = useState<undefined | Wikipage>(undefined);
 
   useEffect(() => {
     async function getWiki() {

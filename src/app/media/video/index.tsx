@@ -4,7 +4,7 @@ import { decode } from 'html-entities';
 import * as React from 'react';
 import { Text, TouchableNativeFeedback, View } from 'react-native';
 import base64 from 'react-native-base64';
-import { RedditVideo } from '@services/api';
+import type { RedditVideo } from '@services/api';
 import { PaletteDark } from '@theme/colors';
 import Icons from '@components/Icons';
 import { Spacing } from '@theme/tokens';
@@ -13,7 +13,9 @@ import { extractMetaTags } from '@features/video/metadata';
 import Typography from '@components/Typography';
 import useTheme from '@services/theme/useTheme';
 
-type RedditVideoProps = { hls_url: string };
+interface RedditVideoProps {
+  hls_url: string;
+}
 
 export default function Page() {
   const { title, reddit_video, prefetchuri } = useLocalSearchParams();

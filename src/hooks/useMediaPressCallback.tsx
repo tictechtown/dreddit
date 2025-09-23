@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { onLinkPress } from '@features/subreddit/utils';
 import * as WebBrowser from 'expo-web-browser';
-import { Post } from '@services/api';
-import { Router } from 'expo-router';
+import type { Post } from '@services/api';
+import type { Router } from 'expo-router';
 
 export default (post: Post | null | undefined, router: Router) => {
   return useCallback(() => {

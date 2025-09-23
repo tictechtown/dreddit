@@ -1,6 +1,6 @@
-import { Href } from 'expo-router/build/typed-routes/types';
+import type { Href } from 'expo-router/build/typed-routes/types';
 import base64 from 'react-native-base64';
-import { Post } from '../../services/api';
+import type { Post } from '../../services/api';
 
 export const onLinkPress = (post: Post): Href => {
   let originalPost = post;
@@ -25,7 +25,7 @@ export const onLinkPress = (post: Post): Href => {
       pathname: 'media/gallery',
       params: {
         gallery_data: base64.encode(
-          encodeURIComponent(JSON.stringify(originalPost.data.gallery_data))
+          encodeURIComponent(JSON.stringify(originalPost.data.gallery_data)),
         ),
         media_metadata: base64.encode(JSON.stringify(originalPost.data.media_metadata)),
         title,
@@ -59,7 +59,10 @@ export const onLinkPress = (post: Post): Href => {
 
     return { pathname: 'media/image', params: { uri: originalPost.data.url, title } };
   }
-  if (domain.startsWith('i.imgur.com') && originalPost.data.preview?.reddit_video_preview != null) {
+  if (
+    domain.startsWith('i.imgur.com') &&
+    originalPost.data.preview?.reddit_video_preview != undefined
+  ) {
     return {
       pathname: 'media/video',
       params: {
@@ -79,7 +82,7 @@ export const onLinkPress = (post: Post): Href => {
               hls_url: originalPost.data.url_overridden_by_dest,
               height: '100%',
               width: '100%',
-            })
+            }),
           ),
         },
       };
@@ -138,7 +141,7 @@ export const onLinkPress = (post: Post): Href => {
       params: {
         title,
         reddit_video: base64.encode(
-          JSON.stringify({ hls_url: newUrl, height: '100%', width: '100%' })
+          JSON.stringify({ hls_url: newUrl, height: '100%', width: '100%' }),
         ),
       },
     };
@@ -154,7 +157,7 @@ export const onLinkPress = (post: Post): Href => {
             hls_url: originalPost.data.url.replace('/v/', '/videos/') + '.mp4',
             height: '100%',
             width: '100%',
-          })
+          }),
         ),
       },
     };
@@ -171,7 +174,7 @@ export const onLinkPress = (post: Post): Href => {
               hls_url: originalPost.data.preview?.reddit_video_preview?.hls_url,
               height: '100%',
               width: '100%',
-            })
+            }),
           ),
         },
       };

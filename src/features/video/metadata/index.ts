@@ -15,7 +15,7 @@ export const extractMetaTags = (
     onlyGetOpenGraphInfo?: boolean;
     allMedia?: boolean;
     customMetaTags: { multiple: false; property: 'og:type'; fieldName: 'ogType' }[];
-  }
+  },
 ): Record<string, any> => {
   let ogObject: Record<string, any> = {};
   const $ = cheerio.load(body);
@@ -23,7 +23,9 @@ export const extractMetaTags = (
 
   // find all of the open graph info in the meta tags
   $('meta').each((index, meta) => {
-    if (!meta.attribs || (!meta.attribs.property && !meta.attribs.name)) return;
+    if (!meta.attribs || (!meta.attribs.property && !meta.attribs.name)) {
+      return;
+    }
     const property = meta.attribs.property || meta.attribs.name;
     const content = meta.attribs.content || meta.attribs.value;
     metaFields.forEach((item) => {

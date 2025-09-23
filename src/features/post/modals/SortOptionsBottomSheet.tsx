@@ -1,7 +1,9 @@
 // TODO - move that to /components/ and rename it
-import { TouchableOpacity, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import useTheme from '@services/theme/useTheme';
-import Icons, { IconName } from '@components/Icons';
+import type { IconName } from '@components/Icons';
+import Icons from '@components/Icons';
 import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
@@ -13,8 +15,8 @@ interface SortOption<T extends string> {
 }
 
 interface SortOptionProps<T extends string = string> {
-  currentSort: T | null;
-  title?: string | null;
+  currentSort: T | undefined;
+  title?: string | undefined;
   onSortPressed: (value: T) => void;
   options: SortOption<T>[];
 }
@@ -54,7 +56,10 @@ const SortOptionsBottomSheet = <T extends string>({
         return (
           <TouchableOpacity
             key={option.key}
-            style={[choiceContainer, currentSort === option.key ? selectedChoiceContainer : null]}
+            style={[
+              choiceContainer,
+              currentSort === option.key ? selectedChoiceContainer : undefined,
+            ]}
             onPress={() => {
               onSortPressed(option.key);
             }}>

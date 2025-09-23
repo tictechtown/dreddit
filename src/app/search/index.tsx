@@ -12,9 +12,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Post, RedditApi, SubReddit, User } from '@services/api';
+import type { Post, SubReddit, User } from '@services/api';
+import { RedditApi } from '@services/api';
 import useTheme from '@services/theme/useTheme';
-import { ColorPalette } from '@theme/colors';
+import type { ColorPalette } from '@theme/colors';
 import Icons from '@components/Icons';
 import SubredditIcon, { defaultSubredditIcon } from '@components/SubredditIcon';
 import Tabs from '@components/Tabs';
@@ -249,7 +250,7 @@ const HomeSearchContent = ({
   const flatListRef = React.useRef<FlatList>(null);
 
   const [searchSort, setSearchSort] = useState<'relevance' | 'hot' | 'top' | 'new' | 'comments'>(
-    'top'
+    'top',
   );
 
   const [searchRange, setSearchRange] = useState<

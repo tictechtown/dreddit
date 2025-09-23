@@ -45,30 +45,38 @@ const fallback = (ogObject: any, options: any, $: any) => {
       if (doesElementExist(imageElement, 'src', $)) {
         const source = $(imageElement).attr('src');
         const type = findImageTypeFromUrl(source);
-        if (!isUrlValid(source) || !isImageTypeValid(type)) return false;
+        if (!isUrlValid(source) || !isImageTypeValid(type)) {
+          return false;
+        }
         ogObject.ogImage.push({
           url: source,
-          width: $(imageElement).attr('width') || null,
-          height: $(imageElement).attr('height') || null,
+          width: $(imageElement).attr('width') || undefined,
+          height: $(imageElement).attr('height') || undefined,
           type,
         });
       }
       return false;
     });
-    if (ogObject.ogImage.length === 0) delete ogObject.ogImage;
+    if (ogObject.ogImage.length === 0) {
+      delete ogObject.ogImage;
+    }
   } else if (ogObject.ogImage) {
     // if there isn't a type, try to pull it from the URL
     if (Array.isArray(ogObject.ogImage)) {
       ogObject.ogImage.map((image: any) => {
         if (image.url && !image.type) {
           const type = findImageTypeFromUrl(image.url);
-          if (isImageTypeValid(type)) image.type = type;
+          if (isImageTypeValid(type)) {
+            image.type = type;
+          }
         }
         return false;
       });
     } else if (ogObject.ogImage.url && !ogObject.ogImage.type) {
       const type = findImageTypeFromUrl(ogObject.ogImage.url);
-      if (isImageTypeValid(type)) ogObject.ogImage.type = type;
+      if (isImageTypeValid(type)) {
+        ogObject.ogImage.type = type;
+      }
     }
   }
 
@@ -83,8 +91,9 @@ const fallback = (ogObject: any, options: any, $: any) => {
         ogObject.ogAudioURL = audioElementValue;
       }
       const audioElementTypeValue = $('audio').attr('type');
-      if (!ogObject.ogAudioType && doesElementExist('audio', 'type', $))
+      if (!ogObject.ogAudioType && doesElementExist('audio', 'type', $)) {
         ogObject.ogAudioType = audioElementTypeValue;
+      }
     } else if (doesElementExist('audio > source', 'src', $)) {
       if (audioSourceElementValue.startsWith('https')) {
         ogObject.ogAudioSecureURL = audioSourceElementValue;
@@ -92,8 +101,9 @@ const fallback = (ogObject: any, options: any, $: any) => {
         ogObject.ogAudioURL = audioSourceElementValue;
       }
       const audioSourceElementTypeValue = $('audio > source').attr('type');
-      if (!ogObject.ogAudioType && doesElementExist('audio > source', 'type', $))
+      if (!ogObject.ogAudioType && doesElementExist('audio > source', 'type', $)) {
         ogObject.ogAudioType = audioSourceElementTypeValue;
+      }
     }
   }
 

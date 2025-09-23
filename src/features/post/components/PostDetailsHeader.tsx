@@ -3,8 +3,8 @@ import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback } from 'react';
 import { Pressable, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { Post } from '@services/api';
-import { ColorPalette } from '@theme/colors';
+import type { Post } from '@services/api';
+import type { ColorPalette } from '@theme/colors';
 import CarouselView from '@components/CarouselView';
 import Icons from '@components/Icons';
 import PostKarmaButton from '@components/PostKarmaButton';
@@ -17,7 +17,10 @@ import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
 import PollOption from './PollOption';
 import useGalleryData from '@hooks/useGalleryData';
 
-function getDisplaySortOrder(forcedSortOrder: string | null, suggestedSort: string | null): string {
+function getDisplaySortOrder(
+  forcedSortOrder: string | undefined,
+  suggestedSort: string | undefined,
+): string {
   let sort = forcedSortOrder ?? suggestedSort ?? 'best';
   // confidence is deprecated. Display "best" instead
   if (sort === 'confidence') {
@@ -34,21 +37,21 @@ const PostDetailsHeader = ({
   onChangeSort,
   theme,
 }: {
-  post: null | Post;
-  forcedSortOrder: string | null;
+  post: undefined | Post;
+  forcedSortOrder: string | undefined;
   onMediaPress: () => void;
   onChangeSort: () => void;
   theme: ColorPalette;
 }) => {
   if (!post) {
-    return null;
+    return;
   }
   const dimensions = useWindowDimensions();
   const mdStyle = useMarkdownStyle(theme);
 
   const [maxGaleryResolutions, galleryCaptions] = useGalleryData(
     post.data.gallery_data,
-    post.data.media_metadata
+    post.data.media_metadata,
   );
 
   const _onLinkPress = useCallback((url: string) => {

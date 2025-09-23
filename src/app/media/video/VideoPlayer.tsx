@@ -1,23 +1,21 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
-import {
+import type {
   AVPlaybackStatus,
-  ResizeMode,
-  Video,
-  VideoFullscreenUpdate,
   VideoFullscreenUpdateEvent,
   VideoProps,
   VideoReadyForDisplayEvent,
 } from 'expo-av';
+import { ResizeMode, Video, VideoFullscreenUpdate } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
+  TouchableWithoutFeedback,
   View,
   useWindowDimensions,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -36,13 +34,13 @@ import { useKeepAwake } from 'expo-keep-awake';
 
 type Props = VideoProps & { activityIndicator?: any; onError?: (errorMsg: string) => void };
 
-const getMinutesSecondsFromMilliseconds = (ms: number) => {
+function getMinutesSecondsFromMilliseconds(ms: number) {
   const totalSeconds = ms / 1000;
   const seconds = String(Math.floor(totalSeconds % 60));
   const minutes = String(Math.floor(totalSeconds / 60));
 
   return minutes.padStart(1, '0') + ':' + seconds.padStart(2, '0');
-};
+}
 
 enum PlaybackStates {
   Loading,
@@ -87,7 +85,7 @@ const VideoPlayer = (props: Props) => {
       setControlsState(value);
       controlsStateRef.current = value;
     },
-    [setControlsState, controlsStateRef]
+    [setControlsState, controlsStateRef],
   );
 
   // cleanup VideoPlayer when exiting screen
@@ -106,7 +104,7 @@ const VideoPlayer = (props: Props) => {
     if (!props.source) {
       console.error(
         '[VideoPlayer] `Source` is a required in `videoProps`. ' +
-          'Check https://docs.expo.io/versions/latest/sdk/video/#usage'
+          'Check https://docs.expo.io/versions/latest/sdk/video/#usage',
       );
       props.onError?.('`Source` is a required in `videoProps`');
       setPlaybackInstanceInfo({
@@ -214,7 +212,7 @@ const VideoPlayer = (props: Props) => {
       });
       videoPlayerOpacityValue.value = withTiming(1);
     },
-    [playbackInstanceInfo]
+    [playbackInstanceInfo],
   );
 
   const onFullscreenUpdate = useCallback(
@@ -228,7 +226,7 @@ const VideoPlayer = (props: Props) => {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
       }
     },
-    [playbackInstanceInfo.videoOrientation]
+    [playbackInstanceInfo.videoOrientation],
   );
 
   const enterFullScreen = useCallback(async () => {

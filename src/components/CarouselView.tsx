@@ -16,13 +16,15 @@ const CarouselView = ({
     x: number;
     u: string;
   }[];
-  captions: null | (string | null)[];
+  captions: undefined | (string | undefined)[];
   width: number;
 }) => {
   const [pageIndex, setPageIndex] = React.useState(0);
 
   const tallestResolution = useMemo(() => {
-    if (resolutions.length == 0) return null;
+    if (resolutions.length == 0) {
+      return;
+    }
 
     let index = 0;
     let maxIndex = 0;
@@ -72,7 +74,7 @@ const CarouselView = ({
   }, []);
 
   if (resolutions.length === 0) {
-    return null;
+    return;
   }
 
   return (

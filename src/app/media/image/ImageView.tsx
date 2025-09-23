@@ -8,7 +8,7 @@ import { Spacing } from '@theme/tokens';
 
 export default function ImageView({ uri, progress }: { uri: string; progress: any }) {
   const _uri = (uri as string).replaceAll('&amp;', '&');
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string | undefined>(undefined);
 
   const onLoadStart = React.useCallback(() => {
     if (progress) {
@@ -29,7 +29,7 @@ export default function ImageView({ uri, progress }: { uri: string; progress: an
         console.log('value', progress.value);
       }
     },
-    [progress]
+    [progress],
   );
 
   const onError = React.useCallback(() => {

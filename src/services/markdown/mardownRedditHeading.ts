@@ -1,16 +1,16 @@
 // replace ##<text> by ## <text>
 
-type MarkdownToken = {
+interface MarkdownToken {
   type: 'inline' | 'block' | 'text' | 'heading_open' | 'heading_close';
   content: string;
   tag: string;
   markup: string;
   children: MarkdownToken[];
-};
+}
 
-type MarkdownState = {
+interface MarkdownState {
   tokens: MarkdownToken[];
-};
+}
 
 function headingRuler(state: MarkdownState) {
   const blockTokens = state.tokens;

@@ -1,15 +1,16 @@
-import { MarkdownIt, RenderRules, hasParents } from '@ronradtke/react-native-markdown-display';
+import type { RenderRules } from '@ronradtke/react-native-markdown-display';
+import { MarkdownIt, hasParents } from '@ronradtke/react-native-markdown-display';
 import { Link } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useMemo } from 'react';
 import { ScrollView, Share, Text, View } from 'react-native';
 // import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { Comment, Post } from '@services/api';
+import type { Comment, Post } from '@services/api';
 import markdownRedditHeadingPlugin from '@services/markdown/mardownRedditHeading';
 import markdownItRedditLink from '@services/markdown/markdownRedditLink';
 import markdownItRedditSpoiler from '@services/markdown/markdownRedditSpoiler';
 import markdownItRedditSupsubscript from '@services/markdown/markdownSupSubscript';
-import { ColorPalette } from '@theme/colors';
+import type { ColorPalette } from '@theme/colors';
 import { Spacing } from '@theme/tokens';
 import { getPreviewImageFromStreaminMe, getPreviewImageFromYoutube } from '@utils/get-preview-url';
 import CommentSpoiler from './components/CommentSpoiler';
@@ -101,7 +102,9 @@ export function useCommentMarkdownStyle(theme: ColorPalette) {
 }
 
 export function getMaxPreviewByDomain(post: Post | null | undefined) {
-  if (!post?.data.preview) return null;
+  if (!post?.data.preview) {
+    return;
+  }
   if (post.data.domain === 'i.redd.it' && !post.data.preview) {
     return post.data.url.replaceAll('&amp;', '&');
   }
@@ -125,7 +128,9 @@ export function getMaxPreviewByDomain(post: Post | null | undefined) {
 }
 
 export function getMaxPreview(post: Post | null | undefined) {
-  if (!post?.data.preview) return null;
+  if (!post?.data.preview) {
+    return;
+  }
   const allResolutions = post.data.preview?.images[0].resolutions;
   return allResolutions[allResolutions.length - 1];
 }
@@ -136,7 +141,7 @@ export const markdownRenderRules: RenderRules = {
     // to determine the type, we look at the end of the key (should be _thead, _tr, _th)
     let shouldUseScrollView = false;
     // @ts-ignore
-    if (children[0] != null && children[0].key.endsWith('_thead')) {
+    if (children[0] != undefined && children[0].key.endsWith('_thead')) {
       // @ts-ignore
       const totalTH = children[0].props.children[0].props.children.length ?? 0;
       shouldUseScrollView = totalTH > 5;
@@ -286,9 +291,9 @@ export function mergeComments(oldComments: Comment[], newComments: Comment[]): C
   }
   const result: Comment[] = [...oldComments];
   const index = result.findIndex((c) =>
-    Array.isArray(c) ? false : c.data.id === newComments[0].data.id
+    Array.isArray(c) ? false : c.data.id === newComments[0].data.id,
   );
-  if (index > -1 && result[index].kind === 'more') {
+  if (index !== -1 && result[index].kind === 'more') {
     for (const newComment of newComments) {
       newComment.data.depth += result[index].data.depth;
     }

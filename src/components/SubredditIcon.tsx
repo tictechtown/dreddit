@@ -1,11 +1,11 @@
 import { Image } from 'expo-image';
 
-type Props = {
+interface Props {
   size: number;
   nsfw: boolean;
   icon: string | undefined | null;
   onIconNotFoundError?: () => void;
-};
+}
 
 export const defaultSubredditIcon = require('../../assets/images/reddit_default_sub_alpha.svg');
 export const defaultSubredditIconNSFW = require('../../assets/images/reddit_default_sub_alpha_nsfw.svg');

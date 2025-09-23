@@ -7,7 +7,7 @@ import Typography from './Typography';
 const PostKarmaButton = ({ karma }: { karma: number }) => {
   const theme = useTheme();
   const displayedKarma =
-    karma > 10000 ? `${(karma / 1000).toFixed(1)}k` : karma.toLocaleString('en-US');
+    karma > 10_000 ? `${(karma / 1000).toFixed(1)}k` : karma.toLocaleString('en-US');
 
   return (
     <View

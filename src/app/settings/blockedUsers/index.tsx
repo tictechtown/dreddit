@@ -3,16 +3,17 @@ import useTheme from '@services/theme/useTheme';
 import * as React from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { useStore } from '@services/store';
-import { ColorPalette } from '@theme/colors';
-import Icons, { IconName } from '@components/Icons';
+import type { ColorPalette } from '@theme/colors';
+import type { IconName } from '@components/Icons';
+import Icons from '@components/Icons';
 import Typography from '@components/Typography';
 
-type RowProps = {
+interface RowProps {
   icon: IconName;
   title: string;
   theme: ColorPalette;
   onPress: () => void;
-};
+}
 
 const Row = ({ icon, title, theme, onPress }: RowProps) => {
   return (

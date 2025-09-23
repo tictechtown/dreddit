@@ -3,14 +3,14 @@ import useTheme from '@services/theme/useTheme';
 import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
 
-type Props = {
+interface Props {
   option: {
     text: string;
     id: string;
     vote_count?: number;
   };
   total: number;
-};
+}
 
 const PollOption = (props: Props) => {
   const theme = useTheme();

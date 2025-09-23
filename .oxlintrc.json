@@ -1,0 +1,14 @@
+{
+  "plugins": ["eslint", "unicorn", "typescript", "oxc", "import"],
+  "rules": {
+    "func-style": ["warn", "declaration", { "allowArrowFunctions": true }]
+  },
+  "categories": {
+    "correctness": "error",
+    // "restriction": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+    // "style": "warn"
+    // "pedantic": "warn"
+  }
+}

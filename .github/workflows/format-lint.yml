@@ -28,4 +28,4 @@ jobs:
         run: npx prettier --check .
 
       - name: Check types with Typescript
-        run: npx tsc noEmit
+        run: npx tsc --noEmit

@@ -34,7 +34,7 @@ export default function Page() {
                 onPressIn={async () => {
                   const result = await FileSystem.downloadAsync(
                     uri as string,
-                    `${FileSystem.documentDirectory ?? ''}${filename}`
+                    `${FileSystem.Paths.document?.uri ?? ''}${filename}`
                   );
 
                   // Log the download result

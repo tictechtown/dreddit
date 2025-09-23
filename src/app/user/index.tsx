@@ -191,7 +191,7 @@ const UserPage = (props: Props) => {
     );
   }, [props.userId, userData, sortOrder]);
 
-  const filteredData = useMemo(() => {
+  const filteredData = useMemo<CommentOrPostOrTrophy[]>(() => {
     if (sortOrder === 'posts') {
       return commentsData.data.filter((it) => it.kind === 't3');
     }
@@ -199,7 +199,7 @@ const UserPage = (props: Props) => {
       return commentsData.data.filter((it) => it.kind === 't1');
     }
     if (sortOrder === 'trophies') {
-      return userTrophies;
+      return userTrophies ?? [];
     }
     return [];
   }, [commentsData, userTrophies, sortOrder]);

@@ -38,7 +38,7 @@ const Page = () => {
     if (url.includes(`reddit.com/r/${subreddit}/search`)) {
       // some custom logic
       const qs = queryString.parseUrl(url);
-      const initialQuery = qs.query.q;
+      const initialQuery = qs.query.q?.toString() ?? '';
       router.push({
         pathname: 'subreddit/search',
         params: { subreddit, initialQuery },
@@ -84,6 +84,7 @@ const Page = () => {
           {wiki?.content_md && (
             <Markdown
               markdownit={markdownIt}
+              // @ts-ignore
               style={mdStyle}
               rules={markdownRenderRules}
               onLinkPress={onLinkPress}>

@@ -190,6 +190,7 @@ const CommentItem = ({
         ) : (
           <Markdown
             markdownit={markdownIt}
+            // @ts-ignore
             style={mdStyle}
             rules={markdownRenderRules}
             onLinkPress={_onLinkPress}>

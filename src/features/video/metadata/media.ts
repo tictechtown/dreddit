@@ -1,34 +1,37 @@
 /* eslint-disable max-len */
 import fields from './fields';
 
-const mediaMapperTwitterImage = (item) => ({
+const mediaMapperTwitterImage = (item: [string, number, number, string]) => ({
   url: item[0],
   width: item[1],
   height: item[2],
   alt: item[3],
 });
 
-const mediaMapperTwitterPlayer = (item) => ({
+const mediaMapperTwitterPlayer = (item: [string, number, number, string]) => ({
   url: item[0],
   width: item[1],
   height: item[2],
   stream: item[3],
 });
 
-const mediaMapperMusicSong = (item) => ({
+const mediaMapperMusicSong = (item: [string, string, string]) => ({
   url: item[0],
   track: item[1],
   disc: item[2],
 });
 
-const mediaMapper = (item) => ({
+const mediaMapper = (item: [string, number, number, string]) => ({
   url: item[0],
   width: item[1],
   height: item[2],
   type: item[3],
 });
 
-const mediaSorter = (a, b) => {
+const mediaSorter = (
+  a: { url: string; width: number; height: number },
+  b: { url: string; width: number; height: number }
+): number => {
   if (!(a.url && b.url)) {
     return 0;
   }
@@ -47,7 +50,10 @@ const mediaSorter = (a, b) => {
   return Math.max(b.width, b.height) - Math.max(a.width, a.height);
 };
 
-const mediaSorterMusicSong = (a, b) => {
+const mediaSorterMusicSong = (
+  a: { track?: string; disc: string },
+  b: { track?: string; disc: string }
+) => {
   if (!(a.track && b.track)) {
     return 0;
   }
@@ -57,11 +63,12 @@ const mediaSorterMusicSong = (a, b) => {
   if (a.disc < b.disc) {
     return -1;
   }
+  // @ts-ignore
   return a.track - b.track;
 };
 
 // lodash zip replacement
-const zip = (array, ...args) => {
+const zip = (array: Array<unknown>, ...args: Array<any>) => {
   if (array === undefined) return [];
   return array.map((value, idx) => [value, ...args.map((arr) => arr[idx])]);
 };
@@ -72,7 +79,15 @@ const zip = (array, ...args) => {
  * @param string options - options the user has set
  * @param function callback
  */
-export const mediaSetup = (ogObject, options) => {
+export const mediaSetup = (
+  ogObject: Record<string, any>,
+  options: {
+    allMedia?: boolean;
+    allVideos?: boolean;
+    defaultMedia?: boolean;
+    customMediaOnly?: boolean;
+  }
+) => {
   // sets ogImage image/width/height/type to null if one these exists
   if (
     ogObject.ogImage ||
@@ -93,6 +108,7 @@ export const mediaSetup = (ogObject, options) => {
     ogObject.ogImageHeight,
     ogObject.ogImageType
   )
+    // @ts-ignore
     .map(mediaMapper)
     .sort(mediaSorter);
 
@@ -111,6 +127,7 @@ export const mediaSetup = (ogObject, options) => {
     ogObject.ogVideoHeight,
     ogObject.ogVideoType
   )
+    // @ts-ignore
     .map(mediaMapper)
     .sort(mediaSorter);
 
@@ -140,6 +157,7 @@ export const mediaSetup = (ogObject, options) => {
     ogObject.twitterImageHeight,
     ogObject.twitterImageAlt
   )
+    // @ts-ignore
     .map(mediaMapperTwitterImage)
     .sort(mediaSorter);
 
@@ -169,6 +187,7 @@ export const mediaSetup = (ogObject, options) => {
     ogObject.twitterPlayerHeight,
     ogObject.twitterPlayerStream
   )
+    // @ts-ignore
     .map(mediaMapperTwitterPlayer)
     .sort(mediaSorter);
 
@@ -181,6 +200,7 @@ export const mediaSetup = (ogObject, options) => {
 
   // format music songs
   const musicSongs = zip(ogObject.musicSong, ogObject.musicSongTrack, ogObject.musicSongDisc)
+    // @ts-ignore
     .map(mediaMapperMusicSong)
     .sort(mediaSorterMusicSong);
 

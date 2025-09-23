@@ -4,7 +4,7 @@ import { Stack } from 'expo-router/stack';
 import { useMemo } from 'react';
 import { ColorSchemeName } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ThemeContext } from '@services/theme/theme';
+import { ExtendedMaterial3Theme, ThemeContext } from '@services/theme/theme';
 import useColorScheme from '@services/theme/useColorScheme';
 import { Edge, SafeAreaView } from 'react-native-safe-area-context';
 
@@ -43,7 +43,7 @@ function convertMD3ToReactNavigation(
 function convertToAmoledIfNeeded(
   schemes: Material3Theme,
   colorScheme: 'light' | 'dark' | 'amoled'
-): { schemes: Material3Theme; color: ColorSchemeName } {
+): { schemes: ExtendedMaterial3Theme; color: ColorSchemeName } {
   if (colorScheme === 'amoled') {
     schemes.dark.background = '#000';
     schemes.dark.surface = '#000';
@@ -59,7 +59,7 @@ function convertToAmoledIfNeeded(
 function useMD3(
   theme: Material3Theme,
   colorScheme: 'light' | 'dark' | 'amoled'
-): { schemes: Material3Theme; color: ColorSchemeName; rnScheme: RNScheme } {
+): { schemes: ExtendedMaterial3Theme; color: ColorSchemeName; rnScheme: RNScheme } {
   const values = useMemo(() => {
     const { schemes, color } = convertToAmoledIfNeeded(theme, colorScheme);
     const rnScheme = convertMD3ToReactNavigation(schemes, color);

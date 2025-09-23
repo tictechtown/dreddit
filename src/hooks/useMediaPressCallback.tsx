@@ -15,7 +15,7 @@ export default (post: Post | null | undefined, router: Router) => {
       Array.isArray(post.data.crosspost_parent_list)
     ) {
       const href = onLinkPress(post);
-      if (href.pathname === 'full' && href.params) {
+      if (typeof href === 'object' && href.pathname === 'full' && href.params) {
         WebBrowser.openBrowserAsync((href.params.uri as string).replaceAll('&amp;', '&'), {
           createTask: false,
         });

@@ -9,7 +9,7 @@ import { ColorPalette } from '../../colors';
 import IndeterminateProgressBarView from '@components/IndeterminateProgressBarView';
 import Tabs from '@components/Tabs';
 import Typography from '@components/Typography';
-import SubredditPostItemView from '@features/subreddit/feed/components/PostFeedItem';
+import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../../tokens';
 import { timeDifference } from '@utils/get-time-difference';
 
@@ -28,32 +28,32 @@ const TabView = (props: { sortOrder: string; onSortOrderChanged: (value: string)
   );
 };
 
-const CommentItem = ({
-  commentOrPost,
+const ResultItem = ({
+  commentOrPost: commentOrPostOrTrophy,
   theme,
 }: {
   commentOrPost: CommentOrPostOrTrophy;
   theme: ColorPalette;
 }) => {
   const onPress = useCallback(() => {
-    if (commentOrPost.kind === 't3') {
+    if (commentOrPostOrTrophy.kind === 't3') {
       router.push({
-        pathname: `post/${commentOrPost.data.id}`,
-        params: { postid: commentOrPost.data.id },
+        pathname: `post/${commentOrPostOrTrophy.data.id}`,
+        params: { postid: commentOrPostOrTrophy.data.id },
       });
-    } else if (commentOrPost.kind === 't1') {
+    } else if (commentOrPostOrTrophy.kind === 't1') {
       router.push({
-        pathname: `post/${commentOrPost.data.link_id.replace('t3_', '')}`,
-        params: { postid: commentOrPost.data.link_id.replace('t3_', '') },
+        pathname: `post/${commentOrPostOrTrophy.data.link_id.replace('t3_', '')}`,
+        params: { postid: commentOrPostOrTrophy.data.link_id.replace('t3_', '') },
       });
     }
-  }, [commentOrPost]);
+  }, [commentOrPostOrTrophy]);
 
-  if (commentOrPost.kind === 't3') {
+  if (commentOrPostOrTrophy.kind === 't3') {
     // Post
-    return <SubredditPostItemView post={commentOrPost} theme={theme} />;
+    return <PostFeedItem post={commentOrPostOrTrophy} theme={theme} />;
   }
-  if (commentOrPost.kind === 't1') {
+  if (commentOrPostOrTrophy.kind === 't1') {
     // Comment
     return (
       <View style={{ flex: 1, paddingHorizontal: Spacing.s12, paddingBottom: Spacing.s12 }}>
@@ -61,15 +61,15 @@ const CommentItem = ({
           <View style={{ flex: 1 }}>
             <Typography variant="headlineSmall">
               {/* @ts-ignore */}
-              {decode(commentOrPost.data.link_title)}
+              {decode(commentOrPostOrTrophy.data.link_title)}
             </Typography>
             <Typography variant="bodySmall" style={{ color: theme.onSurfaceVariant }}>
-              {commentOrPost.data.subreddit_name_prefixed} •{' '}
-              {timeDifference(commentOrPost.data.created_utc * 1000)}
+              {commentOrPostOrTrophy.data.subreddit_name_prefixed} •{' '}
+              {timeDifference(commentOrPostOrTrophy.data.created_utc * 1000)}
             </Typography>
 
             <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant }}>
-              {decode(commentOrPost.data.body)}
+              {decode(commentOrPostOrTrophy.data.body)}
             </Typography>
           </View>
         </TouchableOpacity>
@@ -77,7 +77,7 @@ const CommentItem = ({
     );
   }
 
-  if (commentOrPost.kind === 't6') {
+  if (commentOrPostOrTrophy.kind === 't6') {
     // trophy
     return (
       <View
@@ -91,8 +91,8 @@ const CommentItem = ({
           style={{ borderRadius: 10, marginRight: Spacing.s16 }}
           width={40}
           height={40}
-          source={{ uri: commentOrPost.data.icon_70.replaceAll('&amp;', '&') }}></Image>
-        <Typography variant="bodyLarge">{commentOrPost.data.name}</Typography>
+          source={{ uri: commentOrPostOrTrophy.data.icon_70.replaceAll('&amp;', '&') }}></Image>
+        <Typography variant="bodyLarge">{commentOrPostOrTrophy.data.name}</Typography>
       </View>
     );
   }
@@ -209,7 +209,7 @@ const UserPage = (props: Props) => {
       <Stack.Screen options={{ title: props.userId }} />
       <FlatList
         data={filteredData}
-        renderItem={({ item }) => <CommentItem commentOrPost={item} theme={theme} />}
+        renderItem={({ item }) => <ResultItem commentOrPost={item} theme={theme} />}
         keyExtractor={(item) => item.data.id ?? item.data.name}
         ListHeaderComponent={Header}
         contentContainerStyle={{ rowGap: 10 }}

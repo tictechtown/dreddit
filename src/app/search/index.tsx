@@ -20,7 +20,7 @@ import SubredditIcon, { defaultSubredditIcon } from '@components/SubredditIcon';
 import Tabs from '@components/Tabs';
 import Typography from '@components/Typography';
 // TODO
-import SubredditPostItemView from '@features/subreddit/feed/components/PostFeedItem';
+import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../../tokens';
 import {
   BottomSheetBackdrop,
@@ -225,7 +225,7 @@ const SearchResultItem = (props: { result: SearchResult; theme: ColorPalette }) 
   if (props.result.kind === 't5') {
     return <SearchResultSub result={props.result} theme={props.theme} />;
   } else if (props.result.kind === 't3') {
-    return <SubredditPostItemView post={props.result} theme={props.theme} />;
+    return <PostFeedItem post={props.result} theme={props.theme} />;
   } else {
     return <SearchResultUser result={props.result} theme={props.theme} />;
   }

@@ -7,7 +7,7 @@ import { Comment, Post, RedditApi } from '@services/api';
 import useTheme from '@services/theme/useTheme';
 import Typography from '@components/Typography';
 import { Spacing } from '../../../tokens';
-import SubredditPostItemView from '@features/subreddit/feed/components/PostFeedItem';
+import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
 import {
   BottomSheetModalProvider,
   BottomSheetModal,
@@ -27,7 +27,7 @@ type SearchResult = Post | Comment;
 
 const SearchResultItem = (props: { result: SearchResult; theme: ColorPalette }) => {
   if (props.result.kind === 't3') {
-    return <SubredditPostItemView post={props.result} theme={props.theme} />;
+    return <PostFeedItem post={props.result} theme={props.theme} />;
   }
 };
 

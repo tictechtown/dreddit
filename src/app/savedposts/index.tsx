@@ -5,7 +5,7 @@ import { Post } from '@services/api';
 import { useStore } from '@services/store';
 import useTheme from '@services/theme/useTheme';
 import ItemSeparator from '@components/ItemSeparator';
-import SubredditPostItemView from '@features/subreddit/feed/components/PostFeedItem';
+import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../../tokens';
 
 export default function Page() {
@@ -42,7 +42,7 @@ export default function Page() {
         <FlatList
           data={savedPosts}
           renderItem={({ item }) => (
-            <SubredditPostItemView
+            <PostFeedItem
               post={item as Post}
               isSaved={savedPostIds[item.data.id]}
               addToSavedPosts={addToSavedPosts}

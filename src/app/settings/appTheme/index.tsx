@@ -3,17 +3,18 @@ import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import { useStore } from '@services/store';
 import useTheme from '@services/theme/useTheme';
-import { ColorPalette } from '@theme/colors';
-import Icons, { IconName } from '@components/Icons';
+import type { ColorPalette } from '@theme/colors';
+import type { IconName } from '@components/Icons';
+import Icons from '@components/Icons';
 import Typography from '@components/Typography';
 
-type RowProps = {
+interface RowProps {
   icon: IconName;
   title: string;
   theme: ColorPalette;
   isSelected: boolean;
   onPress: () => void;
-};
+}
 
 const Row = ({ icon, title, theme, isSelected, onPress }: RowProps) => {
   return (

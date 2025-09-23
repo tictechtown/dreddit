@@ -1,17 +1,22 @@
 import { router } from 'expo-router';
 import { Pressable, View } from 'react-native';
-import { Post } from '@services/api';
+import type { Post } from '@services/api';
 import { useStore } from '@services/store';
 import useTheme from '@services/theme/useTheme';
-import { ColorPalette } from '@theme/colors';
-import Icons, { IconName } from '@components/Icons';
+import type { ColorPalette } from '@theme/colors';
+import type { IconName } from '@components/Icons';
+import Icons from '@components/Icons';
 import Typography from '@components/Typography';
 import { onLinkPress } from '../../utils';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import * as WebBrowser from 'expo-web-browser';
 import { Spacing } from '@theme/tokens';
 
-type RowProps = { icon: IconName; title: string; theme: ColorPalette };
+interface RowProps {
+  icon: IconName;
+  title: string;
+  theme: ColorPalette;
+}
 
 const Row = ({ icon, title, theme }: RowProps) => {
   return (
@@ -52,7 +57,7 @@ const PostActionSheet = ({
       <Pressable
         onPress={() => {
           router.push({ pathname: `subreddit/feed/${post.data.subreddit}` });
-          onClose(null);
+          onClose(undefined);
         }}>
         <Row
           icon={'arrow-outward'}
@@ -66,7 +71,7 @@ const PostActionSheet = ({
           <Pressable
             onPress={() => {
               router.push(onLinkPress(post));
-              onClose(null);
+              onClose(undefined);
             }}>
             <Row icon={'share'} title={'View Original Post'} theme={theme} />
           </Pressable>
@@ -75,7 +80,7 @@ const PostActionSheet = ({
               router.push({
                 pathname: `subreddit/feed/${post.data.crosspost_parent_list![0].subreddit}`,
               });
-              onClose(null);
+              onClose(undefined);
             }}>
             <Row
               icon={'repeat'}
@@ -89,7 +94,7 @@ const PostActionSheet = ({
       <Pressable
         onPress={() => {
           router.push({ pathname: `user`, params: { userid: post.data.author } });
-          onClose(null);
+          onClose(undefined);
         }}>
         <Row icon={'person'} title={`View ${post.data.author} Profile`} theme={theme} />
       </Pressable>

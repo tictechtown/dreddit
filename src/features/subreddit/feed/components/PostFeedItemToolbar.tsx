@@ -2,21 +2,21 @@ import { router } from 'expo-router';
 import React from 'react';
 import { TouchableNativeFeedback, TouchableOpacity } from 'react-native-gesture-handler';
 import { Share, View } from 'react-native';
-import { Post } from '@services/api';
-import { ColorPalette } from '@theme/colors';
+import type { Post } from '@services/api';
+import type { ColorPalette } from '@theme/colors';
 import Icons from '@components/Icons';
 import PostKarmaButton from '@components/PostKarmaButton';
 import Typography from '@components/Typography';
 import * as Haptics from 'expo-haptics';
 
-type Props = {
+interface Props {
   post: Post;
   theme: ColorPalette;
   isSaved: boolean | undefined;
   addToSavedPosts: ((post: Post) => void) | undefined;
   removeFromSavedPosts: ((post: Post) => void) | undefined;
   onMoreOptions: ((post: Post) => void) | undefined;
-};
+}
 
 const PostCommentButton = ({ comments, theme }: { comments: number; theme: ColorPalette }) => {
   return (

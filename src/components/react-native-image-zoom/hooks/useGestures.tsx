@@ -19,10 +19,10 @@ import type {
 
 import type { ImageZoomUseGesturesProps } from '../types';
 
-type Size = {
+interface Size {
   width: number;
   height: number;
-};
+}
 
 const getContainedInitialImageSize = (fullImageSize: Size, containerImageSize: Size): Size => {
   if (containerImageSize.height === 0) {

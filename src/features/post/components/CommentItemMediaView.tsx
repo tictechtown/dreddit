@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import { decode } from 'html-entities';
 import { useCallback } from 'react';
 import { Pressable, View } from 'react-native';
-import { RedditMediaMedata } from '@services/api';
+import type { RedditMediaMedata } from '@services/api';
 import useTheme from '@services/theme/useTheme';
 import { Spacing } from '@theme/tokens';
 import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../utils';
@@ -26,7 +26,7 @@ const CommentItemMediaView = ({
   }, [item]);
 
   if (!item) {
-    return null;
+    return;
   }
   if (item.t === 'emoji' || item.t === 'sticker') {
     return (
@@ -45,7 +45,7 @@ const CommentItemMediaView = ({
 
   if (!preview) {
     console.log(item);
-    return null;
+    return;
   }
 
   return (

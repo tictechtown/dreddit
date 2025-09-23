@@ -1,9 +1,9 @@
 import { Image } from 'expo-image';
 import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
-import { Post } from '@services/api';
+import type { Post } from '@services/api';
 import { DataUsage, useStore } from '@services/store';
-import { ColorPalette } from '@theme/colors';
+import type { ColorPalette } from '@theme/colors';
 import Icons from '@components/Icons';
 import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
@@ -13,14 +13,14 @@ import {
   getPreviewImageFromYoutube,
 } from '@utils/get-preview-url';
 
-type PostPreviewImageProps = {
+interface PostPreviewImageProps {
   domain: Post['data']['domain'];
   url: Post['data']['url'];
   media: Post['data']['media'];
   preview: Post['data']['preview'];
   imageWidth: number;
   theme: ColorPalette;
-};
+}
 
 function getVideoDuration(duration: number): string {
   const mins = Math.floor(duration / 60);
@@ -80,7 +80,7 @@ const PostPreviewVideo = memo(
         </View>
       </View>
     );
-  }
+  },
 );
 
 const PostPreviewStaticMedia = ({
@@ -133,13 +133,17 @@ const PostPreviewImage = ({
 }: PostPreviewImageProps) => {
   const dataUsage = useStore((state) => state.dataUsage);
   const maxPreviewResolutions = useMemo(() => {
-    if (!preview) return null;
-    if (dataUsage === DataUsage.None) return null;
+    if (!preview) {
+      return;
+    }
+    if (dataUsage === DataUsage.None) {
+      return;
+    }
     const allResolutions = preview?.images[0].resolutions;
     if (dataUsage === DataUsage.Reduced) {
       const smallerResolutions = allResolutions.filter((r) => r.width < 640);
       if (smallerResolutions.length === 0) {
-        return null;
+        return;
       }
       return smallerResolutions[smallerResolutions.length - 1];
     }
@@ -188,7 +192,7 @@ const PostPreviewImage = ({
         />
       );
     }
-    return null;
+    return;
   }
 
   // Self Post with Image
@@ -204,7 +208,7 @@ const PostPreviewImage = ({
         />
       );
     }
-    return null;
+    return;
   }
 
   // Video Preview (Youtube)
@@ -290,7 +294,7 @@ const PostPreviewImage = ({
             width: imageWidth,
             height: Math.min(
               210,
-              (imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width
+              (imageWidth * maxPreviewResolutions.height) / maxPreviewResolutions.width,
             ),
             borderTopLeftRadius: 12,
             borderTopRightRadius: 12,
@@ -424,7 +428,7 @@ const PostContentPreview = ({
 
   // Gallery
   if (post.data.gallery_data) {
-    return null;
+    return;
   }
 
   return (

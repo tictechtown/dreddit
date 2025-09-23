@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
+import type { ViewStyle } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
   cancelAnimation,
@@ -19,7 +20,7 @@ function IndeterminateProgressBarView() {
   React.useEffect(() => {
     progress.value = withRepeat(
       withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.exp) }),
-      0
+      0,
     );
     return () => {
       cancelAnimation(progress);

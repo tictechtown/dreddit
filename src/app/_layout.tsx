@@ -1,15 +1,18 @@
-import { Material3Theme, useMaterial3Theme } from '@pchmn/expo-material3-theme';
-import { ThemeProvider, DefaultTheme } from '@react-navigation/native';
+import type { Material3Theme } from '@pchmn/expo-material3-theme';
+import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router/stack';
 import { useMemo } from 'react';
-import { ColorSchemeName } from 'react-native';
+import type { ColorSchemeName } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ExtendedMaterial3Theme, ThemeContext } from '@services/theme/theme';
+import type { ExtendedMaterial3Theme } from '@services/theme/theme';
+import { ThemeContext } from '@services/theme/theme';
 import useColorScheme from '@services/theme/useColorScheme';
-import { Edge, SafeAreaView } from 'react-native-safe-area-context';
+import type { Edge } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-type RNScheme = {
+interface RNScheme {
   dark: boolean;
   fonts: any; // TODO
   colors: {
@@ -20,11 +23,11 @@ type RNScheme = {
     border: string;
     notification: string;
   };
-};
+}
 
 function convertMD3ToReactNavigation(
   schemes: Material3Theme,
-  colorScheme: ColorSchemeName
+  colorScheme: ColorSchemeName,
 ): RNScheme {
   const scheme = schemes[colorScheme ?? 'light'];
   return {
@@ -43,7 +46,7 @@ function convertMD3ToReactNavigation(
 
 function convertToAmoledIfNeeded(
   schemes: Material3Theme,
-  colorScheme: 'light' | 'dark' | 'amoled'
+  colorScheme: 'light' | 'dark' | 'amoled',
 ): { schemes: ExtendedMaterial3Theme; color: ColorSchemeName } {
   if (colorScheme === 'amoled') {
     schemes.dark.background = '#000';
@@ -59,7 +62,7 @@ function convertToAmoledIfNeeded(
 
 function useMD3(
   theme: Material3Theme,
-  colorScheme: 'light' | 'dark' | 'amoled'
+  colorScheme: 'light' | 'dark' | 'amoled',
 ): { schemes: ExtendedMaterial3Theme; color: ColorSchemeName; rnScheme: RNScheme } {
   const values = useMemo(() => {
     const { schemes, color } = convertToAmoledIfNeeded(theme, colorScheme);

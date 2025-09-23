@@ -30,16 +30,16 @@ const mediaMapper = (item: [string, number, number, string]) => ({
 
 const mediaSorter = (
   a: { url: string; width: number; height: number },
-  b: { url: string; width: number; height: number }
+  b: { url: string; width: number; height: number },
 ): number => {
   if (!(a.url && b.url)) {
     return 0;
   }
 
   const aRes = a.url.match(/\.(\w{2,5})$/);
-  const aExt = (aRes && aRes[1].toLowerCase()) || null;
+  const aExt = (aRes && aRes[1].toLowerCase()) || undefined;
   const bRes = b.url.match(/\.(\w{2,5})$/);
-  const bExt = (bRes && bRes[1].toLowerCase()) || null;
+  const bExt = (bRes && bRes[1].toLowerCase()) || undefined;
 
   if (aExt === 'gif' && bExt !== 'gif') {
     return -1;
@@ -52,7 +52,7 @@ const mediaSorter = (
 
 const mediaSorterMusicSong = (
   a: { track?: string; disc: string },
-  b: { track?: string; disc: string }
+  b: { track?: string; disc: string },
 ) => {
   if (!(a.track && b.track)) {
     return 0;
@@ -68,8 +68,10 @@ const mediaSorterMusicSong = (
 };
 
 // lodash zip replacement
-const zip = (array: Array<unknown>, ...args: Array<any>) => {
-  if (array === undefined) return [];
+const zip = (array: unknown[], ...args: any[]) => {
+  if (array === undefined) {
+    return [];
+  }
   return array.map((value, idx) => [value, ...args.map((arr) => arr[idx])]);
 };
 
@@ -86,7 +88,7 @@ export const mediaSetup = (
     allVideos?: boolean;
     defaultMedia?: boolean;
     customMediaOnly?: boolean;
-  }
+  },
 ) => {
   // sets ogImage image/width/height/type to null if one these exists
   if (
@@ -95,10 +97,10 @@ export const mediaSetup = (
     ogObject.twitterImageHeight ||
     ogObject.ogImageType
   ) {
-    ogObject.ogImage = ogObject.ogImage ? ogObject.ogImage : [null];
-    ogObject.ogImageWidth = ogObject.ogImageWidth ? ogObject.ogImageWidth : [null];
-    ogObject.ogImageHeight = ogObject.ogImageHeight ? ogObject.ogImageHeight : [null];
-    ogObject.ogImageType = ogObject.ogImageType ? ogObject.ogImageType : [null];
+    ogObject.ogImage = ogObject.ogImage ? ogObject.ogImage : [undefined];
+    ogObject.ogImageWidth = ogObject.ogImageWidth ? ogObject.ogImageWidth : [undefined];
+    ogObject.ogImageHeight = ogObject.ogImageHeight ? ogObject.ogImageHeight : [undefined];
+    ogObject.ogImageType = ogObject.ogImageType ? ogObject.ogImageType : [undefined];
   }
 
   // format images
@@ -106,7 +108,7 @@ export const mediaSetup = (
     ogObject.ogImage,
     ogObject.ogImageWidth,
     ogObject.ogImageHeight,
-    ogObject.ogImageType
+    ogObject.ogImageType,
   )
     // @ts-ignore
     .map(mediaMapper)
@@ -114,10 +116,10 @@ export const mediaSetup = (
 
   // sets ogVideo video/width/height/type to null if one these exists
   if (ogObject.ogVideo || ogObject.ogVideoWidth || ogObject.ogVideoHeight || ogObject.ogVideoType) {
-    ogObject.ogVideo = ogObject.ogVideo ? ogObject.ogVideo : [null];
-    ogObject.ogVideoWidth = ogObject.ogVideoWidth ? ogObject.ogVideoWidth : [null];
-    ogObject.ogVideoHeight = ogObject.ogVideoHeight ? ogObject.ogVideoHeight : [null];
-    ogObject.ogVideoType = ogObject.ogVideoType ? ogObject.ogVideoType : [null];
+    ogObject.ogVideo = ogObject.ogVideo ? ogObject.ogVideo : [undefined];
+    ogObject.ogVideoWidth = ogObject.ogVideoWidth ? ogObject.ogVideoWidth : [undefined];
+    ogObject.ogVideoHeight = ogObject.ogVideoHeight ? ogObject.ogVideoHeight : [undefined];
+    ogObject.ogVideoType = ogObject.ogVideoType ? ogObject.ogVideoType : [undefined];
   }
 
   // format videos
@@ -125,7 +127,7 @@ export const mediaSetup = (
     ogObject.ogVideo,
     ogObject.ogVideoWidth,
     ogObject.ogVideoHeight,
-    ogObject.ogVideoType
+    ogObject.ogVideoType,
   )
     // @ts-ignore
     .map(mediaMapper)
@@ -139,15 +141,17 @@ export const mediaSetup = (
     ogObject.twitterImageHeight ||
     ogObject.twitterImageAlt
   ) {
-    ogObject.twitterImageSrc = ogObject.twitterImageSrc ? ogObject.twitterImageSrc : [null];
+    ogObject.twitterImageSrc = ogObject.twitterImageSrc ? ogObject.twitterImageSrc : [undefined];
     ogObject.twitterImage = ogObject.twitterImage
       ? ogObject.twitterImage
       : ogObject.twitterImageSrc; // deafult to twitterImageSrc
-    ogObject.twitterImageWidth = ogObject.twitterImageWidth ? ogObject.twitterImageWidth : [null];
+    ogObject.twitterImageWidth = ogObject.twitterImageWidth
+      ? ogObject.twitterImageWidth
+      : [undefined];
     ogObject.twitterImageHeight = ogObject.twitterImageHeight
       ? ogObject.twitterImageHeight
-      : [null];
-    ogObject.twitterImageAlt = ogObject.twitterImageAlt ? ogObject.twitterImageAlt : [null];
+      : [undefined];
+    ogObject.twitterImageAlt = ogObject.twitterImageAlt ? ogObject.twitterImageAlt : [undefined];
   }
 
   // format twitter images
@@ -155,7 +159,7 @@ export const mediaSetup = (
     ogObject.twitterImage,
     ogObject.twitterImageWidth,
     ogObject.twitterImageHeight,
-    ogObject.twitterImageAlt
+    ogObject.twitterImageAlt,
   )
     // @ts-ignore
     .map(mediaMapperTwitterImage)
@@ -168,16 +172,16 @@ export const mediaSetup = (
     ogObject.twitterPlayerHeight ||
     ogObject.twitterPlayerStream
   ) {
-    ogObject.twitterPlayer = ogObject.twitterPlayer ? ogObject.twitterPlayer : [null];
+    ogObject.twitterPlayer = ogObject.twitterPlayer ? ogObject.twitterPlayer : [undefined];
     ogObject.twitterPlayerWidth = ogObject.twitterPlayerWidth
       ? ogObject.twitterPlayerWidth
-      : [null];
+      : [undefined];
     ogObject.twitterPlayerHeight = ogObject.twitterPlayerHeight
       ? ogObject.twitterPlayerHeight
-      : [null];
+      : [undefined];
     ogObject.twitterPlayerStream = ogObject.twitterPlayerStream
       ? ogObject.twitterPlayerStream
-      : [null];
+      : [undefined];
   }
 
   // format twitter player
@@ -185,7 +189,7 @@ export const mediaSetup = (
     ogObject.twitterPlayer,
     ogObject.twitterPlayerWidth,
     ogObject.twitterPlayerHeight,
-    ogObject.twitterPlayerStream
+    ogObject.twitterPlayerStream,
   )
     // @ts-ignore
     .map(mediaMapperTwitterPlayer)
@@ -193,9 +197,9 @@ export const mediaSetup = (
 
   // sets music song/songTrack/songDisc to null if one these exists
   if (ogObject.musicSong || ogObject.musicSongTrack || ogObject.musicSongDisc) {
-    ogObject.musicSong = ogObject.musicSong ? ogObject.musicSong : [null];
-    ogObject.musicSongTrack = ogObject.musicSongTrack ? ogObject.musicSongTrack : [null];
-    ogObject.musicSongDisc = ogObject.musicSongDisc ? ogObject.musicSongDisc : [null];
+    ogObject.musicSong = ogObject.musicSong ? ogObject.musicSong : [undefined];
+    ogObject.musicSongTrack = ogObject.musicSongTrack ? ogObject.musicSongTrack : [undefined];
+    ogObject.musicSongDisc = ogObject.musicSongDisc ? ogObject.musicSongDisc : [undefined];
   }
 
   // format music songs
@@ -210,24 +214,44 @@ export const mediaSetup = (
       (item) =>
         item.multiple &&
         item.fieldName &&
-        item.fieldName.match('(ogImage|ogVideo|twitter|musicSong).*')
+        item.fieldName.match('(ogImage|ogVideo|twitter|musicSong).*'),
     )
     .forEach((item) => {
       delete ogObject[item.fieldName];
     });
 
   if (options.allMedia) {
-    if (ogImages.length) ogObject.ogImage = ogImages;
-    if (ogVideos.length) ogObject.ogVideo = ogVideos;
-    if (twitterImages.length) ogObject.twitterImage = twitterImages;
-    if (twitterPlayers.length) ogObject.twitterPlayer = twitterPlayers;
-    if (musicSongs.length) ogObject.musicSong = musicSongs;
+    if (ogImages.length) {
+      ogObject.ogImage = ogImages;
+    }
+    if (ogVideos.length) {
+      ogObject.ogVideo = ogVideos;
+    }
+    if (twitterImages.length) {
+      ogObject.twitterImage = twitterImages;
+    }
+    if (twitterPlayers.length) {
+      ogObject.twitterPlayer = twitterPlayers;
+    }
+    if (musicSongs.length) {
+      ogObject.musicSong = musicSongs;
+    }
   } else {
-    if (ogImages.length) [ogObject.ogImage] = ogImages;
-    if (ogVideos.length) [ogObject.ogVideo] = ogVideos;
-    if (twitterImages.length) [ogObject.twitterImage] = twitterImages;
-    if (twitterPlayers.length) [ogObject.twitterPlayer] = twitterPlayers;
-    if (musicSongs.length) [ogObject.musicSong] = musicSongs;
+    if (ogImages.length) {
+      [ogObject.ogImage] = ogImages;
+    }
+    if (ogVideos.length) {
+      [ogObject.ogVideo] = ogVideos;
+    }
+    if (twitterImages.length) {
+      [ogObject.twitterImage] = twitterImages;
+    }
+    if (twitterPlayers.length) {
+      [ogObject.twitterPlayer] = twitterPlayers;
+    }
+    if (musicSongs.length) {
+      [ogObject.musicSong] = musicSongs;
+    }
   }
 
   return ogObject;

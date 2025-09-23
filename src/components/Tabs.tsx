@@ -2,16 +2,17 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import useTheme from '@services/theme/useTheme';
 import { Spacing } from '@theme/tokens';
-import Icons, { IconName } from './Icons';
+import type { IconName } from './Icons';
+import Icons from './Icons';
 import Typography from './Typography';
 
-type TabProps<T extends string | number> = {
+interface TabProps<T extends string | number> {
   tabId: T;
   tabName: string | undefined | null;
   tabIconName: IconName | undefined | null;
   tabSelectedId: T;
   onPress: (newValue: T) => void;
-};
+}
 
 const Tab = <T extends string | number>({
   tabId,
@@ -70,13 +71,13 @@ const Tab = <T extends string | number>({
   );
 };
 
-type Props<T extends string | number> = {
+interface Props<T extends string | number> {
   selectedTabId: T;
   tabIds: T[];
   tabNames?: string[];
   tabIconNames?: IconName[] | null | undefined;
   onPress: (value: T) => void;
-};
+}
 
 const Tabs = <T extends string | number>({
   selectedTabId,
@@ -101,8 +102,8 @@ const Tabs = <T extends string | number>({
           <Tab
             key={tabId}
             tabId={tabId}
-            tabName={tabNames ? tabNames[idx] : null}
-            tabIconName={tabIconNames ? tabIconNames[idx] : null}
+            tabName={tabNames ? tabNames[idx] : undefined}
+            tabIconName={tabIconNames ? tabIconNames[idx] : undefined}
             tabSelectedId={selectedTabId}
             onPress={onPress}
           />

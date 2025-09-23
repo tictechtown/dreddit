@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { Comment, RedditMediaMedata } from '@services/api';
+import type { Comment, RedditMediaMedata } from '@services/api';
 import type { ColorPalette } from '@theme/colors';
 import ItemSeparator from '@components/ItemSeparator';
 import Typography from '@components/Typography';
@@ -38,7 +38,7 @@ const CommentItem = ({
 
   const isGifReply = useMemo(() => {
     if (!('media_metadata' in comment.data) || !comment.data.media_metadata) {
-      return null;
+      return;
     }
     const value = Object.values(comment.data.media_metadata)[0];
     return value;
@@ -182,7 +182,7 @@ const CommentItem = ({
       {/* Comment content */}
       <View style={{ marginBottom: Spacing.s4, flex: 0 }}>
         {isAutomoderator && !showModeration ? (
-          comment.data.depth > 0 ? null : (
+          comment.data.depth > 0 ? undefined : (
             <ItemSeparator fullWidth />
           )
         ) : isGifReply ? (

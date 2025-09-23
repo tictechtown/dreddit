@@ -69,7 +69,7 @@ export type ImageZoomProps = Omit<ImageProps, 'source'> & {
 
 export type ImageZoomUseLayoutProps = Pick<ImageZoomProps, 'onLayout'>;
 
-export type ImageZoomLayoutState = {
+export interface ImageZoomLayoutState {
   /**
    * An object containing the x and y coordinates of the center point of the image, relative to the top-left corner of the container.
    */
@@ -91,7 +91,7 @@ export type ImageZoomLayoutState = {
     width: number;
     height: number;
   };
-};
+}
 
 export type ImageZoomUseGesturesProps = ImageZoomLayoutState &
   Pick<

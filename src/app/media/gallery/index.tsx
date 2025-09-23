@@ -1,10 +1,11 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Image, StyleSheet, View, useWindowDimensions } from 'react-native';
 import base64 from 'react-native-base64';
-import { fitContainer, Gallery, GalleryType } from 'react-native-zoom-toolkit';
-import { Post } from '@services/api';
+import type { GalleryType } from 'react-native-zoom-toolkit';
+import { Gallery, fitContainer } from 'react-native-zoom-toolkit';
+import type { Post } from '@services/api';
 import { PaletteDark } from '@theme/colors';
 import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
@@ -102,7 +103,7 @@ const CarouselTab = ({
 
       {showCaption && (
         <>
-          <CaptionFooter caption={captions ? captions[pageIndex] : null} />
+          <CaptionFooter caption={captions ? captions[pageIndex] : undefined} />
           <View style={[styles.pageIndexContainer, { bottom: padding.bottom + 10 }]}>
             <View style={styles.pageIndexBackground} />
             <Typography variant="labelMedium" style={styles.pageIndexTextColor}>
@@ -121,22 +122,24 @@ const CarouselTab = ({
 export default function Page() {
   const { title, gallery_data, media_metadata } = useLocalSearchParams();
   const { resolutions, captions } = React.useMemo(() => {
-    if (!gallery_data || !media_metadata) return { resolutions: null, captions: null };
+    if (!gallery_data || !media_metadata) {
+      return { resolutions: undefined, captions: undefined };
+    }
     let metadata: Post['data']['media_metadata'];
     let galleryData: Post['data']['gallery_data'];
     try {
       metadata = JSON.parse(base64.decode(media_metadata as string));
       galleryData = JSON.parse(decodeURIComponent(base64.decode(gallery_data as string)));
-    } catch (e) {
-      console.log('error loading data', { e, media_metadata, gallery_data });
-      return { resolutions: null, captions: null };
+    } catch (error) {
+      console.log('error loading data', { error, media_metadata, gallery_data });
+      return { resolutions: undefined, captions: undefined };
     }
     const mediaIds = galleryData?.items.map((it) => it.media_id);
     // @ts-ignore
     const galeryWithAllResolutions = (mediaIds ?? []).map((mediaId) => metadata[mediaId].s);
     return {
       resolutions: galeryWithAllResolutions,
-      captions: (galleryData?.items ?? []).map((dt) => dt.caption ?? null),
+      captions: (galleryData?.items ?? []).map((dt) => dt.caption ?? undefined),
     };
   }, [gallery_data]);
 

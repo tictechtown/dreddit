@@ -5,26 +5,27 @@
  * and  ~superscript ~(superscript).
  */
 
-import { MarkdownIt } from '@ronradtke/react-native-markdown-display';
+import type { MarkdownIt } from '@ronradtke/react-native-markdown-display';
 import markdownitRegexp from './markdownRegex';
 
-type Options = {
+interface Options {
   superscriptParenthesized: boolean;
   superscript: boolean;
   subscriptParenthesized: boolean;
   // subscript: boolean;
-};
+}
 
 type Tags = Record<keyof Options, { regex: RegExp; name: string }>;
 
 export default function markdownItRedditSupsubscript(md: MarkdownIt, options: Options) {
-  if (!options)
+  if (!options) {
     options = {
       superscriptParenthesized: true,
       superscript: true,
       subscriptParenthesized: true,
       // subscript: true,
     };
+  }
 
   const tags: Tags = {
     superscriptParenthesized: {
@@ -52,7 +53,7 @@ export default function markdownItRedditSupsubscript(md: MarkdownIt, options: Op
   const ids = Object.keys(tags);
 
   const replacer = (tag: any) =>
-    function (match: any, _config: any, _pluginOptions: any, env: any) {
+    function replacer(match: any, _config: any, _pluginOptions: any, env: any) {
       md.disable('image').disable(ids, true);
       const html = md.renderInline(match, env);
       md.enable('image').enable(ids, true);
@@ -61,7 +62,9 @@ export default function markdownItRedditSupsubscript(md: MarkdownIt, options: Op
 
   ids.forEach((id) => {
     // @ts-ignore
-    if (!options[id]) return;
+    if (!options[id]) {
+      return;
+    }
     // @ts-ignore
     const tag = tags[id];
     md.use(markdownitRegexp, { name: id, regex: tag.regex, replace: replacer(tag.name) });

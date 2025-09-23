@@ -1,15 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StateCreator, create } from 'zustand';
+import type { StateCreator } from 'zustand';
+import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { SUBREDDITS } from './fixtures';
 
-export type SubredditFavorite = {
+export interface SubredditFavorite {
   id?: string;
   name: string;
   icon?: string | null;
   title?: string | null;
   description?: string | null;
-};
+}
 
 interface FavoriteState {
   favorites: SubredditFavorite[];
@@ -54,12 +55,12 @@ const createSettingsSlice: StateCreator<SettingsState> = (set) => ({
   setDataUsage: (entry) => set(() => ({ dataUsage: entry })),
 });
 
-type SavedPost = {
+interface SavedPost {
   kind: 't3';
   data: {
     id: string;
   };
-};
+}
 
 interface SavedPostState {
   savedPosts: SavedPost[];
@@ -171,6 +172,6 @@ export const useStore = create<State>()(
         }
         return persistedState as State;
       },
-    }
-  )
+    },
+  ),
 );

@@ -1,12 +1,13 @@
 import { Image } from 'expo-image';
 import { decode } from 'html-entities';
-import { Pressable, TextStyle, View, ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
+import { Pressable, View } from 'react-native';
 import type { FlairRichText, Post } from '@services/api';
-import { ColorPalette } from '@theme/colors';
+import type { ColorPalette } from '@theme/colors';
 import Typography from './Typography';
 import { Spacing } from '@theme/tokens';
 
-type Props = {
+interface Props {
   flair_text: string | null;
   flair_richtext: Post['data']['link_flair_richtext'];
   flair_background_color?: Post['data']['link_flair_background_color'];
@@ -17,7 +18,7 @@ type Props = {
   outlined?: boolean | undefined;
   theme: ColorPalette;
   onPress?: ((text: string) => void) | undefined;
-};
+}
 
 const PostFlairChip = (props: Props) => {
   const displayPin = props.pinned || props.stickied;
@@ -42,7 +43,7 @@ const PostFlairChip = (props: Props) => {
   }
 
   if (elementsToDisplay.length === 0) {
-    return null;
+    return;
   }
 
   const containerStyle: ViewStyle = props.outlined

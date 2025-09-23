@@ -3,7 +3,8 @@ import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import postCache from '@services/postCache';
-import { SubredditFavorite, useStore } from '../../services/store';
+import type { SubredditFavorite } from '../../services/store';
+import { useStore } from '../../services/store';
 import useTheme from '@services/theme/useTheme';
 import HomeItem from '@features/home/components/HomeItem';
 import SavedPostsFooter from '@features/home/components/SavedPostsFooter';
@@ -18,7 +19,7 @@ const HomePage = () => {
   useFocusEffect(
     useCallback(() => {
       postCache.clearAll();
-    }, [])
+    }, []),
   );
 
   const flatData = useMemo(() => {
@@ -38,7 +39,7 @@ const HomePage = () => {
         console.log('test', { favorite, potentialNewIcon });
       }
     },
-    [updateFavorite]
+    [updateFavorite],
   );
 
   return (

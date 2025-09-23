@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
-import Animated, { SharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import type { ViewStyle } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import type { SharedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import useTheme from '@services/theme/useTheme';
 
 function ProgressBarView({ progress }: { progress: SharedValue<number> }) {

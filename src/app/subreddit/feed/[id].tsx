@@ -1,4 +1,4 @@
-import { useLocalSearchParams, Stack, router } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -9,7 +9,8 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import { Post, RedditApi, SubReddit } from '@services/api';
+import type { Post, SubReddit } from '@services/api';
+import { RedditApi } from '@services/api';
 import { useStore } from '@services/store';
 import useTheme from '@services/theme/useTheme';
 import Icons from '@components/Icons';
@@ -25,14 +26,17 @@ import * as Haptics from 'expo-haptics';
 import useBackdrop from '@hooks/useBackdrop';
 import SortOptionsBottomSheet from '@features/post/modals/SortOptionsBottomSheet';
 
-type Props = { subreddit: string; icon: string | undefined | null };
+interface Props {
+  subreddit: string;
+  icon: string | undefined | null;
+}
 
 const keyExtractor = (item: Post, index: number) => `${item.data.id}.${index}`;
 
 const filterPosts = (
   posts: Post[] | undefined,
   blockedUsers: string[],
-  bannedSubreddits: string[]
+  bannedSubreddits: string[],
 ): Post[] => {
   const v = (posts ?? []).filter((p: Post) => {
     return (
@@ -43,13 +47,13 @@ const filterPosts = (
   return v;
 };
 
-type SortOrderProps = {
+interface SortOrderProps {
   sortOrder: string;
   onSortOrderChanged: (value: string) => void;
   flairs: string[];
   selectedFlair: string | null;
   onFlairTapped: (value: string) => void;
-};
+}
 
 const SortOrderView = (props: SortOrderProps) => {
   return (
@@ -72,16 +76,16 @@ const SubredditFeedPage = (props: Props) => {
   // hour, day, week, month, year, all
   const [topOrder, setTopOrder] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('all');
 
-  const [subredditData, setSubredditData] = useState<SubReddit['data'] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [subredditData, setSubredditData] = useState<SubReddit['data'] | null>(undefined);
+  const [error, setError] = useState<string | null>(undefined);
   // toasts
   const [displayUserBlockedToast, setDisplayUserBlockedToast] = useState(false);
   const [displaySubredditBannedToast, setDisplaySubredditBannedToast] = useState(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  const [after, setAfter] = useState<string | null>(null);
+  const [after, setAfter] = useState<string | null>(undefined);
   const [flairs] = useState<string[]>([]);
-  const [selectedFlair, setSelectedFlair] = useState<string | null>(null);
+  const [selectedFlair, setSelectedFlair] = useState<string | null>(undefined);
 
   const [loading, setLoading] = useState(false);
   const [refreshLoading, setRefreshLoading] = useState(false);
@@ -101,7 +105,7 @@ const SubredditFeedPage = (props: Props) => {
     ]);
 
   const savedPostIds: Record<string, boolean> = useMemo(() => {
-    const result = savedPosts.reduce(function (map: Record<string, boolean>, obj) {
+    const result = savedPosts.reduce(function result(map: Record<string, boolean>, obj) {
       map[obj.data.id] = true;
       return map;
     }, {});
@@ -125,7 +129,7 @@ const SubredditFeedPage = (props: Props) => {
 
   useEffect(() => {
     const goFetch = async () => {
-      setError(null);
+      setError(undefined);
       const data = await new RedditApi().getSubmissions(sortOrder, props.subreddit, {
         v: `${Date.now()}`,
         t: topOrder,
@@ -222,18 +226,18 @@ const SubredditFeedPage = (props: Props) => {
         />
       );
     },
-    [savedPosts, theme]
+    [savedPosts, theme],
   );
 
   const onFlairTapped = useCallback(
     (value: string) => {
       if (selectedFlair === value) {
-        setSelectedFlair(null);
+        setSelectedFlair(undefined);
       } else {
         setSelectedFlair(value);
       }
     },
-    [selectedFlair, setSelectedFlair]
+    [selectedFlair, setSelectedFlair],
   );
 
   const onSortOrderChanged = useCallback(
@@ -245,7 +249,7 @@ const SubredditFeedPage = (props: Props) => {
         Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
       }
     },
-    [setSortOrder]
+    [setSortOrder],
   );
 
   const filteredData = useMemo(() => {
@@ -280,7 +284,7 @@ const SubredditFeedPage = (props: Props) => {
         </Pressable>
       );
     },
-    [scrollToTop, props.subreddit]
+    [scrollToTop, props.subreddit],
   );
 
   const HeaderRight = useCallback(() => {
@@ -419,7 +423,7 @@ const SubredditFeedPage = (props: Props) => {
           {({ data }) =>
             data.type === 'sort' ? (
               <SortOptionsBottomSheet
-                currentSort={null}
+                currentSort={undefined}
                 onSortPressed={(value) => {
                   setTopOrder(value);
                   setSortOrder('top');

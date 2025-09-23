@@ -1,23 +1,24 @@
-import { useLocalSearchParams, Stack } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TextInput, View } from 'react-native';
-import { Comment, Post, RedditApi } from '@services/api';
+import type { Comment, Post } from '@services/api';
+import { RedditApi } from '@services/api';
 import useTheme from '@services/theme/useTheme';
 import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
 import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { ColorPalette } from '@theme/colors';
+import type { ColorPalette } from '@theme/colors';
 import FilterChip from '@components/FilterChip';
 import useBackdrop from '@hooks/useBackdrop';
 import SortOptionsBottomSheet from '@features/post/modals/SortOptionsBottomSheet';
 
-type Props = {
+interface Props {
   subreddit: string;
   initialQuery: string | null;
-};
+}
 
 type SearchResult = Post | Comment;
 
@@ -37,7 +38,7 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
 
   const [searchSort, setSearchSort] = useState<'relevance' | 'hot' | 'top' | 'new' | 'comments'>(
-    'new'
+    'new',
   );
 
   const [searchRange, setSearchRange] = useState<
@@ -57,7 +58,7 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
         const searchResults = await new RedditApi().searchSubmissions(
           initialQuery ? `${initialQuery} ${searchText}` : `${searchText} subreddit:${subreddit}`,
           subreddit as string,
-          { sort: searchSort, t: searchRange, restrict_sr: 'on', limit: '100' }
+          { sort: searchSort, t: searchRange, restrict_sr: 'on', limit: '100' },
         );
         console.log('search', searchResults);
         if (searchResults) {
@@ -77,7 +78,7 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
         const searchResults = await new RedditApi().searchSubmissions(
           initialQuery,
           subreddit as string,
-          { sort: searchSort, t: searchRange, restrict_sr: 'on' }
+          { sort: searchSort, t: searchRange, restrict_sr: 'on' },
         );
         if (searchResults) {
           setResults(searchResults.items);

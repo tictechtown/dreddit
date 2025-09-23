@@ -22,7 +22,7 @@ const isTimeoutValid = (timeout: number) =>
  * @param string var - user input url and timeout
  */
 export const validate = (url: string, timeout: number) => ({
-  url: isUrlValid(url) ? coerceUrl(url) : null,
+  url: isUrlValid(url) ? coerceUrl(url) : undefined,
   timeout: isTimeoutValid(timeout) ? timeout : 2000,
 });
 
@@ -113,8 +113,11 @@ export const isThisANonHTMLUrl = (url: string) => {
  */
 export const removeNestedUndefinedValues = (object: Record<string, any>) => {
   Object.entries(object).forEach(([key, value]) => {
-    if (value && typeof value === 'object') removeNestedUndefinedValues(value);
-    else if (value === undefined) delete object[key];
+    if (value && typeof value === 'object') {
+      removeNestedUndefinedValues(value);
+    } else if (value === undefined) {
+      delete object[key];
+    }
   });
   return object;
 };

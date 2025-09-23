@@ -2,9 +2,9 @@ import { router } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useCallback } from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import { Post } from '@services/api';
+import type { Post } from '@services/api';
 import postCache from '@services/postCache';
-import { ColorPalette } from '@theme/colors';
+import type { ColorPalette } from '@theme/colors';
 import CarouselView from '@components/CarouselView';
 import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
@@ -14,16 +14,16 @@ import PostContentPreview from './PostContentPreview';
 import PostFeedItemToolbar from './PostFeedItemToolbar';
 import useMediaPressCallback from '@hooks/useMediaPressCallback';
 import useGalleryData from '@hooks/useGalleryData';
-import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-type Props = {
+interface Props {
   post: Post;
   theme: ColorPalette;
   isSaved?: boolean;
   addToSavedPosts?: (post: Post) => void;
   removeFromSavedPosts?: (post: Post) => void;
   onMoreOptions?: (post: Post) => void;
-};
+}
 
 const PostFeedItem = ({
   post,
@@ -35,14 +35,14 @@ const PostFeedItem = ({
 }: Props) => {
   if (!post?.data) {
     console.log('post', post);
-    return null;
+    return;
   }
 
   const { width } = useWindowDimensions();
 
   const [maxGaleryResolutions, galleryCaptions] = useGalleryData(
     post.data.gallery_data,
-    post.data.media_metadata
+    post.data.media_metadata,
   );
 
   postCache.setCache(post.data.id, post);

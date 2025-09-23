@@ -4,17 +4,18 @@ import useTheme from '@services/theme/useTheme';
 import * as Application from 'expo-application';
 import { router } from 'expo-router';
 import { Pressable, View } from 'react-native';
-import { ColorPalette } from '@theme/colors';
-import Icons, { IconName } from '@components/Icons';
+import type { ColorPalette } from '@theme/colors';
+import type { IconName } from '@components/Icons';
+import Icons from '@components/Icons';
 import Typography from '@components/Typography';
 
-type RowProps = {
+interface RowProps {
   icon: IconName;
   title: string;
   supporting: string;
   theme: ColorPalette;
   onPress: () => void;
-};
+}
 
 const Row = ({ icon, title, supporting, theme, onPress }: RowProps) => {
   return (

@@ -2,7 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { Link, Stack, useFocusEffect } from 'expo-router';
 import { decode } from 'html-entities';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Keyboard,
@@ -12,23 +12,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Post, RedditApi, SubReddit, User } from '../../services/api';
-import useTheme from '../../services/theme/useTheme';
+import { Post, RedditApi, SubReddit, User } from '@services/api';
+import useTheme from '@services/theme/useTheme';
 import { ColorPalette } from '../../colors';
-import Icons from '../../components/Icons';
-import SubredditIcon, { defaultSubredditIcon } from '../../components/SubredditIcon';
-import Tabs from '../../components/Tabs';
-import Typography from '../../components/Typography';
+import Icons from '@components/Icons';
+import SubredditIcon, { defaultSubredditIcon } from '@components/SubredditIcon';
+import Tabs from '@components/Tabs';
+import Typography from '@components/Typography';
 // TODO
-import SubredditPostItemView from '../../features/subreddit/feed/components/PostFeedItem';
+import SubredditPostItemView from '@features/subreddit/feed/components/PostFeedItem';
 import { Spacing } from '../../tokens';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
-import PostDetailsSortOptions from '../../features/post/modals/PostDetailsSortOptions';
-import FilterChip from '../../components/FilterChip';
+import PostDetailsSortOptions from '@features/post/modals/PostDetailsSortOptions';
+import FilterChip from '@components/FilterChip';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import * as Haptics from 'expo-haptics';
 

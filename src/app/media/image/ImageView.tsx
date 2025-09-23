@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { PaletteDark } from '../../../colors';
-import Icons from '../../../components/Icons';
+import Icons from '@components/Icons';
 import { Spacing } from '../../../tokens';
 
 export default function ImageView({ uri, progress }: { uri: string; progress: any }) {

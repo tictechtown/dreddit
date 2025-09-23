@@ -7,3 +7,5 @@
 [] E2E tests with maestro
 [] Remove x86, x86_64 from building
 [] Redo download file on disk
+[] Make sure all scrims have same opacity
+[] Make sure all scrims cover the entire screen (header included)

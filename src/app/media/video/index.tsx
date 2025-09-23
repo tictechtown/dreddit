@@ -4,14 +4,14 @@ import { decode } from 'html-entities';
 import * as React from 'react';
 import { Text, TouchableNativeFeedback, View } from 'react-native';
 import base64 from 'react-native-base64';
-import { RedditVideo } from '../../../services/api';
+import { RedditVideo } from '@services/api';
 import { PaletteDark } from '../../../colors';
-import Icons from '../../../components/Icons';
+import Icons from '@components/Icons';
 import { Spacing } from '../../../tokens';
 import VideoPlayer from './VideoPlayer';
-import { extractMetaTags } from '../../../features/video/metadata';
-import Typography from '../../../components/Typography';
-import useTheme from '../../../services/theme/useTheme';
+import { extractMetaTags } from '@features/video/metadata';
+import Typography from '@components/Typography';
+import useTheme from '@services/theme/useTheme';
 
 type RedditVideoProps = { hls_url: string };
 

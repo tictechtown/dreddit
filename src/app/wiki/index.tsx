@@ -4,9 +4,9 @@ import { decode } from 'html-entities';
 import queryString from 'query-string';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { RedditApi, User } from '../../services/api';
-import useTheme from '../../services/theme/useTheme';
-import { markdownIt, markdownRenderRules, useMarkdownStyle } from '../../features/post/utils';
+import { RedditApi, User } from '@services/api';
+import useTheme from '@services/theme/useTheme';
+import { markdownIt, markdownRenderRules, useMarkdownStyle } from '@features/post/utils';
 import { Spacing } from '../../tokens';
 
 type Wikipage = {

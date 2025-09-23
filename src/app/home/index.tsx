@@ -2,13 +2,13 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import postCache from '../../services/postCache';
+import postCache from '@services/postCache';
 import { SubredditFavorite, useStore } from '../../services/store';
-import useTheme from '../../services/theme/useTheme';
-import HomeItem from '../../features/home/components/HomeItem';
-import SavedPostsFooter from '../../features/home/components/SavedPostsFooter';
-import SearchHeader from '../../features/home/components/SearchHeader';
-import { RedditApi } from '../../services/api';
+import useTheme from '@services/theme/useTheme';
+import HomeItem from '@features/home/components/HomeItem';
+import SavedPostsFooter from '@features/home/components/SavedPostsFooter';
+import SearchHeader from '@features/home/components/SearchHeader';
+import { RedditApi } from '@services/api';
 
 const HomePage = () => {
   const theme = useTheme();
@@ -54,7 +54,7 @@ const HomePage = () => {
             return (
               <Pressable
                 onPressIn={() => {
-                  router.push('features/settings');
+                  router.push('/settings');
                 }}>
                 <Ionicons name="settings-sharp" size={24} color={theme.onBackground} />
               </Pressable>

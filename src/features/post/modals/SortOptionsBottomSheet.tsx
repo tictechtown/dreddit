@@ -19,7 +19,7 @@ interface SortOptionProps<T extends string = string> {
   options: SortOption<T>[];
 }
 
-const PostDetailsSortOptions = <T extends string>({
+const SortOptionsBottomSheet = <T extends string>({
   currentSort,
   title,
   onSortPressed,
@@ -32,7 +32,7 @@ const PostDetailsSortOptions = <T extends string>({
     alignItems: 'center',
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: theme.surface,
+    borderColor: theme.surfaceContainerLow,
   };
 
   const selectedChoiceContainer = { borderRadius: 10, borderColor: theme.secondaryContainer };
@@ -43,7 +43,7 @@ const PostDetailsSortOptions = <T extends string>({
     <BottomSheetView
       style={{
         flex: 1,
-        backgroundColor: theme.surface,
+        backgroundColor: theme.surfaceContainerLow,
         paddingHorizontal: Spacing.s16,
         paddingBottom: Spacing.s32,
       }}>
@@ -69,4 +69,4 @@ const PostDetailsSortOptions = <T extends string>({
   );
 };
 
-export default PostDetailsSortOptions;
+export default SortOptionsBottomSheet;

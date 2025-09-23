@@ -1,11 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import postCache from '@services/postCache';
 
-import {
-  BottomSheetBackdrop,
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { router, Stack, useFocusEffect } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -27,11 +23,11 @@ import Typography from '@components/Typography';
 import { Spacing } from '@theme/tokens';
 import CommentItem from '@features/post/components/CommentItem';
 import PostDetailsHeader from '@features/post/components/PostDetailsHeader';
-import PostDetailsSortOptions from '@features/post/modals/PostDetailsSortOptions';
+import SortOptionsBottomSheet from '@features/post/modals/SortOptionsBottomSheet';
 import { flattenComments, getMaxPreview, mergeComments } from '@features/post/utils';
 import useMediaPressCallback from '@hooks/useMediaPressCallback';
 import * as Haptics from 'expo-haptics';
-import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import useBackdrop from '@hooks/useBackdrop';
 
 type Props = { postId: string; cachedPost?: Post | null };
 
@@ -254,12 +250,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
     );
   }, [refreshLoading, refreshData, theme]);
 
-  const renderBackdrop = useCallback(
-    (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
-    ),
-    []
-  );
+  const renderBackdrop = useBackdrop();
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.surface }}>
@@ -294,6 +285,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
                 <TouchableOpacity
                   onPressIn={async () => {
                     await Share.share({ message: queryData?.post?.data.url ?? '' });
+                    Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
                   }}
                   hitSlop={20}>
                   <Icons name="share" size={24} color={theme.onSurfaceVariant} />
@@ -337,33 +329,31 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
         contentContainerStyle={{ paddingBottom: 40 }}
       />
       {queryData.loading && <IndeterminateProgressBarView />}
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          index={0}
-          maxDynamicContentSize={600}
-          backgroundStyle={{ backgroundColor: theme.surface }}
-          backdropComponent={renderBackdrop}
-          enableDynamicSizing
-          handleStyle={{
-            backgroundColor: theme.surface,
-            borderTopLeftRadius: 14,
-            borderTopRightRadius: 14,
-          }}
-          handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
-          <PostDetailsSortOptions
-            currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
-            onSortPressed={onSortPressed}
-            options={[
-              { key: 'best', display: 'Best', icon: 'rocket' },
-              { key: 'top', display: 'Top', icon: 'leaderboard' },
-              { key: 'new', display: 'New', icon: 'access-time' },
-              { key: 'controversial', display: 'Controversial', icon: 'question-answer' },
-              { key: 'random', display: 'Random', icon: 'shuffle' },
-            ]}
-          />
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        maxDynamicContentSize={600}
+        backgroundStyle={{ backgroundColor: theme.surfaceContainerLow }}
+        backdropComponent={renderBackdrop}
+        enableDynamicSizing
+        handleStyle={{
+          backgroundColor: theme.surfaceContainerLow,
+          borderTopLeftRadius: 28,
+          borderTopRightRadius: 28,
+        }}
+        handleIndicatorStyle={{ backgroundColor: theme.onSurfaceVariant }}>
+        <SortOptionsBottomSheet
+          currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
+          onSortPressed={onSortPressed}
+          options={[
+            { key: 'best', display: 'Best', icon: 'rocket' },
+            { key: 'top', display: 'Top', icon: 'leaderboard' },
+            { key: 'new', display: 'New', icon: 'access-time' },
+            { key: 'controversial', display: 'Controversial', icon: 'question-answer' },
+            { key: 'random', display: 'Random', icon: 'shuffle' },
+          ]}
+        />
+      </BottomSheetModal>
     </View>
   );
 };

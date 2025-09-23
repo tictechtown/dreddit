@@ -72,6 +72,12 @@ const styles = StyleSheet.create({
     lineHeight: 36,
     fontWeight: '400',
   },
+  headlineSmall: {
+    fontSize: 24,
+    lineHeight: 32,
+    fontWeight: '400',
+  },
+
   titleLarge: {
     fontSize: 22,
     lineHeight: 24,

@@ -1,22 +1,20 @@
-import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
+import { Directory, File, Paths } from 'expo-file-system';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { decode } from 'html-entities';
 import * as React from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { PaletteDark } from '@theme/colors';
 import Icons from '@components/Icons';
 import ProgressBarView from '@components/ProgressBarView';
 import ToastView from '@components/ToastView';
 import ImageView from './ImageView';
+import * as Haptics from 'expo-haptics';
 
 export default function Page() {
   const { title, uri } = useLocalSearchParams();
   const progress = useSharedValue(0);
   const [displayToast, setDisplayToast] = React.useState(false);
-
-  const filename = (uri as string).split('/').pop();
 
   console.log('showing', uri);
 
@@ -30,37 +28,24 @@ export default function Page() {
           },
           headerRight: () => {
             return (
-              <Icons
+              <TouchableOpacity
                 onPressIn={async () => {
-                  const result = await FileSystem.downloadAsync(
-                    uri as string,
-                    `${FileSystem.Paths.document?.uri ?? ''}${filename}`
-                  );
-
-                  // Log the download result
-                  console.log(result);
-
-                  const { status } = await MediaLibrary.requestPermissionsAsync(true);
-                  if (status === 'granted') {
-                    try {
-                      const asset = await MediaLibrary.createAssetAsync(result.uri);
-                      const album = await MediaLibrary.getAlbumAsync('Dreddit');
-                      if (album == null) {
-                        await MediaLibrary.createAlbumAsync('Dreddit', asset, false);
-                      } else {
-                        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
-                      }
-                      setDisplayToast(true);
-                    } catch (err) {
-                      console.log('Save err: ', err);
-                    }
-                  } else if (status === 'denied') {
-                    alert('please allow permissions to download');
+                  const destination = new Directory(Paths.document, 'downloads');
+                  try {
+                    destination.create({ idempotent: true });
+                    const output = await File.downloadFileAsync(uri as string, destination);
+                    console.log(output.exists); // true
+                    console.log(output.uri); // path to the downloaded file, e.g., '${cacheDirectory}/pdfs/sample.pdf'
+                    setDisplayToast(true);
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                  } catch (error) {
+                    console.error(error);
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
                   }
                 }}
-                name="download"
-                size={24}
-                color={PaletteDark.onSurface}></Icons>
+                hitSlop={20}>
+                <Icons name="download" size={24} color={PaletteDark.onSurface}></Icons>
+              </TouchableOpacity>
             );
           },
         }}

@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ExtendedMaterial3Theme, ThemeContext } from '@services/theme/theme';
 import useColorScheme from '@services/theme/useColorScheme';
 import { Edge, SafeAreaView } from 'react-native-safe-area-context';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 type RNScheme = {
   dark: boolean;
@@ -89,19 +90,21 @@ export default function Layout() {
       {/* @ts-ignore */}
       <ThemeContext.Provider value={schemes[color ?? 'light']}>
         <ThemeProvider value={rnScheme}>
-          <SafeAreaView
-            edges={EDGES}
-            style={{ flex: 1, backgroundColor: schemes[color ?? 'light'].background }}>
-            <Stack
-              screenOptions={{
-                headerStyle: { backgroundColor: schemes[color ?? 'light'].surface },
-                // headerBackTitleVisible: false,
-                headerShadowVisible: false,
-                headerTitleStyle: { color: schemes[color ?? 'light'].onSurface },
-                headerTintColor: schemes[color ?? 'light'].onSurface,
-              }}
-            />
-          </SafeAreaView>
+          <BottomSheetModalProvider>
+            <SafeAreaView
+              edges={EDGES}
+              style={{ flex: 1, backgroundColor: schemes[color ?? 'light'].background }}>
+              <Stack
+                screenOptions={{
+                  headerStyle: { backgroundColor: schemes[color ?? 'light'].surface },
+                  // headerBackTitleVisible: false,
+                  headerShadowVisible: false,
+                  headerTitleStyle: { color: schemes[color ?? 'light'].onSurface },
+                  headerTintColor: schemes[color ?? 'light'].onSurface,
+                }}
+              />
+            </SafeAreaView>
+          </BottomSheetModalProvider>
         </ThemeProvider>
       </ThemeContext.Provider>
     </GestureHandlerRootView>

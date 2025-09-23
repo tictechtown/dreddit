@@ -1,0 +1,377 @@
+import { useLocalSearchParams } from 'expo-router';
+import postCache from '@services/postCache';
+
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
+import { router, Stack, useFocusEffect } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  BackHandler,
+  FlatList,
+  RefreshControl,
+  Share,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Comment, Post, RedditApi, RedditMediaMedata } from '@services/api';
+import { useStore } from '@services/store';
+import useTheme from '@services/theme/useTheme';
+import Icons from '@components/Icons';
+import IndeterminateProgressBarView from '@components/IndeterminateProgressBarView';
+import Typography from '@components/Typography';
+import { Spacing } from '@theme/tokens';
+import CommentItem from '@features/post/components/CommentItem';
+import PostDetailsHeader from '@features/post/components/PostDetailsHeader';
+import PostDetailsSortOptions from '@features/post/modals/PostDetailsSortOptions';
+import { flattenComments, getMaxPreview, mergeComments } from '@features/post/utils';
+import useMediaPressCallback from '@hooks/useMediaPressCallback';
+import * as Haptics from 'expo-haptics';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+
+type Props = { postId: string; cachedPost?: Post | null };
+
+type CommentsAndPost = {
+  comments: Comment[]; // flat list, no replies
+  rawComments: Comment[];
+  post: Post | undefined | null;
+  cached?: boolean;
+  loading?: boolean;
+};
+
+const COMMENT_LIMIT = '100';
+
+const keyExtractor = (item: Comment) => item.data.id;
+
+const PostDetailsPage = ({ postId, cachedPost }: Props) => {
+  const [queryData, setQueryData] = useState<CommentsAndPost>({
+    comments: [],
+    rawComments: [],
+    post: cachedPost,
+    cached: true,
+    loading: true,
+  });
+
+  const theme = useTheme();
+  const [sortOrder, setSortOrder] = useState<string | null>(null);
+  const [refreshLoading, setRefreshLoading] = useState(false);
+  const [showMediaItem, setShowMediaItem] = useState<RedditMediaMedata | null>(null);
+
+  const [savedPosts, addToSavedPosts, removeFromSavedPosts] = useStore((state) => [
+    state.savedPosts,
+    state.addToSavedPosts,
+    state.removeFromSavedPosts,
+  ]);
+
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const flatListRef = useRef<FlatList>(null);
+
+  // Android: handle back button when media is displayed
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (showMediaItem) {
+          setShowMediaItem(null);
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => subscription.remove();
+    }, [showMediaItem, setShowMediaItem])
+  );
+
+  useEffect(() => {
+    const goFetch = async () => {
+      const searchParams: {
+        limit: string;
+        include_over_18: string;
+        sort?: string;
+        threaded: string;
+      } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false' };
+      if (sortOrder !== null) {
+        searchParams['sort'] = sortOrder;
+      }
+
+      const data = await new RedditApi().getSubmissionComments(postId, searchParams);
+      // TODO, do something better
+      if (data) {
+        setQueryData({
+          comments: flattenComments(data.comments),
+          rawComments: data.comments,
+          post: data.submission,
+          cached: false,
+        });
+      }
+    };
+    goFetch();
+  }, [postId, sortOrder]);
+
+  const _onHeaderPressed = useCallback(() => {
+    if (queryData.post) {
+      WebBrowser.openBrowserAsync(queryData.post.data.url.replaceAll('&amp;', '&'));
+    }
+  }, [queryData.post?.data.id]);
+
+  const _onMediaHeaderPressed = useMediaPressCallback(queryData.post, router);
+
+  const _onChangeSort = () => {
+    bottomSheetModalRef.current?.present();
+    Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Tap);
+  };
+
+  const Header = useCallback(() => {
+    return (
+      <PostDetailsHeader
+        post={queryData.post ?? null}
+        forcedSortOrder={sortOrder}
+        onMediaPress={_onMediaHeaderPressed}
+        onChangeSort={_onChangeSort}
+        theme={theme}
+      />
+    );
+  }, [queryData.post?.data.id, getMaxPreview(queryData.post)?.url, sortOrder, theme]);
+
+  const onSortPressed = useCallback((newChoice: string) => {
+    setSortOrder(newChoice);
+    bottomSheetModalRef.current?.close();
+  }, []);
+
+  const refreshData = useCallback(async () => {
+    setRefreshLoading(true);
+
+    const searchParams: {
+      limit: string;
+      include_over_18: string;
+      sort?: string;
+      v?: string;
+      threaded: string;
+    } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false', v: `${Date.now()}` };
+    if (sortOrder !== null) {
+      searchParams['sort'] = sortOrder;
+    }
+
+    const data = await new RedditApi().getSubmissionComments(postId, searchParams);
+    if (data) {
+      setQueryData({
+        comments: flattenComments(data.comments),
+        rawComments: data.comments,
+        post: data.submission,
+        cached: false,
+      });
+    }
+
+    // scroll to top
+    flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+    setRefreshLoading(false);
+  }, []);
+
+  const displayMediaItem = useCallback((mediaItem: RedditMediaMedata) => {
+    const mediadSource = (mediaItem.s.gif ?? mediaItem.s.u).replaceAll('&amp;', '&');
+    const href = { pathname: 'media/image', params: { uri: mediadSource, title: '' } };
+    router.push(href);
+  }, []);
+
+  const fetchMoreComments = useCallback(async (commentId: string, childrenIds: string[]) => {
+    const searchParams: {
+      limit: string;
+      include_over_18: string;
+      sort?: string;
+      threaded: string;
+      comment: string;
+      depth: string;
+    } = { limit: '25', include_over_18: 'true', threaded: 'false', comment: commentId, depth: '0' };
+    if (sortOrder !== null) {
+      searchParams['sort'] = sortOrder;
+    }
+
+    const api = new RedditApi();
+    if (childrenIds.length < 2) {
+      const data = await api.getSubmissionComments(postId, searchParams);
+      // TODO, do something better
+      if (data) {
+        setQueryData((oldQuery) => ({
+          comments: mergeComments(oldQuery.comments, data.comments),
+          rawComments: oldQuery.comments,
+          post: data.submission,
+          cached: false,
+        }));
+      }
+    } else {
+      // TODO - we should keep the "more comments" if we don't load all the comments
+      // so ()
+      const promises = childrenIds
+        .slice(0, 25)
+        .map((cId) => api.getSubmissionComments(postId, { ...searchParams, comment: cId }));
+      const allData = await Promise.all(promises);
+      const data = allData.reduce(
+        (prevValue, currentValue) => {
+          if (prevValue?.submission === null) {
+            prevValue.submission = currentValue?.submission;
+          }
+          prevValue?.comments.push(currentValue?.comments);
+          return prevValue;
+        },
+        { comments: [], submission: null }
+      ) ?? { comments: [], submission: null };
+      data.comments = data?.comments.flat();
+      setQueryData((oldQuery) => ({
+        comments: mergeComments(oldQuery.comments, data.comments),
+        rawComments: oldQuery.comments,
+        post: data.submission,
+        cached: false,
+      }));
+    }
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Comment }) => (
+      <CommentItem
+        comment={item}
+        showGif={displayMediaItem}
+        fetchMoreComments={fetchMoreComments}
+        theme={theme}
+      />
+    ),
+    [displayMediaItem, fetchMoreComments, theme]
+  );
+
+  const refreshControl = useMemo(() => {
+    return (
+      <RefreshControl
+        refreshing={refreshLoading}
+        onRefresh={refreshData}
+        colors={[theme.primary]}
+        progressBackgroundColor={theme.background}
+      />
+    );
+  }, [refreshLoading, refreshData, theme]);
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetDefaultBackdropProps) => (
+      <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
+    ),
+    []
+  );
+
+  return (
+    <View style={{ flex: 1, backgroundColor: theme.surface }}>
+      <Stack.Screen
+        options={{
+          title: queryData.post?.data.subreddit_name_prefixed ?? '',
+          headerRight: () => {
+            const isSaved = !!savedPosts.find((sP) => sP.data.id === queryData.post?.data.id);
+
+            const toggleSavedPost = () => {
+              if (queryData.post) {
+                const post = savedPosts.find((sP) => sP.data.id === queryData.post?.data.id);
+                if (post) {
+                  removeFromSavedPosts(post);
+                } else {
+                  addToSavedPosts(queryData.post);
+                }
+              }
+            };
+
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  columnGap: 8,
+                }}>
+                <TouchableOpacity onPressIn={_onHeaderPressed} hitSlop={20}>
+                  <Icons name="open-in-new" size={24} color={theme.onSurfaceVariant} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPressIn={async () => {
+                    await Share.share({ message: queryData?.post?.data.url ?? '' });
+                  }}
+                  hitSlop={20}>
+                  <Icons name="share" size={24} color={theme.onSurfaceVariant} />
+                </TouchableOpacity>
+                <TouchableNativeFeedback
+                  disabled={!queryData}
+                  hitSlop={5}
+                  onPressIn={toggleSavedPost}
+                  background={TouchableNativeFeedback.Ripple(theme.surfaceVariant, true)}>
+                  <View>
+                    <Icons
+                      name={isSaved ? 'bookmark' : 'bookmark-outline'}
+                      size={24}
+                      color={isSaved ? theme.primary : theme.onBackground}
+                    />
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+            );
+          },
+        }}
+      />
+      <FlatList
+        ref={flatListRef}
+        data={queryData.comments}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        ListHeaderComponent={Header}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={() => {
+          if (queryData.loading) {
+            return null;
+          }
+          return (
+            <View style={{ marginHorizontal: Spacing.s12 }}>
+              <Typography variant="bodyMedium">No comments yet</Typography>
+            </View>
+          );
+        }}
+        refreshControl={refreshControl}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      />
+      {queryData.loading && <IndeterminateProgressBarView />}
+      <BottomSheetModalProvider>
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={0}
+          maxDynamicContentSize={600}
+          backgroundStyle={{ backgroundColor: theme.surface }}
+          backdropComponent={renderBackdrop}
+          enableDynamicSizing
+          handleStyle={{
+            backgroundColor: theme.surface,
+            borderTopLeftRadius: 14,
+            borderTopRightRadius: 14,
+          }}
+          handleIndicatorStyle={{ backgroundColor: theme.onSurface }}>
+          <PostDetailsSortOptions
+            currentSort={sortOrder ?? queryData.post?.data.suggested_sort ?? 'best'}
+            onSortPressed={onSortPressed}
+            options={[
+              { key: 'best', display: 'Best', icon: 'rocket' },
+              { key: 'top', display: 'Top', icon: 'leaderboard' },
+              { key: 'new', display: 'New', icon: 'access-time' },
+              { key: 'controversial', display: 'Controversial', icon: 'question-answer' },
+              { key: 'random', display: 'Random', icon: 'shuffle' },
+            ]}
+          />
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
+    </View>
+  );
+};
+
+export default function Page() {
+  const { postid } = useLocalSearchParams();
+
+  const cachedPost = postCache.getCache(postid as string);
+  console.log('showing page', { postid });
+  return <PostDetailsPage postId={postid as string} cachedPost={cachedPost as Post | null} />;
+}

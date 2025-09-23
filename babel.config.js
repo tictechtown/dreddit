@@ -2,6 +2,22 @@ module.exports = function (api) {
   api.cache(true);
   return {
     presets: ['babel-preset-expo'],
-    plugins: ['react-native-worklets/plugin'],
+    plugins: [
+      [
+        'module-resolver',
+        {
+          root: ['./src'],
+          alias: {
+            '@components': './src/components',
+            '@features': './src/features',
+            '@services': './src/services',
+            '@hooks': './src/hooks',
+            '@utils': './src/utils',
+            '@theme': './src/theme',
+          },
+        },
+      ],
+      'react-native-worklets/plugin',
+    ],
   };
 };

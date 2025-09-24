@@ -1,0 +1,5 @@
+appId: com.tictechtown.app.dreddit.dev
+---
+- launchApp
+- assertVisible: 'Home'
+- assertVisible: 'Saved posts'

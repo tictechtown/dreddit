@@ -6,6 +6,8 @@
 [x] Make sure all scrims have same opacity
 [x] Make sure all scrims cover the entire screen (header included)
 [x] Oxlint config
+[x] Update from expo-av to expo-video
+[] VideoPlayer, add spring animation for forward/rewind and toolbar visibility
 [] Start using rnui for activity indicator and slider
 [] Profile app
 [] E2E tests with maestro

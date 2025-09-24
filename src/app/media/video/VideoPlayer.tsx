@@ -39,13 +39,13 @@ function formatDurationForDisplay(duration_s: number) {
 }
 
 // Spring Animation
-const FAST_SEEK_BASE_SCALE = 0.92;
-const FAST_SEEK_PEAK_SCALE = 1.08;
+const FAST_SEEK_BASE_SCALE = 0.9;
+const FAST_SEEK_PEAK_SCALE = 1.25;
 const FAST_SEEK_FADE_IN_DURATION = 120;
 const FAST_SEEK_FADE_OUT_DURATION = 220;
 const FAST_SEEK_VISIBLE_DELAY = 450;
-const FAST_SEEK_SPRING_IN = { damping: 10, stiffness: 260, mass: 0.6 };
-const FAST_SEEK_SPRING_OUT = { damping: 20, stiffness: 220, mass: 0.6 };
+const FAST_SEEK_SPRING_IN = { damping: 10, stiffness: 800, mass: 1, velocity: 1 };
+const FAST_SEEK_SPRING_OUT = { damping: 20, stiffness: 220, mass: 1, velocity: 1 };
 
 type Props = Omit<VideoViewProps, 'player'> & {
   source: VideoSource;
@@ -100,7 +100,6 @@ const VideoPlayer = (props: Props) => {
 
   const fastForwardFeedbackStyle = useAnimatedStyle(() => {
     return {
-      flex: 1,
       opacity: fastForwardOpacityValue.value,
       transform: [{ scale: fastForwardScaleValue.value }],
     };
@@ -108,7 +107,6 @@ const VideoPlayer = (props: Props) => {
 
   const fastRewindFeedbackStyle = useAnimatedStyle(() => {
     return {
-      flex: 1,
       opacity: fastRewindOpacityValue.value,
       transform: [{ scale: fastRewindScaleValue.value }],
     };
@@ -184,7 +182,7 @@ const VideoPlayer = (props: Props) => {
       opacityValue.value = withSequence(
         withTiming(1, { duration: FAST_SEEK_FADE_IN_DURATION }),
         withDelay(
-          FAST_SEEK_VISIBLE_DELAY,
+          FAST_SEEK_VISIBLE_DELAY * 2,
           withTiming(0, { duration: FAST_SEEK_FADE_OUT_DURATION }),
         ),
       );
@@ -268,8 +266,8 @@ const VideoPlayer = (props: Props) => {
               style={{
                 position: 'absolute',
                 left: 0,
+                top: 0,
                 bottom: 0,
-                height: '55%',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -279,7 +277,6 @@ const VideoPlayer = (props: Props) => {
                     marginLeft: 16,
                     backgroundColor: theme.secondaryContainer,
                     padding: 24,
-                    paddingHorizontal: 24,
                     borderRadius: 48,
                     alignItems: 'center',
                   }}>
@@ -293,8 +290,8 @@ const VideoPlayer = (props: Props) => {
               style={{
                 position: 'absolute',
                 right: 0,
+                top: 0,
                 bottom: 0,
-                height: '55%',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -304,7 +301,6 @@ const VideoPlayer = (props: Props) => {
                     marginRight: 16,
                     backgroundColor: theme.secondaryContainer,
                     padding: 24,
-                    paddingHorizontal: 24,
                     borderRadius: 48,
                     alignItems: 'center',
                   }}>

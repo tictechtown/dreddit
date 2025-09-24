@@ -114,7 +114,7 @@ export default function Page() {
           </View>
         </View>
       )}
-      {videoData && (
+      {videoData && videoData.hls_url && (
         <VideoPlayer
           style={{ height: '100%', width: '100%', flex: 1 }}
           source={{ uri: videoData.hls_url }}

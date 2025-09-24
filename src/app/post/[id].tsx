@@ -96,7 +96,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
         sort?: string;
         threaded: string;
       } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false' };
-      if (sortOrder !== null) {
+      if (sortOrder !== undefined) {
         searchParams['sort'] = sortOrder;
       }
 
@@ -154,7 +154,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
       v?: string;
       threaded: string;
     } = { limit: COMMENT_LIMIT, include_over_18: 'true', threaded: 'false', v: `${Date.now()}` };
-    if (sortOrder !== null) {
+    if (sortOrder !== undefined) {
       searchParams['sort'] = sortOrder;
     }
 
@@ -188,7 +188,7 @@ const PostDetailsPage = ({ postId, cachedPost }: Props) => {
       comment: string;
       depth: string;
     } = { limit: '25', include_over_18: 'true', threaded: 'false', comment: commentId, depth: '0' };
-    if (sortOrder !== null) {
+    if (sortOrder !== undefined) {
       searchParams['sort'] = sortOrder;
     }
 

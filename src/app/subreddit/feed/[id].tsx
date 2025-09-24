@@ -391,7 +391,7 @@ const SubredditFeedPage = (props: Props) => {
           </View>
         )}
 
-        {error !== null && (
+        {!!error && (
           <View
             style={{
               flex: 5,

@@ -1,5 +1,4 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import Slider from '@react-native-community/slider';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -21,22 +20,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useStore } from '@services/store';
 import Icons from '@components/Icons';
-import Typography from '@components/Typography';
 import { useKeepAwake } from 'expo-keep-awake';
 import { useVideoPlayer, VideoSource, VideoView, VideoViewProps } from 'expo-video';
 import { useEvent } from 'expo';
 import useTheme from '@services/theme/useTheme';
-
-function formatDurationForDisplay(duration_s: number) {
-  if (!Number.isFinite(duration_s)) {
-    return '--:--';
-  }
-  const totalSeconds = duration_s;
-  const seconds = String(Math.floor(totalSeconds % 60));
-  const minutes = String(Math.floor(totalSeconds / 60));
-
-  return minutes.padStart(1, '0') + ':' + seconds.padStart(2, '0');
-}
+import VideoPlayerTiming from './VideoPlayerTiming';
+import VideoPlayerSlider from './VideoPlayerSlider';
 
 // Spring Animation
 const FAST_SEEK_BASE_SCALE = 0.9;
@@ -73,12 +62,6 @@ const VideoPlayer = (props: Props) => {
 
   // Events
   const { status, error } = useEvent(player, 'statusChange', { status: player.status });
-  const { currentTime } = useEvent(player, 'timeUpdate', {
-    currentTime: 0,
-    currentLiveTimestamp: 0,
-    currentOffsetFromLive: 0,
-    bufferedPosition: 0,
-  });
   const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
 
   // Refs
@@ -215,9 +198,11 @@ const VideoPlayer = (props: Props) => {
     return <></>;
   }
 
+  console.log('status', status, player.duration);
+
   return (
     <>
-      {status === 'loading' && (
+      {status === 'loading' && player.duration === 0 && (
         <View
           style={{
             backgroundColor: theme.scrim,
@@ -375,18 +360,7 @@ const VideoPlayer = (props: Props) => {
                     />
                   </View>
                   {/* Timing */}
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <Typography variant="bodyMedium" style={{ color: theme.onSurface }}>
-                      {formatDurationForDisplay(currentTime)}
-                      <Typography variant="bodyMedium" style={{ color: theme.onSurfaceVariant }}>
-                        / {formatDurationForDisplay(player.duration)}
-                      </Typography>
-                    </Typography>
-                  </View>
+                  <VideoPlayerTiming player={player} />
 
                   <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
                     {/* Mute Button */}
@@ -420,24 +394,7 @@ const VideoPlayer = (props: Props) => {
                 </View>
 
                 {/* Slider */}
-                <Slider
-                  style={{
-                    flex: 1,
-                    width: '100%',
-                    height: 40,
-                    borderRadius: 2,
-                  }}
-                  tapToSeek={true}
-                  minimumTrackTintColor={theme.primary}
-                  maximumTrackTintColor={theme.secondaryContainer}
-                  thumbTintColor={theme.primary}
-                  value={player.duration ? currentTime / player.duration : 0}
-                  onSlidingComplete={async (e) => {
-                    if (Number.isFinite(player.duration)) {
-                      player.currentTime = e * player.duration;
-                    }
-                  }}
-                />
+                <VideoPlayerSlider player={player} />
               </View>
             </Animated.View>
           </View>

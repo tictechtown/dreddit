@@ -2,12 +2,12 @@
 [x] Start using react-native-haptic-feedback
 [x] Add GH workflow to build the android app and store the artifact
 [x] Remove x86, x86_64 from building
-[x] Redo download file on disk
+[] Redo download file on disk for pictures. It should save it to Downloads folder
 [x] Make sure all scrims have same opacity
 [x] Make sure all scrims cover the entire screen (header included)
 [x] Oxlint config
 [x] Update from expo-av to expo-video
-[] VideoPlayer, add spring animation for forward/rewind and toolbar visibility
+[x] VideoPlayer, add spring animation for forward/rewind and toolbar visibility
 [] Start using rnui for activity indicator and slider
 [] Profile app
 [] E2E tests with maestro

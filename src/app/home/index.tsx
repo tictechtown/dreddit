@@ -54,14 +54,16 @@ const HomePage = () => {
           headerRight: () => {
             return (
               <View style={{ flexDirection: 'row', gap: 16 }}>
-                <Pressable
-                  onPressIn={() => {
-                    router.push('/settings');
-                  }}>
-                  <Link style={{ color: theme.onBackground }} href="/storybook">
-                    Open Storybook
-                  </Link>
-                </Pressable>
+                {__DEV__ && (
+                  <Pressable
+                    onPressIn={() => {
+                      router.push('/settings');
+                    }}>
+                    <Link style={{ color: theme.onBackground }} href="/storybook">
+                      Open Storybook
+                    </Link>
+                  </Pressable>
+                )}
                 <Pressable
                   onPressIn={() => {
                     router.push('/settings');

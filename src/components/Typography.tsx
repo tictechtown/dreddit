@@ -131,39 +131,39 @@ const styles = StyleSheet.create({
 
   titleLarge: {
     fontSize: 22,
-    lineHeight: 28,
+    lineHeight: 24,
     letterSpacing: 0,
     fontWeight: '400',
   },
   titleLargeEmphasized: {
     fontSize: 22,
-    lineHeight: 28,
+    lineHeight: 24,
     letterSpacing: 0,
     fontWeight: '500',
   },
 
   titleMedium: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 18,
     letterSpacing: 0.15,
     fontWeight: '500',
   },
   titleMediumEmphasized: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 18,
     letterSpacing: 0.15,
     fontWeight: '700',
   },
 
   titleSmall: {
     fontSize: 14,
-    lineHeight: 20,
+    lineHeight: 18,
     letterSpacing: 0.1,
     fontWeight: '500',
   },
   titleSmallEmphasized: {
     fontSize: 14,
-    lineHeight: 20,
+    lineHeight: 18,
     letterSpacing: 0.1,
     fontWeight: '700',
   },

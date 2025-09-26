@@ -173,7 +173,6 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
                 }}>
                 <FilterChip
                   value={searchSort}
-                  allValues={['relevance', 'hot', 'top', 'new', 'comments']}
                   onChange={() => {
                     inputRef.current?.blur();
                     bottomSheetModalRef.current?.present('sort');
@@ -181,7 +180,6 @@ const SubredditSearchPage = ({ subreddit, initialQuery }: Props) => {
                 />
                 <FilterChip
                   value={searchRange}
-                  allValues={['hour', 'day', 'week', 'month', 'year', 'all']}
                   onChange={() => {
                     inputRef.current?.blur();
                     bottomSheetModalRef.current?.present('range');

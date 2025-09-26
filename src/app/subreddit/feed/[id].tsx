@@ -25,13 +25,7 @@ import PostFeedItem from '@features/subreddit/feed/components/PostFeedItem';
 import * as Haptics from 'expo-haptics';
 import useBackdrop from '@hooks/useBackdrop';
 import SortOptionsBottomSheet from '@features/post/modals/SortOptionsBottomSheet';
-import Animated, {
-  cancelAnimation,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withSpring,
-} from 'react-native-reanimated';
+import FeedLoadingIndicator from '@features/subreddit/feed/components/FeedLoadingIndicator';
 
 interface Props {
   subreddit: string;
@@ -75,45 +69,6 @@ const SortOrderView = (props: SortOrderProps) => {
 };
 
 const SortOrderViewMemo = React.memo(SortOrderView);
-
-interface PulsingSubredditIconProps {
-  size: number;
-  icon: string | undefined | null;
-  nsfw: boolean;
-}
-
-const MATERIAL_YOU_EXPRESSIVE_SPRING = { damping: 12, stiffness: 260, mass: 1.6 } as const; // Material You expressive spring
-const MATERIAL_YOU_EXPRESSIVE_SCALE_BASE = 1;
-const MATERIAL_YOU_EXPRESSIVE_SCALE_PEAK = 1.2;
-
-const PulsingSubredditIcon = (props: PulsingSubredditIconProps) => {
-  const scale = useSharedValue(MATERIAL_YOU_EXPRESSIVE_SCALE_BASE);
-
-  useEffect(() => {
-    scale.value = withRepeat(
-      withSpring(MATERIAL_YOU_EXPRESSIVE_SCALE_PEAK, MATERIAL_YOU_EXPRESSIVE_SPRING),
-      -1,
-      false,
-    );
-
-    return () => {
-      cancelAnimation(scale);
-      scale.value = MATERIAL_YOU_EXPRESSIVE_SCALE_BASE;
-    };
-  }, [scale]);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scale.value }],
-    };
-  }, [scale]);
-
-  return (
-    <Animated.View style={animatedStyle}>
-      <SubredditIcon size={props.size} icon={props.icon} nsfw={props.nsfw} />
-    </Animated.View>
-  );
-};
 
 const SubredditFeedPage = (props: Props) => {
   const theme = useTheme();
@@ -420,23 +375,11 @@ const SubredditFeedPage = (props: Props) => {
         />
 
         {posts.length === 0 && (
-          <View
-            style={{
-              flex: 5,
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              paddingHorizontal: 20,
-              gap: 32,
-            }}>
-            <Typography
-              variant="displayMediumEmphasized"
-              style={{ color: theme.onBackground, textAlign: 'center' }}
-              onPress={scrollToTop}>
-              r/{props.subreddit}
-            </Typography>
-
-            <PulsingSubredditIcon size={200} icon={props.icon} nsfw={false} />
-          </View>
+          <FeedLoadingIndicator
+            onPress={scrollToTop}
+            icon={props.icon}
+            subreddit={props.subreddit}
+          />
         )}
 
         {!!error && (

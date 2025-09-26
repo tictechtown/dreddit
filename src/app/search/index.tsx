@@ -359,7 +359,6 @@ const HomeSearchContent = ({
               }}>
               <FilterChip
                 value={searchSort}
-                allValues={['relevance', 'hot', 'top', 'new', 'comments']}
                 onChange={() => {
                   onFocusOut();
                   bottomSheetModalRef.current?.present('sort');
@@ -368,7 +367,6 @@ const HomeSearchContent = ({
               />
               <FilterChip
                 value={searchRange}
-                allValues={['hour', 'day', 'week', 'month', 'year', 'all']}
                 onChange={() => {
                   onFocusOut();
                   bottomSheetModalRef.current?.present('range');

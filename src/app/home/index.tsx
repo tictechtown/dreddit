@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Stack, useFocusEffect, useRouter } from 'expo-router';
+import { Link, Stack, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import postCache from '@services/postCache';
@@ -53,12 +53,22 @@ const HomePage = () => {
           title: 'Home',
           headerRight: () => {
             return (
-              <Pressable
-                onPressIn={() => {
-                  router.push('/settings');
-                }}>
-                <Ionicons name="settings-sharp" size={24} color={theme.onBackground} />
-              </Pressable>
+              <View style={{ flexDirection: 'row', gap: 16 }}>
+                <Pressable
+                  onPressIn={() => {
+                    router.push('/settings');
+                  }}>
+                  <Link style={{ color: theme.onBackground }} href="/storybook">
+                    Open Storybook
+                  </Link>
+                </Pressable>
+                <Pressable
+                  onPressIn={() => {
+                    router.push('/settings');
+                  }}>
+                  <Ionicons name="settings-sharp" size={24} color={theme.onBackground} />
+                </Pressable>
+              </View>
             );
           },
         }}

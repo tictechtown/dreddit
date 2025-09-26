@@ -100,12 +100,15 @@ export default function Layout() {
               <Stack
                 screenOptions={{
                   headerStyle: { backgroundColor: schemes[color ?? 'light'].surface },
-                  // headerBackTitleVisible: false,
                   headerShadowVisible: false,
                   headerTitleStyle: { color: schemes[color ?? 'light'].onSurface },
                   headerTintColor: schemes[color ?? 'light'].onSurface,
-                }}
-              />
+                }}>
+                <Stack.Screen name="index" />
+                <Stack.Protected guard={__DEV__}>
+                  <Stack.Screen name="storybook" />
+                </Stack.Protected>
+              </Stack>
             </SafeAreaView>
           </BottomSheetModalProvider>
         </ThemeProvider>

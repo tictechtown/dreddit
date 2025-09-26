@@ -4,11 +4,7 @@ import useTheme from '@services/theme/useTheme';
 import Icons from './Icons';
 import Typography from './Typography';
 
-export default function FilterChip(props: {
-  value: string;
-  allValues: string[];
-  onChange: () => void;
-}) {
+export default function FilterChip(props: { value: string; onChange: () => void }) {
   const theme = useTheme();
 
   return (

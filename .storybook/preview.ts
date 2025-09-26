@@ -1,11 +1,11 @@
-import type { Preview } from '@storybook/react-native-web-vite'
+import type { Preview } from '@storybook/react-native-web-vite';
 
 const preview: Preview = {
   parameters: {
     controls: {
       matchers: {
-       color: /(background|color)$/i,
-       date: /Date$/i,
+        color: /(background|color)$/i,
+        date: /Date$/i,
       },
     },
   },

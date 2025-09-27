@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      EXPO_NO_TELEMETRY: '1'
-      EAS_NO_VCS: '1'
+      EXPO_NO_TELEMETRY: "1"
+      EAS_NO_VCS: "1"
 
     steps:
       - name: Check out repository
@@ -19,8 +19,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -33,8 +33,8 @@ jobs:
 
       - name: Build Android APK
         env:
-          EAS_NO_INTERACTIVE: '1'
-          EAS_LOCAL_BUILD_SKIP_CREDENTIALS_CHECK: '1'
+          EAS_NO_INTERACTIVE: "1"
+          EAS_LOCAL_BUILD_SKIP_CREDENTIALS_CHECK: "1"
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: npm run build:android -- --non-interactive
 
@@ -44,3 +44,9 @@ jobs:
           name: dreddit-apk
           path: builds/dreddit.apk
           if-no-files-found: error
+      - name: Upload APK artifact to release
+        run: |
+          zip builds/dreddit.zip builds/dreddit.apk
+          gh release upload ${{ github.event.release.tag_name }} builds/dreddit.zip
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}

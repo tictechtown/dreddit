@@ -2,7 +2,8 @@ import type { Comment, Post, RedditMediaMedata } from '@services/api';
 import { PaletteDark } from '@theme/colors';
 
 type PostData = Post['data'];
-type CommentData = Extract<Comment, { kind: 't1' }>['data'];
+type CommentT1 = Extract<Comment, { kind: 't1' }>;
+type CommentData = CommentT1['data'];
 
 const clone = <T>(value: T): T => {
   if (value === undefined || value === null) {
@@ -248,7 +249,7 @@ export const createMockPost = (overrides: Partial<PostData> = {}): Post => ({
   },
 });
 
-export const createMockComment = (overrides: Partial<CommentData> = {}): Comment => ({
+export const createMockComment = (overrides: Partial<CommentData> = {}): CommentT1 => ({
   kind: 't1',
   data: {
     ...clone(baseCommentData),

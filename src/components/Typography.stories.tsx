@@ -56,6 +56,10 @@ const TypographyPreview = ({ variants }: { variants: TypographyVariant[] }) => (
 
 const meta = {
   component: Typography,
+  args: {
+    variant: 'bodyMedium',
+    children: 'Typography sample',
+  },
 } satisfies Meta<typeof Typography>;
 
 export default meta;

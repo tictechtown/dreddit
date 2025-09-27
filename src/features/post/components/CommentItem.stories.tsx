@@ -13,7 +13,7 @@ const mediaComment = createMockComment({
   media_metadata: {
     media1: mockRedditMedia,
   },
-  body: `${createMockComment().body}\n\n![gif](media1)`,
+  body: `${baseComment.data.body}\n\n![gif](media1)`,
 });
 
 const autoModeratorComment = createMockComment({

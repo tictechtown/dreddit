@@ -4,12 +4,12 @@ import { View } from 'react-native';
 import { useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import ProgressBarView from './ProgressBarView';
 
-const ProgressPreview = ({ initialValue }: { initialValue: number }) => {
-  const progress = useSharedValue(initialValue);
+const ProgressStory = ({ value }: { value: number }) => {
+  const progress = useSharedValue(value);
 
   useEffect(() => {
-    progress.value = initialValue;
-  }, [initialValue, progress]);
+    progress.value = value;
+  }, [value, progress]);
 
   return (
     <View style={{ padding: 16 }}>
@@ -33,25 +33,26 @@ const AnimatedProgressPreview = () => {
 };
 
 const meta = {
-  component: ProgressBarView,
+  component: ProgressStory,
+  args: {
+    value: 0.6,
+  },
   argTypes: {
     value: {
       control: { type: 'range', min: 0, max: 1, step: 0.05 },
     },
   },
-  args: {
-    value: 0.6,
-  },
-} satisfies Meta<typeof ProgressBarView>;
+} satisfies Meta<typeof ProgressStory>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Static: Story = {
-  render: ({ value }) => <ProgressPreview initialValue={value as number} />,
-};
+export const Static: Story = {};
 
 export const Animated: Story = {
+  args: {
+    value: 0.6,
+  },
   render: () => <AnimatedProgressPreview />,
 };

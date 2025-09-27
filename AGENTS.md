@@ -22,6 +22,7 @@ npx oxlint .
 
 - Run `npx oxlint .` before raising a PR to mirror the CI checks
 - Run `npx prettier --check .` to ensure formatting; re-run with `--write` to fix
+- Run `npx tsc --noEmit` to ensure correct types. Fix the issues if possible
 - Use `npm run start:android` or `npm run start:ios` when debugging on devices; `npm run start` is fine for the simulator or web
 - Keep changes scoped and document context in PR descriptions so future agents can trace decisions
 

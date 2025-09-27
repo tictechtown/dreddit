@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+
 jobs:
   build-android:
     runs-on: ubuntu-latest
@@ -44,9 +47,10 @@ jobs:
           name: dreddit-apk
           path: builds/dreddit.apk
           if-no-files-found: error
+
       - name: Upload APK artifact to release
         run: |
           zip builds/dreddit.zip builds/dreddit.apk
           gh release upload ${{ github.event.release.tag_name }} builds/dreddit.zip
         env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
+          GH_TOKEN: ${{ github.token }}

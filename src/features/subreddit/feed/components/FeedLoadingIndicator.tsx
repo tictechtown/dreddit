@@ -1,11 +1,9 @@
 import Typography from '@components/Typography';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
   Easing,
-  Extrapolation,
   cancelAnimation,
-  interpolate,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -13,155 +11,20 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { Image } from 'expo-image';
-import { defaultSubredditIcon, defaultSubredditIconNSFW } from '@components/SubredditIcon';
+import SubredditIcon from '@components/SubredditIcon';
 import useTheme from '@services/theme/useTheme';
 
-interface MorphingSubredditIconProps {
-  size: number;
-  icon: string | undefined | null;
-  nsfw: boolean;
-  style: any;
-}
+const MATERIAL_EASING = {
+  standard: Easing.bezier(0.4, 0, 0.2, 1),
+  emphasizedDecelerate: Easing.bezier(0.05, 0.7, 0.1, 1),
+  emphasizedAccelerate: Easing.bezier(0.3, 0, 0.8, 0.15),
+} as const;
 
-const MORPH_INPUT_RANGE = [0, 0.25, 0.5, 0.75, 1] as const;
-const MORPH_WIDTH_MULTIPLIERS = [1, 1, 1.25, 0.6, 1] as const;
-const MORPH_HEIGHT_MULTIPLIERS = [1, 1, 0.6, 1.25, 1] as const;
-const MORPH_RADIUS_MULTIPLIERS = [0.5, 0.1, 0.3, 0.3, 0.5] as const;
-const MORPH_SCALE_MULTIPLIERS = [1, 1, 1, 1, 1] as const;
-const MORPH_ANIMATION_DURATION = 200;
-const MORPH_ANIMATION_DELAY = 500;
-
-const AnimatedImage = Animated.createAnimatedComponent(Image);
-
-const MorphingSubredditIcon = (props: MorphingSubredditIconProps) => {
-  const progress = useSharedValue(0);
-
-  const iconSource = useMemo(() => {
-    const sanitizedIcon =
-      typeof props.icon === 'string' ? props.icon.replaceAll('&amp;', '&') : null;
-
-    const shouldUsePlaceholder = !sanitizedIcon || !sanitizedIcon.startsWith('http');
-
-    return shouldUsePlaceholder
-      ? props.nsfw
-        ? defaultSubredditIconNSFW
-        : defaultSubredditIcon
-      : sanitizedIcon;
-  }, [props.icon, props.nsfw]);
-
-  useEffect(() => {
-    progress.value = withRepeat(
-      withSequence(
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(0.25, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(0.5, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(0.75, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(1, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(0.75, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(0.5, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(0.25, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-        withDelay(
-          MORPH_ANIMATION_DELAY,
-          withTiming(0, {
-            duration: MORPH_ANIMATION_DURATION,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ),
-      ),
-      -1,
-      false,
-    );
-
-    return () => {
-      cancelAnimation(progress);
-      progress.value = 0;
-    };
-  }, [progress]);
-
-  const containerStyle = useAnimatedStyle(() => {
-    const width =
-      props.size *
-      interpolate(progress.value, MORPH_INPUT_RANGE, MORPH_WIDTH_MULTIPLIERS, Extrapolation.CLAMP);
-    const height =
-      props.size *
-      interpolate(progress.value, MORPH_INPUT_RANGE, MORPH_HEIGHT_MULTIPLIERS, Extrapolation.CLAMP);
-    const borderRadius =
-      props.size *
-      interpolate(progress.value, MORPH_INPUT_RANGE, MORPH_RADIUS_MULTIPLIERS, Extrapolation.CLAMP);
-
-    return {
-      width,
-      height,
-      borderRadius,
-    };
-  }, [props.size]);
-
-  const imageStyle = useAnimatedStyle(() => {
-    const scale = interpolate(
-      progress.value,
-      MORPH_INPUT_RANGE,
-      MORPH_SCALE_MULTIPLIERS,
-      Extrapolation.CLAMP,
-    );
-
-    return {
-      transform: [{ scale }],
-    };
-  });
-
-  return (
-    <Animated.View style={[styles.morphingIcon, props.style, containerStyle]}>
-      <AnimatedImage
-        source={iconSource}
-        cachePolicy={'disk'}
-        contentFit="cover"
-        style={[styles.iconImage, imageStyle]}
-      />
-    </Animated.View>
-  );
-};
+const TEXT_FADE_DURATION = 250;
+const ICON_FADE_DURATION = 250;
+const PULSE_DURATION = 1000;
+const PULSE_SCALE = 1.2;
+const ICON_SIZE = 200;
 
 export default function FeedLoadingIndicator({
   subreddit,
@@ -173,48 +36,106 @@ export default function FeedLoadingIndicator({
   onPress: () => void;
 }) {
   const theme = useTheme();
-  return (
-    <View
-      style={{
-        flex: 5,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        gap: 32,
-      }}>
-      <Typography
-        variant="displayMediumEmphasized"
-        style={{ textAlign: 'center' }}
-        onPress={onPress}>
-        r/{subreddit}
-      </Typography>
+  const textOpacity = useSharedValue(0);
+  const iconOpacity = useSharedValue(0);
+  const iconScale = useSharedValue(1);
 
-      <View
-        style={{
-          width: 200,
-          height: 200,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <MorphingSubredditIcon
-          size={200}
-          icon={icon}
-          nsfw={false}
-          style={{ backgroundColor: theme.surfaceContainerHigh }}
-        />
-      </View>
+  useEffect(() => {
+    cancelAnimation(textOpacity);
+    cancelAnimation(iconOpacity);
+    cancelAnimation(iconScale);
+
+    textOpacity.value = 0;
+    iconOpacity.value = 0;
+    iconScale.value = 1;
+
+    textOpacity.value = withTiming(1, {
+      duration: TEXT_FADE_DURATION,
+      easing: MATERIAL_EASING.standard,
+    });
+
+    iconOpacity.value = withDelay(
+      TEXT_FADE_DURATION / 2,
+      withTiming(
+        1,
+        {
+          duration: ICON_FADE_DURATION,
+          easing: MATERIAL_EASING.standard,
+        },
+        (finished) => {
+          if (finished) {
+            iconScale.value = withRepeat(
+              withSequence(
+                withTiming(PULSE_SCALE, {
+                  duration: PULSE_DURATION / 4,
+                  easing: MATERIAL_EASING.emphasizedAccelerate,
+                }),
+                withTiming(1, {
+                  duration: PULSE_DURATION,
+                  easing: MATERIAL_EASING.emphasizedDecelerate,
+                }),
+              ),
+              -1,
+              false,
+            );
+          }
+        },
+      ),
+    );
+
+    return () => {
+      cancelAnimation(textOpacity);
+      cancelAnimation(iconOpacity);
+      cancelAnimation(iconScale);
+    };
+  }, [icon, subreddit, textOpacity, iconOpacity, iconScale]);
+
+  const textStyle = useAnimatedStyle(() => ({
+    opacity: textOpacity.value,
+  }));
+
+  const iconAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: iconOpacity.value,
+    transform: [{ scale: iconScale.value }],
+  }));
+
+  return (
+    <View style={styles.container}>
+      <Animated.View style={textStyle}>
+        <Typography variant="displayMediumEmphasized" style={styles.title} onPress={onPress}>
+          r/{subreddit}
+        </Typography>
+      </Animated.View>
+
+      <Animated.View
+        style={[
+          styles.iconWrapper,
+          iconAnimatedStyle,
+          { backgroundColor: theme.surfaceContainerHigh },
+        ]}>
+        <SubredditIcon nsfw={false} size={ICON_SIZE} icon={icon} />
+      </Animated.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  morphingIcon: {
+  container: {
+    flex: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    gap: 64,
+  },
+  title: {
+    textAlign: 'center',
+  },
+  iconWrapper: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    borderRadius: ICON_SIZE / 2,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    alignSelf: 'center',
-  },
-  iconImage: {
-    ...StyleSheet.absoluteFillObject,
   },
 });

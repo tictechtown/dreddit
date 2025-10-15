@@ -28,6 +28,7 @@ import SortOptionsBottomSheet from '@features/post/modals/SortOptionsBottomSheet
 import FilterChip from '@components/FilterChip';
 import * as Haptics from 'expo-haptics';
 import useBackdrop from '@hooks/useBackdrop';
+import SearchPendingLoader from '@features/search/components/SearchPendingLoader';
 
 function getSubredditIcon(icon: string | undefined): string {
   if (!icon || icon?.length === 0) {
@@ -230,11 +231,7 @@ const SearchResultItem = (props: { result: SearchResult; theme: ColorPalette }) 
 
 type SearchResult = SubReddit | User | Post;
 
-enum SearchType {
-  Subreddits,
-  Users,
-  Posts,
-}
+type SearchType = 'subreddits' | 'users' | 'posts';
 
 const HomeSearchContent = ({
   searchText,
@@ -246,8 +243,10 @@ const HomeSearchContent = ({
   const theme = useTheme();
   const [results, setResults] = useState<{ [k: string]: SearchResult[] }>({});
   const [defaultResults, setDefaultResults] = useState<SubReddit[]>([]);
-  const [searchType, setSearchType] = useState<SearchType>(SearchType.Subreddits);
+  const [searchType, setSearchType] = useState<SearchType>('subreddits');
   const flatListRef = React.useRef<FlatList>(null);
+  const requestIdRef = useRef(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [searchSort, setSearchSort] = useState<'relevance' | 'hot' | 'top' | 'new' | 'comments'>(
     'top',
@@ -273,47 +272,81 @@ const HomeSearchContent = ({
   }, []);
 
   useEffect(() => {
-    const searchSubReddits = async (txt: string, searchType: SearchType) => {
-      if (txt && txt.length > 2) {
-        if (searchType === SearchType.Subreddits) {
-          const searchResults = await new RedditApi().searchSubreddits(txt, {
+    const normalizedSearch = searchText.trim();
+    const shouldSearch = normalizedSearch.length > 2;
+
+    if (!shouldSearch) {
+      requestIdRef.current += 1;
+      setIsLoading(false);
+      setResults({});
+      bottomSheetModalRef.current?.dismiss();
+      return;
+    }
+
+    const currentRequestId = requestIdRef.current + 1;
+    requestIdRef.current = currentRequestId;
+    setIsLoading(true);
+
+    const performSearch = async () => {
+      try {
+        if (searchType === 'subreddits') {
+          const searchResults = await new RedditApi().searchSubreddits(normalizedSearch, {
             sort: 'top',
             limit: '100',
           });
-          if (searchResults) {
-            setResults((prev) => ({ ...prev, [txt]: sortResults(searchResults.items, txt) }));
-          } else {
-            setResults((prev) => ({ ...prev, [txt]: [] }));
+          if (requestIdRef.current === currentRequestId) {
+            setResults((prev) => ({
+              ...prev,
+              [normalizedSearch]: searchResults
+                ? sortResults(searchResults.items, normalizedSearch)
+                : [],
+            }));
           }
-        } else if (searchType === SearchType.Users) {
-          const searchResults = await new RedditApi().searchUsers(txt, {
+        } else if (searchType === 'users') {
+          const searchResults = await new RedditApi().searchUsers(normalizedSearch, {
             sort: 'top',
             limit: '100',
           });
-          if (searchResults) {
-            setResults((prev) => ({ ...prev, [txt]: sortUserResults(searchResults.items) }));
-          } else {
-            setResults((prev) => ({ ...prev, [txt]: [] }));
+          if (requestIdRef.current === currentRequestId) {
+            setResults((prev) => ({
+              ...prev,
+              [normalizedSearch]: searchResults ? sortUserResults(searchResults.items) : [],
+            }));
           }
-        } else if (searchType === SearchType.Posts) {
-          const searchResults = await new RedditApi().searchSubmissions(txt, undefined, {
-            sort: searchSort,
-            t: searchRange,
-            limit: '100',
-          });
-          if (searchResults) {
-            setResults((prev) => ({ ...prev, [txt]: searchResults.items }));
-          } else {
-            setResults((prev) => ({ ...prev, [txt]: [] }));
+        } else if (searchType === 'posts') {
+          const searchResults = await new RedditApi().searchSubmissions(
+            normalizedSearch,
+            undefined,
+            {
+              sort: searchSort,
+              t: searchRange,
+              limit: '100',
+            },
+          );
+          if (requestIdRef.current === currentRequestId) {
+            setResults((prev) => ({
+              ...prev,
+              [normalizedSearch]: searchResults ? searchResults.items : [],
+            }));
           }
         }
-        flatListRef?.current?.scrollToOffset({ animated: true, offset: 0 });
-      } else {
-        setResults({});
+        // oxlint-disable-next-line no-unused-vars
+      } catch (error) {
+        if (requestIdRef.current === currentRequestId) {
+          setResults((prev) => ({
+            ...prev,
+            [normalizedSearch]: [],
+          }));
+        }
+      } finally {
+        if (requestIdRef.current === currentRequestId) {
+          setIsLoading(false);
+        }
       }
     };
 
-    searchSubReddits(searchText, searchType);
+    performSearch();
+    flatListRef?.current?.scrollToOffset({ animated: true, offset: 0 });
     bottomSheetModalRef.current?.dismiss();
   }, [searchText, searchType, searchSort, searchRange]);
 
@@ -321,14 +354,17 @@ const HomeSearchContent = ({
     bottomSheetModalRef.current?.dismiss();
   }, [searchSort, searchRange]);
 
-  const displayedResults = results[searchText] ?? [];
+  const normalizedSearchText = searchText.trim();
+  const displayedResults = results[normalizedSearchText] ?? [];
   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
 
   const renderBackdrop = useBackdrop();
+  const shouldShowLoader = normalizedSearchText.length >= 3 && isLoading;
+  const listData = normalizedSearchText.length < 3 ? defaultResults : displayedResults;
 
   return (
     <>
-      {searchText.length < 3 && (
+      {normalizedSearchText.length < 3 && (
         <View
           style={{
             paddingHorizontal: Spacing.s12,
@@ -338,15 +374,15 @@ const HomeSearchContent = ({
           <Typography variant="titleMedium">Trending</Typography>
         </View>
       )}
-      {searchText.length >= 3 && (
+      {normalizedSearchText.length >= 3 && (
         <>
           <Tabs
             selectedTabId={searchType}
-            tabIds={[SearchType.Subreddits, SearchType.Users, SearchType.Posts]}
+            tabIds={['subreddits', 'users', 'posts']}
             tabNames={['Subreddits', 'Users', 'Posts']}
             onPress={setSearchType}
           />
-          {searchType === SearchType.Posts && (
+          {searchType === 'posts' && (
             <View
               style={{
                 flexDirection: 'row',
@@ -379,13 +415,22 @@ const HomeSearchContent = ({
       )}
       <FlatList
         ref={flatListRef}
-        data={searchText.length < 3 ? defaultResults : displayedResults}
+        data={shouldShowLoader ? [] : listData}
         renderItem={({ item }) => <SearchResultItem result={item} theme={theme} />}
         keyExtractor={(item) => item.data.id}
         style={{ flex: 1 }}
         keyboardShouldPersistTaps={'handled'}
         onScrollBeginDrag={Keyboard.dismiss}
-        contentContainerStyle={{ paddingBottom: Spacing.s24 }}
+        contentContainerStyle={
+          shouldShowLoader
+            ? { flexGrow: 1, paddingBottom: Spacing.s24 }
+            : { paddingBottom: Spacing.s24 }
+        }
+        ListEmptyComponent={
+          shouldShowLoader ? (
+            <SearchPendingLoader query={normalizedSearchText} searchType={searchType} />
+          ) : null
+        }
       />
       <BottomSheetModal
         ref={bottomSheetModalRef}

@@ -9,7 +9,7 @@ import { PaletteDark } from '@theme/colors';
 import Icons from '@components/Icons';
 import { Spacing } from '@theme/tokens';
 import VideoPlayer from './VideoPlayer';
-import { extractMetaTags } from '@features/video/metadata';
+import { extractMetaTags, extractVideoSourceAttributes } from '@features/video/metadata';
 import Typography from '@components/Typography';
 import useTheme from '@services/theme/useTheme';
 
@@ -44,8 +44,13 @@ export default function Page() {
           setRVideo({ hls_url: ogVideo.url });
         }
       } else {
-        setErrorMessage(`cant load video from url ${uri}`);
-        WebBrowser.openBrowserAsync(uri);
+        const videoSrcFallback = extractVideoSourceAttributes(html);
+        if (videoSrcFallback.length > 0) {
+          setRVideo({ hls_url: videoSrcFallback[0] });
+        } else {
+          setErrorMessage(`cant load video from url ${uri}`);
+          WebBrowser.openBrowserAsync(uri);
+        }
       }
     }
     if (prefetchuri) {

@@ -122,7 +122,7 @@ export const onLinkPress = (post: Post): Href => {
   }
 
   if (
-    domain.startsWith('streamin.one') ||
+    domain.startsWith('streamin.') ||
     domain.startsWith('streamable.com') ||
     domain.startsWith('streamain.com')
   ) {

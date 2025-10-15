@@ -61,3 +61,14 @@ export const extractMetaTags = (
 
   return ogObject;
 };
+
+export const extractVideoSourceAttributes = (body: string) => {
+  const $ = cheerio.load(body);
+  const results: string[] = [];
+  $('video').each((index, attributes) => {
+    if (attributes.attribs['data-link']) {
+      results.push(attributes.attribs['data-link']);
+    }
+  });
+  return results;
+};

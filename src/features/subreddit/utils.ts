@@ -135,7 +135,7 @@ export const onLinkPress = (post: Post): Href => {
   if (domain.startsWith('streamff')) {
     const videoComponents = originalPost.data.url.split('/');
     const videoId = videoComponents[videoComponents.length - 1];
-    const newUrl = `https://ffedge.streamff.com/uploads/${videoId}.mp4`;
+    const newUrl = `https://cdn.streamff.one/${videoId}.mp4`;
     return {
       pathname: 'media/video',
       params: {

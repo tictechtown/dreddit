@@ -151,6 +151,19 @@ const fallback = (ogObject: any, options: any, $: any) => {
     }
   }
 
+  // video schema.org fallback
+  if (!ogObject.ogVideo) {
+    const jsonSchemaString = $('script[type="application/ld+json"]').text();
+    try {
+      const jsonSchema = JSON.parse(jsonSchemaString);
+      if (jsonSchema && jsonSchema['@type'] === 'VideoObject' && jsonSchema['contentUrl']) {
+        ogObject.ogVideo = { url: jsonSchema['contentUrl'] };
+      }
+    } catch (e) {
+      // continue
+    }
+  }
+
   // video fallback
   if (!ogObject.ogVideo) {
     const audioElementValue = $('video').attr('src');

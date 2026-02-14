@@ -25,7 +25,7 @@ const CommentItemMediaView = ({
     showGif(item);
   }, [item]);
 
-  if (!item) {
+  if (!item || item.status === 'invalid') {
     return;
   }
   if (item.t === 'emoji' || item.t === 'sticker') {
